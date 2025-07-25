@@ -5,6 +5,9 @@ import mongoose from "mongoose";
 // import routers
 import { abilities } from "./routes/routeAbilities.ts";
 
+// import data
+// import { data } from from "./data/data.ts";
+
 // setup
 const app = express();
 app.set("view engine", "ejs");
@@ -31,6 +34,9 @@ mongoose.connect("mongodb://localhost/codemon");
 const db = mongoose.connection;
 db.on("error", (error) => console.log(error));
 db.once("open", () => console.log("Database of madness has started!"));
+
+// add data to database
+// data();
 
 // render index.ejs
 app.get("/", (_, res) => {
