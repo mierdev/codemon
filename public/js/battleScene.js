@@ -20,6 +20,7 @@ class BattleScene extends Phaser.Scene {
         this.battleText = null;
         this.turnText = null;
         this.isPlayerTurn = true;
+        this.roundCooldowns = new Map(); // Track round-based cooldowns
     }
 
     /**
@@ -78,7 +79,7 @@ class BattleScene extends Phaser.Scene {
         this.createAbilityUI();
         this.createAbilityMessageBoxes();
         
-        this.turnText = this.add.text(480, 540, `Turn: ${this.pokemon1.name}`, {
+        this.turnText = this.add.text(480, 500, `Turn: ${this.pokemon1.name}`, {
             fontSize: '16px',
             fill: '#fff',
             stroke: '#000',
@@ -248,11 +249,11 @@ class BattleScene extends Phaser.Scene {
      */
     createBattleLog() {
         // Background for battle log
-        this.battleLogBg = this.add.rectangle(720, 640, 300, 120, 0x000000, 0.8);
+        this.battleLogBg = this.add.rectangle(720, 600, 300, 120, 0x000000, 0.8);
         this.battleLogBg.setStrokeStyle(2, 0xFFFFFF);
         
         // Title for battle log
-        this.battleLogTitle = this.add.text(720, 590, 'Battle Log:', {
+        this.battleLogTitle = this.add.text(720, 550, 'Battle Log:', {
             fontSize: '14px',
             fill: '#FFFFFF',
             stroke: '#000',
@@ -262,7 +263,7 @@ class BattleScene extends Phaser.Scene {
         // Container for log entries
         this.battleLogEntries = [];
         for (let i = 0; i < 5; i++) {
-            const entry = this.add.text(720, 610 + (i * 18), '', {
+            const entry = this.add.text(720, 570 + (i * 18), '', {
                 fontSize: '10px',
                 fill: '#CCCCCC',
                 stroke: '#000',
@@ -300,6 +301,34 @@ class BattleScene extends Phaser.Scene {
                 entry.setText('');
             }
         });
+    }
+
+    /**
+     * Checks if an ability is on round-based cooldown for a specific Pokemon.
+     * @param {Object} pokemon - The Pokemon using the ability
+     * @param {string} abilityName - The name of the ability
+     * @returns {boolean} True if the ability is on cooldown
+     */
+    isAbilityOnRoundCooldown(pokemon, abilityName) {
+        const key = `${pokemon.name}-${abilityName}`;
+        return this.roundCooldowns.has(key);
+    }
+
+    /**
+     * Sets an ability on round-based cooldown for a specific Pokemon.
+     * @param {Object} pokemon - The Pokemon using the ability
+     * @param {string} abilityName - The name of the ability
+     */
+    setAbilityRoundCooldown(pokemon, abilityName) {
+        const key = `${pokemon.name}-${abilityName}`;
+        this.roundCooldowns.set(key, this.currentTurn);
+    }
+
+    /**
+     * Clears round-based cooldowns at the start of each new round.
+     */
+    clearRoundCooldowns() {
+        this.roundCooldowns.clear();
     }
 
     /**
@@ -620,6 +649,9 @@ class BattleScene extends Phaser.Scene {
         this.battleText.setText('Your turn! Click an ability or use arrow keys + SPACE!');
         this.updateAbilitySelection();
         
+        // Clear round-based cooldowns at the start of each new round
+        this.clearRoundCooldowns();
+        
         this.abilityButtons.forEach(buttonData => {
             buttonData.button.setFillStyle(0x444444);
         });
@@ -816,12 +848,22 @@ class BattleScene extends Phaser.Scene {
                 break;
                 
             case 'Immutability':
+                // Check if Immutability is on round-based cooldown
+                if (this.isAbilityOnRoundCooldown(attacker, 'Immutability')) {
+                    console.log(`   Immutability: Already used this round, skipping effect`);
+                    messages.push(`${attacker.name} cannot use Immutability again this round!`);
+                    break;
+                }
+                
                 console.log(`   Immutability: OCaml's state is immutable and pure`);
                 const healAmount = Math.floor(attacker.maxHp * 0.35);
                 attacker.hp = Math.min(attacker.maxHp, attacker.hp + healAmount);
                 console.log(`   OCaml healed ${healAmount} HP through immutability`);
                 messages.push(`${attacker.name} restored state through immutability!`);
                 messages.push(`${attacker.name} healed ${healAmount} HP!`);
+                
+                // Set round-based cooldown
+                this.setAbilityRoundCooldown(attacker, 'Immutability');
                 
                 // Cleanse non-volatile status conditions
                 if (attacker.statusEffects) {
