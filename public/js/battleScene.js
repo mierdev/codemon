@@ -243,6 +243,66 @@ class BattleScene extends Phaser.Scene {
     }
 
     /**
+     * Creates the battle log display in the bottom right corner.
+     * Shows the last 5 attack events above the status bar.
+     */
+    createBattleLog() {
+        // Background for battle log
+        this.battleLogBg = this.add.rectangle(720, 640, 300, 120, 0x000000, 0.8);
+        this.battleLogBg.setStrokeStyle(2, 0xFFFFFF);
+        
+        // Title for battle log
+        this.battleLogTitle = this.add.text(720, 590, 'Battle Log:', {
+            fontSize: '14px',
+            fill: '#FFFFFF',
+            stroke: '#000',
+            strokeThickness: 2
+        }).setOrigin(0.5);
+        
+        // Container for log entries
+        this.battleLogEntries = [];
+        for (let i = 0; i < 5; i++) {
+            const entry = this.add.text(720, 610 + (i * 18), '', {
+                fontSize: '10px',
+                fill: '#CCCCCC',
+                stroke: '#000',
+                strokeThickness: 1
+            }).setOrigin(0.5);
+            this.battleLogEntries.push(entry);
+        }
+    }
+
+    /**
+     * Adds an event to the battle log and updates the display.
+     * @param {string} event - The event description to add
+     */
+    addToBattleLog(event) {
+        // Add new event to the beginning of the log
+        this.battleLog.unshift(event);
+        
+        // Keep only the last 5 events
+        if (this.battleLog.length > 5) {
+            this.battleLog.pop();
+        }
+        
+        // Update the display
+        this.updateBattleLogDisplay();
+    }
+
+    /**
+     * Updates the battle log display with current events.
+     */
+    updateBattleLogDisplay() {
+        this.battleLogEntries.forEach((entry, index) => {
+            if (index < this.battleLog.length) {
+                entry.setText(this.battleLog[index]);
+            } else {
+                entry.setText('');
+            }
+        });
+    }
+
+    /**
      * Shows an ability message above a specific character.
      * @param {string} pokemonName - The name of the Pokemon to show message for
      * @param {string} message - The message to display
@@ -430,6 +490,9 @@ class BattleScene extends Phaser.Scene {
             // Show ability message above the attacker
             this.showAbilityMessage(attacker.name, `${ability.name}!\nDealt ${damage} damage!`);
             
+            // Add to battle log
+            this.addToBattleLog(`${attacker.name}: ${ability.name} (${damage} dmg)`);
+            
             let message = `${attacker.name} used ${ability.name}! It dealt ${damage} damage!`;
             if (effectMessages.length > 0) {
                 message += '\n' + effectMessages.join('\n');
@@ -441,6 +504,10 @@ class BattleScene extends Phaser.Scene {
         } else {
             console.log(`   MISS! (${accuracy.toFixed(1)}% > ${ability.accuracy}%)`);
             this.showAbilityMessage(attacker.name, `${ability.name}!\nMissed!`);
+            
+            // Add to battle log
+            this.addToBattleLog(`${attacker.name}: ${ability.name} (MISS)`);
+            
             this.battleText.setText(`${attacker.name} used ${ability.name}! But it missed!`);
         }
         
@@ -505,6 +572,9 @@ class BattleScene extends Phaser.Scene {
             // Show ability message above the attacker
             this.showAbilityMessage(attacker.name, `${ability.name}!\nDealt ${damage} damage!`);
             
+            // Add to battle log
+            this.addToBattleLog(`${attacker.name}: ${ability.name} (${damage} dmg)`);
+            
             let message = `${attacker.name} used ${ability.name}! It dealt ${damage} damage!`;
             if (effectMessages.length > 0) {
                 message += '\n' + effectMessages.join('\n');
@@ -516,6 +586,10 @@ class BattleScene extends Phaser.Scene {
         } else {
             console.log(`   MISS! (${accuracy.toFixed(1)}% > ${ability.accuracy}%)`);
             this.showAbilityMessage(attacker.name, `${ability.name}!\nMissed!`);
+            
+            // Add to battle log
+            this.addToBattleLog(`${attacker.name}: ${ability.name} (MISS)`);
+            
             this.battleText.setText(`${attacker.name} used ${ability.name}! But it missed!`);
         }
         
