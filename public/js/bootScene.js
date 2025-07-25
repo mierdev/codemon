@@ -20,7 +20,7 @@ class BootScene extends Phaser.Scene {
     create() {
         window.gameManager = new GameManager();
         
-        const battleData = window.gameManager.startBattle('charizard', 'blastoise');
+        const battleData = window.gameManager.startBattle('python', 'go');
         
         if (battleData) {
             this.scene.start('BattleScene', battleData);
