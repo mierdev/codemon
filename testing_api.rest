@@ -1,1 +1,5 @@
-GET http://localhost:3000/playerCodemon
+GET http://localhost:3000/abilities
+
+###
+
+GET http://localhost:3000/abilities/13

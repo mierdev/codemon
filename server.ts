@@ -3,7 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 
 // import routers
-import { playerCodemon } from "./routes/playerCodemon.ts";
+import { abilities } from "./routes/abilities.ts";
 
 // setup
 const app = express();
@@ -39,7 +39,7 @@ app.get("/", (_, res) => {
 })
 
 // setup routers
-app.use("/playercodemon", playerCodemon);
+app.use("/abilities", abilities);
 
 // start server
 app.listen(3000, () => console.log("Chaos has spread!"));
