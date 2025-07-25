@@ -20,7 +20,17 @@ class BootScene extends Phaser.Scene {
     create() {
         window.gameManager = new GameManager();
         
-        const battleData = window.gameManager.startBattle('python', 'go');
+        // Get all available language IDs
+        const availableLanguages = ['python', 'go', 'rust', 'ocaml', 'cpp', 'javascript', 'typescript'];
+        
+        // Randomly select 2 different languages
+        const shuffled = availableLanguages.sort(() => 0.5 - Math.random());
+        const language1 = shuffled[0];
+        const language2 = shuffled[1];
+        
+        console.log(`Starting battle: ${language1} vs ${language2}`);
+        
+        const battleData = window.gameManager.startBattle(language1, language2);
         
         if (battleData) {
             this.scene.start('BattleScene', battleData);

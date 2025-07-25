@@ -93,6 +93,10 @@ class BattleScene extends Phaser.Scene {
             strokeThickness: 1
         }).setOrigin(0.5);
 
+        // Initialize battle log
+        this.battleLog = [];
+        this.createBattleLog();
+
         this.setupInputHandlers();
         
         this.updateUI();
@@ -289,7 +293,8 @@ class BattleScene extends Phaser.Scene {
             const button = this.add.rectangle(x, y, buttonWidth, buttonHeight, 0x444444);
             const text = this.add.text(x, y, ability.name, {
                 fontSize: '12px',
-                fill: '#fff'
+                fill: '#fff',
+                wordWrap: { width: buttonWidth - 10 }
             }).setOrigin(0.5);
             
             button.setInteractive();

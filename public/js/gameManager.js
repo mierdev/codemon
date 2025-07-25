@@ -184,7 +184,7 @@ class GameManager {
                 {
                     name: 'Unsafe Block',
                     type: 'Physical',
-                    power: 130,
+                    power: 65,
                     accuracy: 80,
                     description: 'Deals high physical damage. 20% chance of Undefined Behavior.',
                     cooldown: 3
