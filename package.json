@@ -3,15 +3,15 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "main": "index.js",
   "keywords": [],
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "start": "nodemon index.ts"
+    "devStart": "nodemon server.ts"
   },
   "devDependencies": {
+    "@types/express": "^5.0.3",
     "dotenv": "^17.2.1",
     "nodemon": "^3.1.10",
     "typescript": "~5.8.3",
