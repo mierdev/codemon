@@ -3,10 +3,10 @@ import express from "express";
 import mongoose from "mongoose";
 
 // import routers
-import { abilities } from "./routes/routeAbilities.ts";
+import { abilitiesRouter } from "./routes/routerAbilities.ts";
 
 // import data
-// import { data } from from "./data/data.ts";
+// import "./data/data.ts";
 
 // setup
 const app = express();
@@ -45,7 +45,7 @@ app.get("/", (_, res) => {
 })
 
 // setup routers
-app.use("/abilities", abilities);
+app.use("/abilities", abilitiesRouter);
 
 // start server
 app.listen(3000, () => console.log("Chaos has spread!"));

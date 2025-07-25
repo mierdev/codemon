@@ -38,4 +38,4 @@ const abilitiesSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model("codemon", abilitiesSchema);
+export default mongoose.model("Abilities", abilitiesSchema);
