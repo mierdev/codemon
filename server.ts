@@ -2,6 +2,9 @@
 import express from "express";
 import mongoose from "mongoose";
 
+// import routers
+import { playerCodemon } from "./routes/playerCodemon.ts";
+
 // setup
 const app = express();
 app.set("view engine", "ejs");
@@ -19,7 +22,7 @@ mongoose.connect("mongodb://localhost/codemon");
   in .env
     DATABASE_URL=mongodb://localhost/test
 
-  in server.js
+  in server.ts
     import { configDotenv } from "dotenv";
     montgoose.connect(process.env.DATABASE_URL);
 */
@@ -35,8 +38,8 @@ app.get("/", (_, res) => {
   res.render("index");
 })
 
-// routes
-// TODO: start with playerCodemon
+// setup routers
+app.use("/playercodemon", playerCodemon);
 
 // start server
-app.listen(3000, () => console.log("Chaos has started!"));
+app.listen(3000, () => console.log("Chaos has spread!"));
