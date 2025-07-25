@@ -3,7 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 
 // import routers
-import { abilities } from "./routes/abilities.ts";
+import { abilities } from "./routes/routeAbilities.ts";
 
 // setup
 const app = express();
