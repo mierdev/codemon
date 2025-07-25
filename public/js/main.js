@@ -9,6 +9,8 @@ const config = {
     parent: 'game-container',
     backgroundColor: '#000000',
     roundPixels: true,
+    pixelArt: true,
+    antialias: false,
     scene: [BootScene, BattleScene],
     physics: {
         default: 'arcade',
