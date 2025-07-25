@@ -1,17 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>codemon game</title>
-    <link rel="stylesheet" href="../css/style.css">
-  </head>
-  <body>
-    <div>
-      <h1>Codemon</h1>
-      <div id="game-container"></div>
-    </div>
-    <script src="../js/phaser.min.js"></script>
-    <script src="../ts/game.ts"></script>
-  </body>
+    <title>Pokemon Battle Game</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        #game-container {
+            border: 2px solid #333;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container"></div>
+    <script src="/js/phaser.min.js"></script>
+    <script src="/js/gameManager.js"></script>
+    <script src="/js/bootScene.js"></script>
+    <script src="/js/battleScene.js"></script>
+    <script src="/js/main.js"></script>
+</body>
 </html>
