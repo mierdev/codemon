@@ -21,6 +21,7 @@ class BattleScene extends Phaser.Scene {
 		this.turnText = null;
 		this.audioManager = null; // Added audio manage for sound effects
 		this.isPlayerTurn = true;
+		this.roundCooldowns = new Map();
 	}
 
 	/**
@@ -40,8 +41,20 @@ class BattleScene extends Phaser.Scene {
 	/**
 	 * Preloads audio files from assets folder
 	 */
+	//TODO:
+	// update files
 	preload() {
-		this.load.audio("fireball", ["assets/audio/effects/fireball.mp3"]);
+		this.load.audio("buff", ["assets/audio/effects/buff.mp3"]);
+		this.load.audio("control", ["assets/audio/effects/control.wav"]);
+		this.load.audio("debuff", ["assets/audio/effects/debuff.mp3"]);
+		this.load.audio("defensive", ["assets/audio/effects/defensive.mp3"]);
+		this.load.audio("passive", ["assets/audio/effects/passive.mp3"]);
+		this.load.audio("physical", ["assets/audio/effects/physical.mp3"]);
+		this.load.audio("recover", ["assets/audio/effects/recover.mp3"]);
+		this.load.audio("special", ["assets/audio/effects/special.wav"]);
+		this.load.audio("support", ["assets/audio/effects/support.mp3"]);
+		this.load.audio("utility", ["assets/audio/effects/support.mp3"]);
+		this.load.audio("miss", ["assets/audio/effects/miss.mp3"]);
 	}
 
 	/**
@@ -432,15 +445,32 @@ class BattleScene extends Phaser.Scene {
 	/**
 	 * Creates the sound to go along with ability buttons using the Audio manager
 	 */
-	playAbilitySound(ability) {
+	playAbilitySound(ability, isHit = true) {
 		console.log("In playAbilitySound with: ", ability);
-
-		const soundEffectMap = {
-			Fire: "fireball",
-		};
 		if (!this.audioManager) return;
-		const soundKey = soundEffectMap[ability] || "fire";
+		if (!isHit) {
+			console.log("Should be playing missed sound 🙊");
+			this.audioManager.playSoundEffect("miss");
+			return;
+		}
+
+		// Based on GameManager abilities
+		const soundEffectMap = {
+			Buff: "buff",
+			Control: "control",
+			Debuff: "debuff",
+			Defensive: "defensive",
+			Passive: "passive",
+			Physical: "physical",
+			Recover: "recover",
+			Special: "special",
+			Support: "support",
+			Utility: "utility",
+		};
+
+		const soundKey = soundEffectMap[ability.type] || "physical";
 		console.log("Sound key to play: ", soundKey);
+
 		this.audioManager.playSoundEffect(soundKey);
 	}
 
@@ -480,6 +510,7 @@ class BattleScene extends Phaser.Scene {
 			button.on("pointerdown", () => {
 				if (this.battleState === "playerTurn") {
 					this.selectedAbility = index;
+					console.log("Player Selected Ability: ", this.selectedAbility);
 					this.executePlayerAttack();
 				}
 			});
@@ -645,10 +676,21 @@ class BattleScene extends Phaser.Scene {
 			}
 			this.battleText.setText(message);
 
+			// Play sound effect - thought is that this might be best to render first
+			// TODO:
+			// Expore idea: maybe volume could be slightly lower for less damage and slightly higher for more damage
+			console.log("Next play a hit sound...");
+			this.playAbilitySound(ability, true);
+
 			// Play hit animation on the defender (pokemon2)
 			this.playHitAnimation(this.pokemon2Sprite);
 		} else {
 			console.log(`   MISS! (${accuracy.toFixed(1)}% > ${ability.accuracy}%)`);
+
+			// Play sound effect
+			console.log("Play miss sound: ");
+			this.playAbilitySound(ability, false);
+
 			this.showAbilityMessage(attacker.name, `${ability.name}!\nMissed!`);
 
 			// Add to battle log
@@ -748,11 +790,17 @@ class BattleScene extends Phaser.Scene {
 			}
 			this.battleText.setText(message);
 
+			// Play hit audio for AI
+			this.playAbilitySound(ability, true);
+
 			// Play hit animation on the defender (pokemon1)
 			this.playHitAnimation(this.pokemon1Sprite);
 		} else {
 			console.log(`   MISS! (${accuracy.toFixed(1)}% > ${ability.accuracy}%)`);
 			this.showAbilityMessage(attacker.name, `${ability.name}!\nMissed!`);
+
+			// Play miss audio
+			this.playAbilitySound(ability, false);
 
 			// Add to battle log
 			this.addToBattleLog(`${attacker.name}: ${ability.name} (MISS)`);
