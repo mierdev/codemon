@@ -19,6 +19,7 @@ app.set("view engine", "ejs");
 // Changed static to joined dirname
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static("public"));
+app.use("/managers", express.static(path.join(__dirname, "managers")));
 // Aded missing parenthesis
 app.use(express.json());
 
