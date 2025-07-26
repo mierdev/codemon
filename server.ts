@@ -36,7 +36,7 @@ db.on("error", (error) => console.log(error));
 db.once("open", () => console.log("Database of madness has started!"));
 
 // add data to database
-// data();
+// setupDatabase();
 
 // render index.ejs
 app.get("/", (_, res) => {
