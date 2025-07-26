@@ -1,10 +1,8 @@
 <img src="https://raw.githubusercontent.com/mierdev/codemon/refs/heads/main/public/assets/readme/codemon.png" alt="codemon logo">
 
-# A pokémon inspired game with a coding theme!
+# A pokémon inspired game with a coding theme
 
-The game is live hosted.
-
-:arrow_right: **[Play the in your browser](https://cdn.bookey.app/files/publish-book/Learning%20TypeScript7136808.jpg)**
+The game is live hosted! **[Play it in your browser](https://cdn.bookey.app/files/publish-book/Learning%20TypeScript7136808.jpg)**
 
 ### In-game sreenshots
 
@@ -22,11 +20,77 @@ The game is live hosted.
 
 ## Installation
 
-- Chaos.
+1. Clone the repo:
+```bash
+git clone git@github.com:mierdev/codemon.git
+```
+
+2. Open the project folder:
+```bash
+cd codemon
+```
+
+3. Install dependencies:
+```bash
+npm install
+```
+
+4. Install MongoDB
+*On WSL2/Ubuntu (Windows)*
+- Import the public key:
+From a terminal, install `gnupg` and `curl` if they are not already available:
+```bash
+sudo apt-get install gnupg curl
+```
+To import the MongoDB public GPG key, run the following command:
+```bash
+curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
+  sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg \
+  --dearmor
+```
+
+- Create the list file:
+Create the list file `/etc/apt/sources.list.d/mongodb-org-8.0.list` for your version of Ubuntu (we are presuming you've installed it with Boot.dev's instructions and are using Ubuntu 22.04 Jammy, if not follow the [Installation guide](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/))
+```bash
+echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/8.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
+```
+
+- Reload the package database:
+Issue the following command to reload the local package database:
+```bash
+sudo apt-get update
+```
+
+- Install MongoDB Community Server:
+```bash
+sudo apt-get install -y mongodb-org
+```
 
 ## Usage
+1. Start MongoDB
+*On WSL2/Ubuntu (Windows)*
+- Run this command to start MongoDBL:
+```bash
+sudo systemctl start mongod
+```
+- If you receive an error similar to the following when starting mongod:
+`Failed to start mongod.service: Unit mongod.service not found.`
+Run the following command first:
+```bash
+sudo systemctl daemon-reload
+```
+Then run the start command above again.
 
-- Fire.
+2. Start the server
+- Run this command in your CLI:
+```bash
+npm run devStart
+```
+
+- If you are on Mac you might run into issues. When you do run this command instead:
+```bash
+npm run macStart
+```
 
 ## Features
 
