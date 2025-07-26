@@ -21,7 +21,7 @@ class BootScene extends Phaser.Scene {
         window.gameManager = new GameManager();
         
         // Get all available language IDs
-        const availableLanguages = ['python', 'go', 'rust', 'ocaml', 'cpp', 'javascript', 'typescript'];
+        const availableLanguages = ['python', 'go', 'rust', 'ocaml', 'cpp', 'javascript'];
         
         // Randomly select 2 different languages
         const shuffled = availableLanguages.sort(() => 0.5 - Math.random());
