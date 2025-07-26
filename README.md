@@ -1,8 +1,21 @@
-# CODEMON
+<div text-align="center" width="100%">
+  ![alt text](./public/assets/readme/codemon.png)
+</div>
 
-A pokémon inspired game with a coding theme!
+# A pokémon inspired game with a coding theme!
 
-**[Play it in your browser](https://cdn.bookey.app/files/publish-book/Learning%20TypeScript7136808.jpg)**
+> **[Play it in your browser](https://cdn.bookey.app/files/publish-book/Learning%20TypeScript7136808.jpg)**
+
+### In-game sreenshots
+
+<div text-align="center" width="100%">
+  <div text-align="center" width="50%">
+    ![alt text](./public/assets/readme/screenshot_1.png)
+  </div>
+  <div text-align="center" width="50%">
+    ![alt text](./public/assets/readme/screenshot_2.png)
+  </div>
+</div>
 
 ## Build by
 - [Nallo](https://github.com/nallovint)
@@ -11,19 +24,23 @@ A pokémon inspired game with a coding theme!
 
 ## Prerequisites
 
--
+- [Node.js](https://nodejs.org/en/download)
 
 ## Installation
 
--
+- Chaos.
 
-## How to run
+## Usage
 
--
+- Fire.
 
 ## Features
 
-- A lot of cool stuff
+- A lot of cool stuff.
+
+## Structure
+
+A bit about our architecture.
 
 ## Attributions
 
@@ -48,3 +65,7 @@ A pokémon inspired game with a coding theme!
 
 More sounds:
 https://sfxr.me/
+
+## License
+
+- CC-BY-something (attribution required) ?
