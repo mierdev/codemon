@@ -2,7 +2,9 @@
 
 # A pokémon inspired game with a coding theme
 
-The game is live hosted! **[Play it in your browser](https://cdn.bookey.app/files/publish-book/Learning%20TypeScript7136808.jpg)**
+Our entry for the Boot.dev Hackathon 2025.
+
+The game is live hosted! **<a href="https://cdn.bookey.app/files/publish-book/Learning%20TypeScript7136808.jpg" target="_blank">Play it in your browser</a>**
 
 ### In-game sreenshots
 
