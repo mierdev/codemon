@@ -1,5 +1,30 @@
 # CODEMON
 
+A pokémon inspired game with a coding theme!
+
+**[Play it in your browser](https://cdn.bookey.app/files/publish-book/Learning%20TypeScript7136808.jpg)**
+
+## Build by
+- [Nallo](https://github.com/nallovint)
+- [TokiLoshi](https://github.com/TokiLoshi)
+- [Miranda](https://github.com/mierdev)
+
+## Prerequisites
+
+-
+
+## Installation
+
+-
+
+## How to run
+
+-
+
+## Features
+
+- A lot of cool stuff
+
 ## Attributions
 
 ### UI
