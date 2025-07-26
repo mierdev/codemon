@@ -6,7 +6,7 @@ Our entry for the Boot.dev Hackathon 2025.
 
 The game is live hosted! **<a href="https://cdn.bookey.app/files/publish-book/Learning%20TypeScript7136808.jpg" target="_blank">Play it in your browser</a>**
 
-### In-game sreenshots
+## In-game sreenshots
 
 <img height="300px" src="https://raw.githubusercontent.com/mierdev/codemon/refs/heads/main/public/assets/readme/screenshot_1.png" alt="screenshot 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img height="300px" src="https://raw.githubusercontent.com/mierdev/codemon/refs/heads/main/public/assets/readme/screenshot_2.png" alt="screenshot 2">
 </div>
