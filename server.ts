@@ -2,6 +2,12 @@
 import express from "express";
 import mongoose from "mongoose";
 
+// import routers
+import { abilitiesRouter } from "./routes/routerAbilities.ts";
+
+// import data
+// import "./data/data.ts";
+
 // setup
 const app = express();
 app.set("view engine", "ejs");
@@ -19,7 +25,7 @@ mongoose.connect("mongodb://localhost/codemon");
   in .env
     DATABASE_URL=mongodb://localhost/test
 
-  in server.js
+  in server.ts
     import { configDotenv } from "dotenv";
     montgoose.connect(process.env.DATABASE_URL);
 */
@@ -29,14 +35,17 @@ const db = mongoose.connection;
 db.on("error", (error) => console.log(error));
 db.once("open", () => console.log("Database of madness has started!"));
 
+// add data to database
+// data();
+
 // render index.ejs
 app.get("/", (_, res) => {
   console.log("Fire is starting to spread on your screen!");
   res.render("index");
 })
 
-// routes
-// TODO: start with playerCodemon
+// setup routers
+app.use("/abilities", abilitiesRouter);
 
 // start server
-app.listen(3000, () => console.log("Chaos has started!"));
+app.listen(3000, () => console.log("Chaos has spread!"));
