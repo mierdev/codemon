@@ -1,20 +1,14 @@
-<div text-align="center" width="100%">
-  ![alt text](./public/assets/readme/codemon.png)
-</div>
+<img src="https://raw.githubusercontent.com/mierdev/codemon/refs/heads/main/public/assets/readme/codemon.png" alt="codemon logo">
 
 # A pokémon inspired game with a coding theme!
 
-> **[Play it in your browser](https://cdn.bookey.app/files/publish-book/Learning%20TypeScript7136808.jpg)**
+The game is live hosted.
+
+:arrow_right: **[Play the in your browser](https://cdn.bookey.app/files/publish-book/Learning%20TypeScript7136808.jpg)**
 
 ### In-game sreenshots
 
-<div text-align="center" width="100%">
-  <div text-align="center" width="50%">
-    ![alt text](./public/assets/readme/screenshot_1.png)
-  </div>
-  <div text-align="center" width="50%">
-    ![alt text](./public/assets/readme/screenshot_2.png)
-  </div>
+<img height="300px" src="https://raw.githubusercontent.com/mierdev/codemon/refs/heads/main/public/assets/readme/screenshot_1.png" alt="screenshot 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img height="300px" src="https://raw.githubusercontent.com/mierdev/codemon/refs/heads/main/public/assets/readme/screenshot_2.png" alt="screenshot 2">
 </div>
 
 ## Build by
