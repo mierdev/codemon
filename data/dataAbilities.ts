@@ -1,1 +1,0 @@
-// ability data for database - push to data.ts

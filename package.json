@@ -8,8 +8,8 @@
 		"dev": "vite",
 		"build": "tsc && vite build",
 		"preview": "vite preview",
-		"macStart": "nodemon --watch './' --ext ts --exec 'node --loader ts-node/esm' server.ts",
-		"devStart": "nodemon server.ts"
+		"macStart": "nodemon --watch './' --ext ts --exec 'node --loader ts-node/esm' server.cjs",
+		"devStart": "nodemon server.cjs"
 	},
 	"devDependencies": {
 		"@types/express": "^5.0.3",
