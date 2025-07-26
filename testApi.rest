@@ -1,4 +1,4 @@
-POST http://localhost:3000/abilities
+POST http://localhost:3001/abilities
 Content-Type: application/json
 
 {
@@ -13,8 +13,8 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3000/abilities
+GET http://localhost:3001/abilities
 
 ###
 
-GET http://localhost:3000/abilities/13
+GET http://localhost:3001/abilities/13

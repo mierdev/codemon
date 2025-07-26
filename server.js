@@ -18,6 +18,13 @@ app.set("view engine", "ejs");
 // app.use(express.static("public"));
 // Changed static to joined dirname
 app.set("views", path.join(__dirname, "views"));
+
+// Add route logging middleware
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+});
+
 app.use(express.static("public"));
 app.use("/managers", express.static(path.join(__dirname, "managers")));
 // Aded missing parenthesis
@@ -50,8 +57,10 @@ import abilitiesRouter from "./routes/routerAbilities.js";
 app.use("/abilities", abilitiesRouter);
 
 // render index.ejs
-app.get("/", (_, res) => {
+app.get("/", (req, res) => {
 	console.log("Fire is starting to spread on your screen!");
+	console.log("Request URL:", req.url);
+	console.log("Request method:", req.method);
 	res.render("index");
 });
 
@@ -62,6 +71,12 @@ app.get("/static", (_, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 */
+
+// 404 handler for unmatched routes
+app.use((req, res) => {
+	console.log("404 - Route not found:", req.method, req.url);
+	res.status(404).send("Route not found: " + req.url);
+});
 
 // start server changed to avoid conflics with vite
 app.listen(3001, () => console.log("Chaos has begun!"));
