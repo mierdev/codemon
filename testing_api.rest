@@ -3,3 +3,18 @@ GET http://localhost:3000/abilities
 ###
 
 GET http://localhost:3000/abilities/13
+
+###
+
+POST http://localhost:3000/abilities
+Content-Type: application/json
+
+{
+  "name": "Nallo's ability",
+  "type": "TypeScript",
+  "description": "Writing awesome code!",
+  "power": 5,
+  "accuracy": 20,
+  "statusEffectSpecialAttack": -4,
+  "statusEffectSpeed": -10
+}

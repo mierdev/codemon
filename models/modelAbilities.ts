@@ -38,4 +38,4 @@ const abilitiesSchema = new mongoose.Schema({
   }
 });
 
-export default mongoose.model("Abilities", abilitiesSchema);
+export default mongoose.model("Ability", abilitiesSchema);
