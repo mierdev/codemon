@@ -358,13 +358,13 @@ class GameManager {
 
 		const effectiveStat = Math.floor(baseStat * multiplier);
 
-		console.log(
-			`${
-				pokemon.name
-			} ${stat}: Base=${baseStat}, Buffs=+${buffStages}, Debuffs=-${debuffStages}, Net=${netStages}, Multiplier=${multiplier.toFixed(
-				2
-			)}, Effective=${effectiveStat}`
-		);
+		// console.log(
+		// 	`${
+		// 		pokemon.name
+		// 	} ${stat}: Base=${baseStat}, Buffs=+${buffStages}, Debuffs=-${debuffStages}, Net=${netStages}, Multiplier=${multiplier.toFixed(
+		// 		2
+		// 	)}, Effective=${effectiveStat}`
+		// );
 
 		return effectiveStat;
 	}
@@ -423,9 +423,9 @@ class GameManager {
 	calculateDamage(attacker, defender, ability) {
 		const basePower = ability.power;
 
-		console.log(
-			`DAMAGE CALCULATION: ${attacker.name} uses ${ability.name} (${ability.type}, ${basePower} BP) vs ${defender.name}`
-		);
+		// console.log(
+		// 	`DAMAGE CALCULATION: ${attacker.name} uses ${ability.name} (${ability.type}, ${basePower} BP) vs ${defender.name}`
+		// );
 
 		// Determine attack and defense stats based on ability type
 		let attackStat, defenseStat;
@@ -450,14 +450,14 @@ class GameManager {
 		);
 		const finalDamage = Math.max(1, damage); // Minimum 1 damage
 
-		console.log(
-			`   Formula: (${basePower} × ${attackStat} ÷ ${defenseStat}) × ${randomFactor.toFixed(
-				2
-			)} = ${finalDamage} damage`
-		);
-		console.log(
-			`   ${defender.name} HP: ${defender.hp} → ${defender.hp - finalDamage}`
-		);
+		// console.log(
+		// 	`   Formula: (${basePower} × ${attackStat} ÷ ${defenseStat}) × ${randomFactor.toFixed(
+		// 		2
+		// 	)} = ${finalDamage} damage`
+		// );
+		// console.log(
+		// 	`   ${defender.name} HP: ${defender.hp} → ${defender.hp - finalDamage}`
+		// );
 
 		return finalDamage;
 	}
@@ -502,6 +502,9 @@ class GameManager {
 		);
 		const randomTrainer =
 			availableTrainers[Math.floor(Math.random() * availableTrainers.length)];
+		console.log(
+			`getting next opponent and returning ${randomTrainer} match: ${this.tournament.currentMatch} total: ${this.tournament.type}`
+		);
 		return {
 			trainer: randomTrainer,
 			match: this.tournament.currentMatch,
@@ -513,7 +516,9 @@ class GameManager {
 		if (!this.tournament) return null;
 		this.tournament.wins++;
 		this.tournament.currentMatch++;
-
+		console.log(
+			`In record win, with: ${this.tournament.wins} tota: ${this.tournament.type}`
+		);
 		if (this.tournament.currentMatch > this.tournament.type) {
 			const result = {
 				completed: true,
@@ -526,6 +531,7 @@ class GameManager {
 						? "Silver"
 						: "Gold",
 			};
+
 			this.tournament = null;
 			return result;
 		}

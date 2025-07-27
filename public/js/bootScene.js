@@ -133,16 +133,20 @@ class BootScene extends Phaser.Scene {
 			`Starting tournament: ${this.selectedTournament} match as ${this.selectedLanguage}`
 		);
 
-		const opponent = window.gameManager.startTournament(
+		const tournamentSetup = window.gameManager.startTournament(
 			this.selectedTournament,
 			this.selectedLanguage
 		);
+
+		const initialOpponent = tournamentSetup.trainer;
+
 		const battleData = window.gameManager.startBattle(
 			this.selectedLanguage,
-			opponent.trainer.language
+			initialOpponent.language
 		);
 		if (battleData) {
-			battleData.tournamentInfo = opponent;
+			battleData.tournamentInfo = tournamentSetup;
+			battleData.playerLanguage = this.selectedLanguage;
 			this.scene.start("BattleScene", battleData);
 		}
 	}
