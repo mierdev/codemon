@@ -1,3 +1,4 @@
+// create on
 POST http://localhost:3001/abilities
 Content-Type: application/json
 
@@ -7,14 +8,20 @@ Content-Type: application/json
   "description": "Writing awesome code!",
   "power": 5,
   "accuracy": 20,
-  "statusEffectSpecialAttack": -4,
   "statusEffectSpeed": -10
 }
 
 ###
 
+// read all
 GET http://localhost:3001/abilities
 
 ###
 
-GET http://localhost:3001/abilities/13
+// read one
+GET http://localhost:3001/abilities/6885f6f89ebebe47c1ad512b
+
+###
+
+// delete one
+DELETE http://localhost:3001/abilities/6885f6e69ebebe47c1ad5129

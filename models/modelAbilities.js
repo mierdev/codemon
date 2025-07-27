@@ -1,9 +1,7 @@
-// const mongoose = require("mongoose");
-/**
- * Importing with ES6 syntax
- */
+// importing with ES6 syntax
 import mongoose from "mongoose";
 
+// setup schema
 const abilitiesSchema = new mongoose.Schema({
 	name: {
 		type: String,
@@ -19,7 +17,7 @@ const abilitiesSchema = new mongoose.Schema({
 	},
 	power: {
 		type: Number,
-		required: true,
+		required: true
 	},
 	accuracy: {
 		type: Number,
@@ -42,5 +40,5 @@ const abilitiesSchema = new mongoose.Schema({
 	},
 });
 
-// module.exports = mongoose.model("Ability", abilitiesSchema);
+// export
 export default mongoose.model("Ability", abilitiesSchema);

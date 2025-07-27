@@ -1,12 +1,9 @@
-/**
- * importing libraries using the import syntax favoured by ES6
- * require is preferred by common js which gives us the .cjs and can often cause headaches
- */
+// importing libraries using the import syntax favoured by ES6
 import express from "express";
 import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
 
 // ES module equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -15,20 +12,16 @@ const __dirname = path.dirname(__filename);
 // setup server
 const app = express();
 app.set("view engine", "ejs");
-// app.use(express.static("public"));
-// Changed static to joined dirname
 app.set("views", path.join(__dirname, "views"));
+app.use(express.static("public"));
+app.use("/managers", express.static(path.join(__dirname, "managers")));
+app.use(express.json());
 
-// Add route logging middleware
-app.use((req, res, next) => {
+// route logging middleware
+app.use((req, _, next) => {
     console.log(`${req.method} ${req.url}`);
     next();
 });
-
-app.use(express.static("public"));
-app.use("/managers", express.static(path.join(__dirname, "managers")));
-// Aded missing parenthesis
-app.use(express.json());
 
 // connect to database
 mongoose.connect("mongodb://localhost/dbCodemon");
@@ -51,8 +44,7 @@ const db = mongoose.connection;
 db.on("error", (error) => console.log(error));
 db.once("open", () => console.log("Database of madness has started!"));
 
-// setup routes (adjusted to use ES6)
-// const abilitiesRouter = require("./routes/routerAbilities.js");
+// setup routes 
 import abilitiesRouter from "./routes/routerAbilities.js";
 app.use("/abilities", abilitiesRouter);
 
@@ -64,19 +56,11 @@ app.get("/", (req, res) => {
 	res.render("index");
 });
 
-/*
-// serve static index.html
-app.get("/static", (_, res) => {
-  console.log("Fire is spreading on your screen!");
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-*/
-
 // 404 handler for unmatched routes
 app.use((req, res) => {
 	console.log("404 - Route not found:", req.method, req.url);
 	res.status(404).send("Route not found: " + req.url);
 });
 
-// start server changed to avoid conflics with vite
+// start server
 app.listen(3001, () => console.log("Chaos has begun!"));

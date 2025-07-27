@@ -1,16 +1,12 @@
-// const express = require("express");
-
-/**
- * importing libraries using the import syntax favoured by ES6
- * require is preferred by common js which gives us the .cjs and can often cause headaches
- */
+// importing libraries using the import syntax favoured by ES6
 import express from "express";
 import Ability from "../models/modelAbilities.js";
+import { error } from "console";
 
 const router = express.Router();
 
 // CREATE one
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
 	const ability = new Ability({
 		name: req.body.name,
 		type: req.body.type,
@@ -24,30 +20,63 @@ router.post("/", (req, res) => {
 		statusEffectSpeed: req.body.statusEffectSpeed,
 	});
 
-	res.send(`CREATE ONE ${ability.name}`);
+	try {
+		const newAbility = await ability.save();
+		res.status(201).json(newAbility);
+	} catch (err) {
+		res.status(400).json({ message: err.message });
+	}
 });
 
 // READ all
-router.get("/", (req, res) => {
-	console.log("Getting all", req);
-	res.send("GET ALL");
+router.get("/", async (_, res) => {
+	try {
+		const abilities = await Ability.find();
+		res.json(abilities);
+	} catch (err) {
+		res.status(500).json({ message: error.message });
+	}
 });
 
 // READ one
-router.get("/:id", (req, res) => {
-	res.send("GET ONE");
+router.get("/:id", getAbility, (_, res) => {
+	res.json(res.ability);
 });
 
 // UPDATE one
-router.patch("/:id", (req, res) => {
+router.patch("/:id", getAbility, (req, res) => {
 	res.send("UPDATE ONE");
 });
 
+
+//TODO: ik ben bij 25:50 in de video
+
+
 // DELETE one
-router.delete("/:id", (req, res) => {
-	res.send("DELETE ONE");
+router.delete("/:id", getAbility, async (_, res) => {
+	try {
+		await Ability.deleteOne({ _id: res.ability._id });
+		res.json({ message: "Deleted ability" })
+	} catch (err) {
+		res.status(500).json({ message: err.message })
+	}
 });
 
-// module.exports = router;
-// Updated for ES6
+// middleware to get id
+async function getAbility(req, res, next) {
+	let ability;
+	try {
+		ability = await Ability.findById(req.params.id);
+		if (ability === null) {
+			return res.status(404).json({ message: "Can't find ability" });
+		}
+	} catch (err) {
+		return res.status(500).json({ message: err.message });
+	}
+
+	res.ability = ability;
+	next();
+};
+
+// export
 export default router;
