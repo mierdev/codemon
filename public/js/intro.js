@@ -1,5 +1,3 @@
-import Phaser from 'phaser';
-
 class IntroScene extends Phaser.Scene {
     constructor() {
         super({ key: 'IntroScene' });
@@ -24,7 +22,7 @@ class IntroScene extends Phaser.Scene {
         // Load all 100 frames with progress tracking
         for (let i = 1; i <= this.totalFrames; i++) {
             const frameNumber = i.toString().padStart(4, '0');
-            this.load.image(`frame_${frameNumber}`, `assets/output_${frameNumber}.png`);
+            this.load.image(`frame_${frameNumber}`, `assets/intro_images/output_${frameNumber}.png`);
         }
         
         // Track loading progress
@@ -91,6 +89,12 @@ class IntroScene extends Phaser.Scene {
         // Start text fade-in after a delay
         this.time.delayedCall(2000, () => {
             this.fadeInText();
+        });
+        
+        // Transition to BootScene after 5 seconds
+        this.time.delayedCall(8000, () => {
+            console.log('Intro complete, transitioning to BootScene...');
+            this.scene.start('BootScene');
         });
         
         console.log('Intro scene created successfully');
@@ -273,24 +277,4 @@ class IntroScene extends Phaser.Scene {
             });
         }
     }
-}
-
-// Game configuration
-const config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    parent: 'game-container',
-    backgroundColor: '#000000',
-    scene: IntroScene,
-    physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: { y: 0 },
-            debug: false
-        }
-    }
-};
-
-// Create the game instance
-const game = new Phaser.Game(config); 
+} 
