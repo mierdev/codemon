@@ -36,8 +36,8 @@ const abilitiesSchema = new mongoose.Schema({
 		type: Number,
 	},
 	statusEffectSpeed: {
-		type: Number,
-	},
+		type: Number
+	}
 });
 
 // export

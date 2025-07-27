@@ -49,8 +49,8 @@ db.once("open", () => console.log("Database of madness has started!"));
 import abilitiesRouter from "./routes/routerAbilities.js";
 app.use("/abilities", abilitiesRouter);
 
-import typesRouter from "./routes/routerTypes.js";
-app.use("/types", typesRouter);
+import codemonRouter from "./routes/routerCodemon.js";
+app.use("/types", codemonRouter);
 
 import trainersRouter from "./routes/routerTrainers.js";
 app.use("/trainers", trainersRouter);
