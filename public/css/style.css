@@ -1,25 +1,27 @@
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  background: #000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	background: #000;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	font-family: Arial, sans-serif;
+	cursor: url("./bootsPaw.png"), auto;
 }
 
 #game-container {
-  border: 2px solid #333;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+	border: 2px solid #333;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+	cursor: url("./bootsPaw.png"), auto;
 }
 
 h1 {
-  color: #ecf0f1;
-  text-align: center;
-  margin-bottom: 20px;
+	color: #ecf0f1;
+	text-align: center;
+	margin-bottom: 20px;
 }
