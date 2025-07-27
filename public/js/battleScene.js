@@ -54,8 +54,6 @@ class BattleScene extends Phaser.Scene {
 	/**
 	 * Preloads audio files from assets folder
 	 */
-	//TODO:
-	// update files
 	preload() {
 		this.load.audio("buff", ["assets/audio/effects/buff.mp3"]);
 		this.load.audio("control", ["assets/audio/effects/control.wav"]);
@@ -153,7 +151,7 @@ class BattleScene extends Phaser.Scene {
 			this.audioManager = new window.AudioManager(this);
 			console.log("AudioManager initialized!");
 		} else {
-			console.log("Nope, you broke it...");
+			console.log("Something has gone wrong with the audio manager");
 		}
 
 		this.updateUI();
