@@ -85,7 +85,7 @@ class EndScene extends Phaser.Scene {
 			.text(
 				480,
 				460,
-				`Score: ${this.tournamentResult.wins}/${this.tournamentResult.type}`,
+				`Score: ${this.tournamentResult.wins}/${this.tournamentResult.total}`,
 				{
 					fontSize: "20px",
 					fill: "#2ecc71",
@@ -206,7 +206,7 @@ class EndScene extends Phaser.Scene {
 				return {
 					name: "Gold",
 					emoji: "🥇",
-					color: "ffd700",
+					color: "#ffd700",
 				};
 			default:
 				return {

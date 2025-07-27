@@ -954,7 +954,7 @@ class BattleScene extends Phaser.Scene {
 	updateUI() {
 		console.log("update UI called for: ", this.pokemon1?.name);
 		console.log("Pokemon abilities in update: ", this.pokemon1?.abilities);
-		console.log("ability buttons lenght: ", this.abilityButtons.lenght);
+		console.log("ability buttons lenght: ", this.abilityButtons?.length);
 
 		this.abilityButtons.forEach((buttonData, index) => {
 			const abilities = this.pokemon1.abilities;
