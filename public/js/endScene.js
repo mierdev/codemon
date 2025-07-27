@@ -15,7 +15,7 @@ class EndScene extends Phaser.Scene {
 	init(data) {
 		this.tournamentResult = data.result;
 		this.playerLanguage = data.playerLanguage;
-		this.won = data.won;
+		this.won = data.result.won;
 	}
 
 	/**
@@ -40,12 +40,17 @@ class EndScene extends Phaser.Scene {
 	 */
 	createVictoryScreen() {
 		this.add
-			.text(480, 150, "You won a... SHINY COIN!", {
-				fontSize: "36px",
-				fill: "#f1c40f",
-				stroke: "#000",
-				strokeThickness: 3,
-			})
+			.text(
+				480,
+				150,
+				`Score: ${this.tournamentResult.wins}-${this.tournamentResult.losses} (needed ${this.tournamentResult.winsNeeded})`,
+				{
+					fontSize: "36px",
+					fill: "#f1c40f",
+					stroke: "#000",
+					strokeThickness: 1,
+				}
+			)
 			.setOrigin(0.5);
 
 		this.add
@@ -151,7 +156,7 @@ class EndScene extends Phaser.Scene {
 			.text(
 				480,
 				460,
-				`Final Score: ${this.tournamentResult.wins}/${this.tournamentResult.total}`,
+				`Final Score: ${this.tournamentResult.wins}-${this.tournamentResult.losses} (needed ${this.tournamentResult.winsNeeded})`,
 				{
 					fontSize: "20px",
 					fill: "#e67e22",

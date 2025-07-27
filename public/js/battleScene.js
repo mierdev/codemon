@@ -741,7 +741,6 @@ class BattleScene extends Phaser.Scene {
 					this.scene.start("EndScene", {
 						result: result,
 						playerLanguage: this.tournamentPlayerLanguage,
-						won: true,
 					});
 				} else {
 					console.log("Getting next opponent.... ");
@@ -886,7 +885,6 @@ class BattleScene extends Phaser.Scene {
 				this.scene.start("EndScene", {
 					result: result,
 					playerLanguage: this.tournamentPlayerLanguage,
-					won: false,
 				});
 			} else {
 				console.log("Single battle activated.... ");

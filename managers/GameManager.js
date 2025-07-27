@@ -475,12 +475,21 @@ class GameManager {
 	 * Simple tournament management tracking wins and generating opponents
 	 */
 	startTournament(matchCount, playerLanguage) {
+		const winsNeeded = Math.ceil(matchCount / 2);
+
 		this.tournament = {
-			type: matchCount, // 3, 5, 7
-			currentMatch: 1,
+			type: matchCount, // 3, 5, 7 total matches
+			winsNeeded: winsNeeded, // 2, 3, 4 to get shiny
+			matchesPlayed: 0,
 			wins: 0,
+			losses: 0,
 			playerLanguage: playerLanguage,
+			isActive: true,
 		};
+
+		console.log(
+			`Tournament started: Best of ${matchCount} (need ${winsNeeded} for shiny)`
+		);
 
 		this.trainers = [
 			{ name: "Nallo", language: "rust" },
@@ -494,7 +503,10 @@ class GameManager {
 	}
 
 	getNextOpponent() {
-		if (!this.tournament) return null;
+		if (!this.tournament || !this.tournament.isActive) {
+			console.log("No active tournament ");
+			return null;
+		}
 
 		/// Filter out player's languages and get random opponent
 		const availableTrainers = this.trainers.filter(
@@ -503,11 +515,11 @@ class GameManager {
 		const randomTrainer =
 			availableTrainers[Math.floor(Math.random() * availableTrainers.length)];
 		console.log(
-			`getting next opponent and returning ${randomTrainer} match: ${this.tournament.currentMatch} total: ${this.tournament.type}`
+			`getting next opponent and returning ${randomTrainer} match: ${this.tournament.matchesPlayed} total: ${this.tournament.type}`
 		);
 		return {
 			trainer: randomTrainer,
-			match: this.tournament.currentMatch,
+			match: this.tournament.matchesPlayed + 1,
 			total: this.tournament.type,
 		};
 	}
@@ -515,15 +527,19 @@ class GameManager {
 	recordWin() {
 		if (!this.tournament) return null;
 		this.tournament.wins++;
-		this.tournament.currentMatch++;
+		this.tournament.matchesPlayed++;
 		console.log(
-			`In record win, with: ${this.tournament.wins} tota: ${this.tournament.type}`
+			`In record win, with: ${this.tournament.wins} total: ${this.tournament.type}`
 		);
-		if (this.tournament.currentMatch > this.tournament.type) {
+
+		if (this.tournament.wins >= this.tournament.winsNeeded) {
 			const result = {
 				completed: true,
+				won: true,
 				wins: this.tournament.wins,
+				losses: this.tournament.losses,
 				total: this.tournament.type,
+				winsNeeded: this.tournament.winsNeeded,
 				trophy:
 					this.tournament.type === 3
 						? "Bronze"
@@ -535,21 +551,82 @@ class GameManager {
 			this.tournament = null;
 			return result;
 		}
-		// Reutrn next match
-		return {
-			completed: false,
-			nextOpponent: this.getNextOpponent(),
+
+		// Continue tournaments
+		if (this.tournament.matchesPlayed <= this.tournament.type) {
+			console.log("Continuing tournament not enough wins yet...");
+			return {
+				completed: false,
+				nextOpponent: this.getNextOpponent(),
+			};
+		}
+
+		// Reutrn next match hoping it doesn't get here...
+		console.log(
+			"Shouldn't have reached this point of Game Manager with recording wins..."
+		);
+		const result = {
+			completed: true,
+			won: false,
+			wins: this.tournament.wins,
+			losses: this.tournament.losses,
+			total: this.tournament.type,
+			winsNeeded: this.tournament.winsNeeded,
+			trophy: "No shiny - didn't get enough wins",
 		};
+		this.tournament = null;
+		return result;
 	}
 
 	recordLoss() {
 		if (!this.tournament) return null;
 
+		this.tournament.losses++;
+		this.tournament.matchesPlayed++;
+
+		console.log(
+			`Player lost a match: ${this.tournament.wins}-${this.tournament.losses}`
+		);
+
+		const matchesLeft = this.tournament.type - this.tournament.matchesPlayed;
+		const maxPossibleWins = this.tournament.wins + matchesLeft;
+
+		console.log(
+			`Matches left ${matchesLeft} vs possible wins: ${maxPossibleWins}`
+		);
+
+		if (maxPossibleWins < this.tournament.winsNeeded) {
+			console.log("Max wins reached, no more wins possible");
+			const result = {
+				completed: true,
+				won: false,
+				wins: this.tournament.wins,
+				losses: this.tournament.losses,
+				total: this.tournament.type,
+				winsNeeded: this.tournament.winsNeeded,
+				trophy: "No shiny coin for you this time... keep trying, you got this!",
+			};
+			this.tournament = null;
+			return result;
+		}
+
+		// Continue tournament if wins are still possible
+		if (this.tournament.matchesPlayed < this.tournament.type) {
+			return {
+				completed: false,
+				nextOpponent: this.getNextOpponent(),
+			};
+		}
+
+		// Reached max without enough wins - Tournament over
 		const result = {
 			completed: true,
+			won: false,
 			wins: this.tournament.wins,
+			losses: this.tournament.losses,
 			total: this.tournament.type,
-			trophy: "No shiny coin for you this time... keep trying, you got this!",
+			winsNeeded: this.tournament.winsNeeded,
+			trophy: "No trophy - didn't get enough wins",
 		};
 		this.tournament = null;
 		return result;
