@@ -38,13 +38,14 @@ router.get("/", async (_, res) => {
 	}
 });
 
-// READ one
-router.get("/:id", getAbility, (_, res) => {
-	res.json(res.ability);
-});
 
-// UPDATE one
-router.patch("/:id", getAbility, async (req, res) => {
+// dynamic endpoints (READ/UPDATE/DELETE one)
+router
+.route("/:id")
+.get(getAbility, (_, res) => {
+	res.json(res.ability);
+})
+.patch(getAbility, async (req, res) => {
 	if (req.body.name !== null) {
 		res.ability.name = req.body.name;
 	};
@@ -82,10 +83,8 @@ router.patch("/:id", getAbility, async (req, res) => {
 	} catch (err) {
 		res.status(400).json({ message: err.message });
 	}
-});
-
-// DELETE one
-router.delete("/:id", getAbility, async (_, res) => {
+})
+.delete(getAbility, async (_, res) => {
 	try {
 		await Ability.deleteOne({ _id: res.ability._id });
 		res.json({ message: "Deleted ability" })

@@ -3,6 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
+// import data from "../data/setupDatabase.js";
 // import dotenv from "dotenv";
 
 // ES module equivalent of __dirname
@@ -47,6 +48,10 @@ db.once("open", () => console.log("Database of madness has started!"));
 // setup routes 
 import abilitiesRouter from "./routes/routerAbilities.js";
 app.use("/abilities", abilitiesRouter);
+
+// create data for database
+// TODO: create data for database
+// getData()
 
 // render index.ejs
 app.get("/", (req, res) => {

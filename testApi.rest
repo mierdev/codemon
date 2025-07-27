@@ -28,7 +28,7 @@ PATCH http://localhost:3001/abilities/6885f6f89ebebe47c1ad512b
 Content-Type: application/json
 
 {
-  "name": "Nallo",
+  "name": "Nallo was here",
   "type": "TypeScript",
   "description": "Writing awesome code!",
   "power": 5,
@@ -38,4 +38,4 @@ Content-Type: application/json
 ###
 
 // delete one
-DELETE http://localhost:3001/abilities/6885f6e69ebebe47c1ad5129
+DELETE http://localhost:3001/abilities/688624b644495729e1718436
