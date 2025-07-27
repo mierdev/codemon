@@ -1469,8 +1469,8 @@ class BattleScene extends Phaser.Scene {
 						this.nextOpponent.trainer.language
 					);
 
-					console.log("Debug - pokemon1Data exists:", !!pokemon1Data);
-					console.log("Debug - pokemon2Data exists:", !!pokemon2Data);
+					// console.log("Debug - pokemon1Data exists:", !!pokemon1Data);
+					// console.log("Debug - pokemon2Data exists:", !!pokemon2Data);
 
 					// There's a next opponent - start next battle
 					const battleData = window.gameManager.startBattle(

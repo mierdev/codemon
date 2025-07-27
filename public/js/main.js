@@ -3,22 +3,22 @@
  * Sets up the Phaser game instance with scene management and physics configuration.
  */
 const config = {
-    type: Phaser.AUTO,
-    width: 960,
-    height: 720,
-    parent: 'game-container',
-    backgroundColor: '#000000',
-    roundPixels: true,
-    pixelArt: true,
-    antialias: false,
-    scene: [BootScene, BattleScene],
-    physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: { y: 0 },
-            debug: false
-        }
-    }
+	type: Phaser.AUTO,
+	width: 960,
+	height: 720,
+	parent: "game-container",
+	backgroundColor: "#000000",
+	roundPixels: true,
+	pixelArt: true,
+	antialias: false,
+	scene: [BootScene, BattleScene, endScene],
+	physics: {
+		default: "arcade",
+		arcade: {
+			gravity: { y: 0 },
+			debug: false,
+		},
+	},
 };
 
 /**
@@ -34,12 +34,12 @@ const game = new Phaser.Game(config);
  * @param {string} pokemon2Id - The ID of the second Pokemon (AI's Pokemon)
  */
 function startNewBattle(pokemon1Id, pokemon2Id) {
-    if (window.gameManager) {
-        const battleData = window.gameManager.startBattle(pokemon1Id, pokemon2Id);
-        if (battleData) {
-            game.scene.start('BattleScene', battleData);
-        }
-    }
+	if (window.gameManager) {
+		const battleData = window.gameManager.startBattle(pokemon1Id, pokemon2Id);
+		if (battleData) {
+			game.scene.start("BattleScene", battleData);
+		}
+	}
 }
 
 /**
@@ -49,7 +49,7 @@ function startNewBattle(pokemon1Id, pokemon2Id) {
  * @param {Object} apiData - The new Pokemon data from the API
  */
 function updatePokemonFromAPI(pokemonId, apiData) {
-    if (window.gameManager) {
-        window.gameManager.updatePokemonFromAPI(pokemonId, apiData);
-    }
-} 
+	if (window.gameManager) {
+		window.gameManager.updatePokemonFromAPI(pokemonId, apiData);
+	}
+}
