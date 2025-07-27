@@ -44,13 +44,45 @@ router.get("/:id", getAbility, (_, res) => {
 });
 
 // UPDATE one
-router.patch("/:id", getAbility, (req, res) => {
-	res.send("UPDATE ONE");
+router.patch("/:id", getAbility, async (req, res) => {
+	if (req.body.name !== null) {
+		res.ability.name = req.body.name;
+	};
+	if (req.body.type !== null) {
+		res.ability.type = req.body.type;
+	};
+	if (req.body.description !== null) {
+		res.ability.description = req.body.description;
+	};
+	if (req.body.power !== null) {
+		res.ability.power = req.body.power;
+	};
+	if (req.body.accuracy !== null) {
+		res.ability.accuracy = req.body.accuracy;
+	};
+	if (req.body.statusEffectAttack !== null) {
+		res.ability.statusEffectAttack = req.body.statusEffectAttack;
+	};
+	if (req.body.statusEffectSpecialAttack !== null) {
+		res.ability.statusEffectSpecialAttack = req.body.statusEffectSpecialAttack;
+	};
+	if (req.body.statusEffectDefense !== null) {
+		res.ability.statusEffectDefense = req.body.statusEffectDefense;
+	};
+	if (req.body.statusEffectSpecialDefense !== null) {
+		res.ability.statusEffectSpecialDefense = req.body.statusEffectSpecialDefense;
+	};
+	if (req.body.statusEffectSpeed !== null) {
+		res.ability.statusEffectSpeed = req.body.statusEffectSpeed;
+	};
+
+	try {
+		const updatedAbility = await res.ability.save();
+		res.json(updatedAbility);
+	} catch (err) {
+		res.status(400).json({ message: err.message });
+	}
 });
-
-
-//TODO: ik ben bij 25:50 in de video
-
 
 // DELETE one
 router.delete("/:id", getAbility, async (_, res) => {
