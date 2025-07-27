@@ -39,13 +39,13 @@ router
   res.json(res.codemon);
 })
 .patch(getCodemon, async (req, res) => {
-  if (req.body.name !== null) {
+  if (req.body.name !== undefined) {
     res.codemon.name = req.body.name;
   };
-  if (req.body.type !== null) {
+  if (req.body.type !== undefined) {
     res.codemon.type = req.body.type;
   };
-  if (req.body.abilities !== null) {
+  if (req.body.abilities !== undefined) {
     res.codemon.abilities = req.body.abilities;
   };
 

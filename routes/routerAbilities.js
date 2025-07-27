@@ -46,34 +46,34 @@ router
 	res.json(res.ability);
 })
 .patch(getAbility, async (req, res) => {
-	if (req.body.name !== null) {
+	if (req.body.name !== undefined) {
 		res.ability.name = req.body.name;
 	};
-	if (req.body.type !== null) {
+	if (req.body.type !== undefined) {
 		res.ability.type = req.body.type;
 	};
-	if (req.body.description !== null) {
+	if (req.body.description !== undefined) {
 		res.ability.description = req.body.description;
 	};
-	if (req.body.power !== null) {
+	if (req.body.power !== undefined) {
 		res.ability.power = req.body.power;
 	};
-	if (req.body.accuracy !== null) {
+	if (req.body.accuracy !== undefined) {
 		res.ability.accuracy = req.body.accuracy;
 	};
-	if (req.body.statusEffectAttack !== null) {
+	if (req.body.statusEffectAttack !== undefined) {
 		res.ability.statusEffectAttack = req.body.statusEffectAttack;
 	};
-	if (req.body.statusEffectSpecialAttack !== null) {
+	if (req.body.statusEffectSpecialAttack !== undefined) {
 		res.ability.statusEffectSpecialAttack = req.body.statusEffectSpecialAttack;
 	};
-	if (req.body.statusEffectDefense !== null) {
+	if (req.body.statusEffectDefense !== undefined) {
 		res.ability.statusEffectDefense = req.body.statusEffectDefense;
 	};
-	if (req.body.statusEffectSpecialDefense !== null) {
+	if (req.body.statusEffectSpecialDefense !== undefined) {
 		res.ability.statusEffectSpecialDefense = req.body.statusEffectSpecialDefense;
 	};
-	if (req.body.statusEffectSpeed !== null) {
+	if (req.body.statusEffectSpeed !== undefined) {
 		res.ability.statusEffectSpeed = req.body.statusEffectSpeed;
 	};
 

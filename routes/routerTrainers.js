@@ -39,13 +39,13 @@ router
   res.json(res.trainer);
 })
 .patch(getTrainer, async (req, res) => {
-  if (req.body.name !== null) {
+  if (req.body.name !== undefined) {
     res.trainer.name = req.body.name;
   };
-  if (req.body.battleDialogue !== null) {
+  if (req.body.codemon !== undefined) {
     res.trainer.codemon = req.body.codemon;
   };
-    if (req.body.dialogue !== null) {
+  if (req.body.dialogue !== undefined) {
     res.trainer.dialogue = req.body.dialogue;
   };
 

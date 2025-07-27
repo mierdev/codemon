@@ -1,44 +1,294 @@
-// create one
-POST http://localhost:3001/trainers
+# Codemon API Test Suite
+# Base URL: http://localhost:3001
+
+### ========================================
+### ROOT ROUTE TESTS
+### ========================================
+
+# Test root route (should render index.ejs)
+GET http://localhost:3001/
+
+### ========================================
+### ABILITIES ROUTE TESTS
+### ========================================
+
+# Test GET all abilities
+GET http://localhost:3001/abilities
+
+###
+
+# Test POST create new ability
+POST http://localhost:3001/abilities
 Content-Type: application/json
 
 {
-  "name": "Dan",
-  "codemon": {
-    "name": "birb"
-  },
-  "dialogue": {
-    "startBattle": "It's import to keep reminding them that TypeScript has enums."
-  }
+  "name": "Test Ability",
+  "type": "Physical",
+  "description": "A test ability for testing purposes",
+  "power": 50,
+  "accuracy": 85,
+  "statusEffectAttack": 1,
+  "statusEffectSpecialAttack": 0,
+  "statusEffectDefense": -1,
+  "statusEffectSpecialDefense": 0,
+  "statusEffectSpeed": 0
 }
 
 ###
 
-// read all
+# Test POST create another ability
+POST http://localhost:3001/abilities
+Content-Type: application/json
+
+{
+  "name": "Special Test Ability",
+  "type": "Special",
+  "description": "A special test ability",
+  "power": 75,
+  "accuracy": 90,
+  "statusEffectAttack": 0,
+  "statusEffectSpecialAttack": 2,
+  "statusEffectDefense": 0,
+  "statusEffectSpecialDefense": -1,
+  "statusEffectSpeed": 1
+}
+
+###
+
+# Test GET ability by ID (replace {id} with actual ID from previous POST)
+GET http://localhost:3001/abilities/{id}
+
+###
+
+# Test PATCH update ability (replace {id} with actual ID)
+PATCH http://localhost:3001/abilities/{id}
+Content-Type: application/json
+
+{
+  "power": 80,
+  "accuracy": 95
+}
+
+###
+
+# Test DELETE ability (replace {id} with actual ID)
+DELETE http://localhost:3001/abilities/{id}
+
+###
+
+# Test GET non-existent ability
+GET http://localhost:3001/abilities/507f1f77bcf86cd799439011
+
+### ========================================
+### CODEMON ROUTE TESTS
+### ========================================
+
+# Test GET all codemon
+GET http://localhost:3001/codemon
+
+###
+
+# Test POST create new codemon
+POST http://localhost:3001/codemon
+Content-Type: application/json
+
+{
+  "name": "Test Codemon",
+  "type": "Fire",
+  "abilities": ["Test Ability", "Special Test Ability"]
+}
+
+###
+
+# Test POST create another codemon
+POST http://localhost:3001/codemon
+Content-Type: application/json
+
+{
+  "name": "Water Codemon",
+  "type": "Water",
+  "abilities": ["Water Gun", "Bubble"]
+}
+
+###
+
+# Test GET codemon by ID (replace {id} with actual ID from previous POST)
+GET http://localhost:3001/codemon/{id}
+
+###
+
+# Test PATCH update codemon (replace {id} with actual ID)
+PATCH http://localhost:3001/codemon/{id}
+Content-Type: application/json
+
+{
+  "name": "Updated Test Codemon",
+  "type": "Fire/Flying"
+}
+
+###
+
+# Test DELETE codemon (replace {id} with actual ID)
+DELETE http://localhost:3001/codemon/{id}
+
+###
+
+# Test GET non-existent codemon
+GET http://localhost:3001/codemon/507f1f77bcf86cd799439011
+
+### ========================================
+### TRAINERS ROUTE TESTS
+### ========================================
+
+# Test GET all trainers
 GET http://localhost:3001/trainers
 
 ###
 
-// read one
-GET http://localhost:3001/trainers/688667ae538c4bf751ef2e5f
-
-###
-
-// update one
-PATCH http://localhost:3001/trainers/688667ae538c4bf751ef2e5f
+# Test POST create new trainer
+POST http://localhost:3001/trainers
 Content-Type: application/json
 
 {
-  "name": "Nuc",
-  "codemon": {
-    "name": "fox"
-  },
-  "dialogue": {
-    "startBattle": "Write it in Nim!"
-  }
+  "name": "Test Trainer",
+  "codemon": ["Test Codemon"],
+  "dialogue": "Hello, I am a test trainer!"
 }
 
 ###
 
-// delete one
-DELETE http://localhost:3001/trainers/688667a7538c4bf751ef2e5d
+# Test POST create another trainer
+POST http://localhost:3001/trainers
+Content-Type: application/json
+
+{
+  "name": "Gym Leader",
+  "codemon": ["Water Codemon"],
+  "dialogue": "Welcome to my gym!"
+}
+
+###
+
+# Test GET trainer by ID (replace {id} with actual ID from previous POST)
+GET http://localhost:3001/trainers/{id}
+
+###
+
+# Test PATCH update trainer (replace {id} with actual ID)
+PATCH http://localhost:3001/trainers/{id}
+Content-Type: application/json
+
+{
+  "name": "Updated Test Trainer",
+  "dialogue": "I have been updated!"
+}
+
+###
+
+# Test DELETE trainer (replace {id} with actual ID)
+DELETE http://localhost:3001/trainers/{id}
+
+###
+
+# Test GET non-existent trainer
+GET http://localhost:3001/trainers/507f1f77bcf86cd799439011
+
+### ========================================
+### DIALOGUE ROUTE TESTS
+### ========================================
+
+# Test GET all dialogue
+GET http://localhost:3001/dialogue
+
+###
+
+# Test POST create new dialogue
+POST http://localhost:3001/dialogue
+Content-Type: application/json
+
+{
+  "startDialogue": "Welcome to the battle!",
+  "battleDialogue": "Let's see what you've got!"
+}
+
+###
+
+# Test POST create another dialogue
+POST http://localhost:3001/dialogue
+Content-Type: application/json
+
+{
+  "startDialogue": "Are you ready?",
+  "battleDialogue": "This will be interesting!"
+}
+
+###
+
+# Test GET dialogue by ID (replace {id} with actual ID from previous POST)
+GET http://localhost:3001/dialogue/{id}
+
+###
+
+# Test PATCH update dialogue (replace {id} with actual ID)
+PATCH http://localhost:3001/dialogue/{id}
+Content-Type: application/json
+
+{
+  "startDialogue": "Updated welcome message!",
+  "battleDialogue": "Updated battle message!"
+}
+
+###
+
+# Test DELETE dialogue (replace {id} with actual ID)
+DELETE http://localhost:3001/dialogue/{id}
+
+###
+
+# Test GET non-existent dialogue
+GET http://localhost:3001/dialogue/507f1f77bcf86cd799439011
+
+### ========================================
+### ERROR HANDLING TESTS
+### ========================================
+
+# Test 404 route
+GET http://localhost:3001/nonexistent
+
+###
+
+# Test invalid JSON
+POST http://localhost:3001/abilities
+Content-Type: application/json
+
+{
+  "invalid": "json",
+  "missing": "required fields"
+}
+
+###
+
+# Test invalid ID format
+GET http://localhost:3001/abilities/invalid-id
+
+### ========================================
+### STATIC FILE TESTS
+### ========================================
+
+# Test CSS file
+GET http://localhost:3001/css/style.css
+
+###
+
+# Test JavaScript file
+GET http://localhost:3001/js/main.js
+
+###
+
+# Test Manager file
+GET http://localhost:3001/managers/GameManager.js
+
+###
+
+# Test Audio file
+GET http://localhost:3001/assets/audio/effects/physical.mp3
