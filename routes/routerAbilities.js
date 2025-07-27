@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
 		statusEffectSpecialAttack: req.body.statusEffectSpecialAttack,
 		statusEffectDefense: req.body.statusEffectDefense,
 		statusEffectSpecialDefense: req.body.statusEffectSpecialDefense,
-		statusEffectSpeed: req.body.statusEffectSpeed,
+		statusEffectSpeed: req.body.statusEffectSpeed
 	});
 
 	try {

@@ -50,7 +50,7 @@ import abilitiesRouter from "./routes/routerAbilities.js";
 app.use("/abilities", abilitiesRouter);
 
 import codemonRouter from "./routes/routerCodemon.js";
-app.use("/types", codemonRouter);
+app.use("/codemon", codemonRouter);
 
 import trainersRouter from "./routes/routerTrainers.js";
 app.use("/trainers", trainersRouter);
