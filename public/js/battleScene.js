@@ -36,6 +36,12 @@ class BattleScene extends Phaser.Scene {
 		this.battleState = "playerTurn";
 		this.selectedAbility = 0;
 		this.isPlayerTurn = true;
+
+		// Store tournament info if it exists
+		if (data.tournamentInfo) {
+			this.tournamentPlayerLanguage =
+				window.gameManager.tournament?.playerLanguage;
+		}
 	}
 
 	/**
@@ -679,7 +685,6 @@ class BattleScene extends Phaser.Scene {
 			// Play sound effect - thought is that this might be best to render first
 			// TODO:
 			// Expore idea: maybe volume could be slightly lower for less damage and slightly higher for more damage
-			console.log("Next play a hit sound...");
 			this.playAbilitySound(ability, true);
 
 			// Play hit animation on the defender (pokemon2)
@@ -688,7 +693,6 @@ class BattleScene extends Phaser.Scene {
 			console.log(`   MISS! (${accuracy.toFixed(1)}% > ${ability.accuracy}%)`);
 
 			// Play sound effect
-			console.log("Play miss sound: ");
 			this.playAbilitySound(ability, false);
 
 			this.showAbilityMessage(attacker.name, `${ability.name}!\nMissed!`);
@@ -704,12 +708,44 @@ class BattleScene extends Phaser.Scene {
 		this.updateHPBars();
 		this.updateBuffsDebuffsUI();
 
+		// if (defender.hp <= 0) {
+		// 	this.battleState = "gameOver";
+		// 	this.battleText.setText(
+		// 		`${defender.name} fainted! ${attacker.name} wins!`
+		// 	);
+		// 	this.turnText.setText("Press SPACE or R to restart");
+		// 	return;
+		// }
+
 		if (defender.hp <= 0) {
 			this.battleState = "gameOver";
-			this.battleText.setText(
-				`${defender.name} fainted! ${attacker.name} wins!`
-			);
-			this.turnText.setText("Press SPACE or R to restart");
+
+			if (window.gameManager.tournament) {
+				const result = window.gameManager.recordWin();
+
+				if (result.completed) {
+					// Handle finished tournament
+					this.battleText.setText(
+						"You won the tournament, congratulations! You get a shiny!"
+					);
+					this.turnText.setText(
+						`Final Score: ${result.wins}/${result.total} - Press SPACE or R to restart`
+					);
+				} else {
+					const nextOpponent = result.nextOpponent;
+					this.nextOpponent = nextOpponent;
+					this.battleText.setText(
+						`${defender.name} fainted! ${attacker.name} wins`
+					);
+					this.turnText.setText("Press SPACE for next match");
+				}
+			} else {
+				// Return single battle
+				this.battleText.setText(
+					`${defender.name} fainted! ${attacker.name} wins`
+				);
+				this.turnText.setText("Press SPACE or R to restart");
+			}
 			return;
 		}
 
@@ -813,12 +849,30 @@ class BattleScene extends Phaser.Scene {
 		this.updateHPBars();
 		this.updateBuffsDebuffsUI();
 
+		// if (defender.hp <= 0) {
+		// 	this.battleState = "gameOver";
+		// 	this.battleText.setText(
+		// 		`${defender.name} fainted! ${attacker.name} wins!`
+		// 	);
+		// 	this.turnText.setText("Press SPACE or R to restart");
+		// 	return;
+		// }
 		if (defender.hp <= 0) {
 			this.battleState = "gameOver";
-			this.battleText.setText(
-				`${defender.name} fainted! ${attacker.name} wins!`
-			);
-			this.turnText.setText("Press SPACE or R to restart");
+
+			// Handle tournament loss
+			if (window.gameManager.tournament) {
+				const result = window.gameManager.recordLoss();
+				this.battleText.setText(
+					`You lost! Tournament over. No shiny for you. Final: ${result.wins}/${result.total} wins`
+				);
+				this.turnText.setText("Press SPACE or R to try restart");
+			} else {
+				this.battleText.setText(
+					`${defender.name} fainted! ${attacker.name} wins!`
+				);
+				this.turnText.setText("Press SPACE or R to restart");
+			}
 			return;
 		}
 
@@ -1350,11 +1404,27 @@ class BattleScene extends Phaser.Scene {
 	update() {
 		if (
 			this.battleState === "gameOver" &&
+			this.nextOpponent &&
+			this.input.keyboard.checkDown(this.input.keyboard.addKey("SPACE"), 1000)
+		) {
+			// this.scene.start("BootScene");
+			const battleData = window.gameManager.startBattle(
+				this.tournamentPlayerLanguage,
+				this.nextOpponent.trainer.language
+			);
+			if (battleData) {
+				battleData.tournamentInfo = this.nextOpponent;
+				this.scene.start("BattleScene", battleData);
+			}
+		} else if (
+			this.battleState === "gameOver" &&
+			!this.nextOpponent &&
 			this.input.keyboard.checkDown(this.input.keyboard.addKey("SPACE"), 1000)
 		) {
 			this.scene.start("BootScene");
 		}
 
+		// Allow R to always refresh
 		if (this.input.keyboard.checkDown(this.input.keyboard.addKey("R"), 1000)) {
 			this.scene.start("BootScene");
 		}
