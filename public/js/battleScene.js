@@ -863,14 +863,7 @@ class BattleScene extends Phaser.Scene {
 		this.updateHPBars();
 		this.updateBuffsDebuffsUI();
 
-		// if (defender.hp <= 0) {
-		// 	this.battleState = "gameOver";
-		// 	this.battleText.setText(
-		// 		`${defender.name} fainted! ${attacker.name} wins!`
-		// 	);
-		// 	this.turnText.setText("Press SPACE or R to restart");
-		// 	return;
-		// }
+		// Handle game over
 		if (defender.hp <= 0) {
 			console.log(`Game over: ${defender.hp}`);
 
@@ -878,23 +871,31 @@ class BattleScene extends Phaser.Scene {
 
 			if (window.gameManager.tournament) {
 				const result = window.gameManager.recordLoss();
-				// this.battleText.setText(
-				// 	`${defender.name} fainted! Tournament over. Final score: ${result.wins}/${result.total} wins`
-				// );
-				// this.turnText.setText("Press SPACE or R to restart");
-				if (result.completed) {
+				console.log("AI Attack - Tournament result: ", result);
+
+				if (result && result.completed) {
 					this.scene.start("EndScene", {
 						result: result,
 						playerLanguage: this.tournamentPlayerLanguage,
 					});
+				} else if (result && !result.completed) {
+					this.nextOpponent = result.nextOpponent;
+					this.battleText.setText(
+						`${defender.name} fainted! ${attacker.name} wins!`
+					);
+					this.turnText.setText("Press SPACE for next battle");
+				} else {
+					console.error(
+						"Tournament result is null.. it shouldn't be doing that...restarting!"
+					);
+					this.scene.start("BootScene");
 				}
 			} else {
-				console.log("Single battle activated.... ");
-				// Single battle
+				console.log("Single battle activated - AI wins");
 				this.battleText.setText(
 					`${defender.name} fainted! ${attacker.name} wins!`
 				);
-				this.turnText.setText("Press SPACE or R to restart");
+				this.turnText.setText("Press SPACE for next battle");
 			}
 			return;
 		}
