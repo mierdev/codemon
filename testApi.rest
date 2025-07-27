@@ -1,42 +1,34 @@
-// create on
-POST http://localhost:3001/codemon
+// create one
+POST http://localhost:3001/dialogue
 Content-Type: application/json
 
 {
-  "name": "Birb",
-  "type": "TypeScript",
-  "abilities": {
-    "name": "awesome",
-    "type": "birb"
-  }
+  "startDialogue": "Write it in Nim!",
+  "battleDialogue": ["Hello", "World", "I'm jigglipuff"]
 }
 
 ###
 
 // read all
-GET http://localhost:3001/codemon
+GET http://localhost:3001/dialogue
 
 ###
 
 // read one
-GET http://localhost:3001/codemon/688643df5d79271b4ea198ee
+GET http://localhost:3001/dialogue/68866598ae7dba730e1d6885
 
 ###
 
 // update one
-PATCH http://localhost:3001/codemon/688643df5d79271b4ea198ee
+PATCH http://localhost:3001/dialogue/68866598ae7dba730e1d6885
 Content-Type: application/json
 
 {
-  "name": "Toki",
-  "type": "TypeScript",
-  "abilities": {
-    "name": "still",
-    "type": "awesome"
-  }
+  "startDialogue": "Write it in Nim!",
+  "battleDialogue": ["Hello", "World"]
 }
 
 ###
 
 // delete one
-DELETE http://localhost:3001/codemon/688643e35d79271b4ea198f2
+DELETE http://localhost:3001/dialogue/688665a6ae7dba730e1d6887

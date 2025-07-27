@@ -8,7 +8,7 @@ const router = express.Router();
 // CREATE one
 router.post("/", async (req, res) => {
   const dialogue = new Dialogue({
-    startDialogue: req.body.startDialogueialogue,
+    startDialogue: req.body.startDialogue,
     battleDialogue: req.body.battleDialogue
   });
 

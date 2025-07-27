@@ -47,10 +47,13 @@ db.once("open", () => console.log("Database of madness has started!"));
 // fill database with data
 // import AbilitiesData from "../database/dbAbilities.js";
 // getAbilities();
+
 // import CodemonData from "../database/dbCodemon.js";
 // getCodemon();
+
 // import DialogueData from "../database/dbCodemon.js";
 // getDialogue();
+
 // import TrainersData from "../database/dbCodemon.js";
 // getTrainers();
 
