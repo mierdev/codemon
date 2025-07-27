@@ -882,10 +882,12 @@ class BattleScene extends Phaser.Scene {
 				// 	`${defender.name} fainted! Tournament over. Final score: ${result.wins}/${result.total} wins`
 				// );
 				// this.turnText.setText("Press SPACE or R to restart");
-				this.scene.start("EndScene", {
-					result: result,
-					playerLanguage: this.tournamentPlayerLanguage,
-				});
+				if (result.completed) {
+					this.scene.start("EndScene", {
+						result: result,
+						playerLanguage: this.tournamentPlayerLanguage,
+					});
+				}
 			} else {
 				console.log("Single battle activated.... ");
 				// Single battle

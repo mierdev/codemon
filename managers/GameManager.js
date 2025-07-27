@@ -614,6 +614,7 @@ class GameManager {
 		if (this.tournament.matchesPlayed < this.tournament.type) {
 			return {
 				completed: false,
+				won: false,
 				nextOpponent: this.getNextOpponent(),
 			};
 		}

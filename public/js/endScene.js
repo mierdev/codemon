@@ -15,7 +15,14 @@ class EndScene extends Phaser.Scene {
 	init(data) {
 		this.tournamentResult = data.result;
 		this.playerLanguage = data.playerLanguage;
-		this.won = data.result.won;
+		this.won = data.result?.won || false;
+
+		console.log("Initialized values: ", {
+			wins: this.tournamentResult?.wins,
+			losses: this.tournamentResult?.losses,
+			winsNeeded: this.tournamentResult?.winsNeeded,
+			won: this.won,
+		});
 	}
 
 	/**
