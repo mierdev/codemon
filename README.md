@@ -1,6 +1,6 @@
 <img src="https://raw.githubusercontent.com/mierdev/codemon/refs/heads/main/public/assets/readme/codemon.png" alt="codemon logo">
 
-# A pokémon inspired game with a coding theme
+# A JRPG tournament game with a coding theme
 
 Our entry for the Boot.dev Hackathon 2025.
 
