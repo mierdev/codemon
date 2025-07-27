@@ -13,7 +13,8 @@
 		"devStart": "nodemon server.js",
 		"dev:full": "concurrently \"npm run server\" \"npm run dev\"",
 		"test": "node testRunner.js",
-		"test:api": "node testRunner.js"
+		"test:api": "node testRunner.js",
+		"log:api": "node apiDataLogger.js"
 	},
 	"devDependencies": {
 		"@types/express": "^5.0.3",
