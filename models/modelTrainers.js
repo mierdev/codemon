@@ -18,4 +18,4 @@ const trainersSchema = new mongoose.Schema({
 });
 
 // export
-export default mongoose.model("Trainers", trainersSchema);
+export default mongoose.model("Trainer", trainersSchema);

@@ -1,34 +1,44 @@
 // create one
-POST http://localhost:3001/dialogue
+POST http://localhost:3001/trainers
 Content-Type: application/json
 
 {
-  "startDialogue": "Write it in Nim!",
-  "battleDialogue": ["Hello", "World", "I'm jigglipuff"]
+  "name": "Dan",
+  "codemon": {
+    "name": "birb"
+  },
+  "dialogue": {
+    "startBattle": "It's import to keep reminding them that TypeScript has enums."
+  }
 }
 
 ###
 
 // read all
-GET http://localhost:3001/dialogue
+GET http://localhost:3001/trainers
 
 ###
 
 // read one
-GET http://localhost:3001/dialogue/68866598ae7dba730e1d6885
+GET http://localhost:3001/trainers/688667ae538c4bf751ef2e5f
 
 ###
 
 // update one
-PATCH http://localhost:3001/dialogue/68866598ae7dba730e1d6885
+PATCH http://localhost:3001/trainers/688667ae538c4bf751ef2e5f
 Content-Type: application/json
 
 {
-  "startDialogue": "Write it in Nim!",
-  "battleDialogue": ["Hello", "World"]
+  "name": "Nuc",
+  "codemon": {
+    "name": "fox"
+  },
+  "dialogue": {
+    "startBattle": "Write it in Nim!"
+  }
 }
 
 ###
 
 // delete one
-DELETE http://localhost:3001/dialogue/688665a6ae7dba730e1d6887
+DELETE http://localhost:3001/trainers/688667a7538c4bf751ef2e5d
