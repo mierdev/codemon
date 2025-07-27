@@ -3,7 +3,6 @@ import express from "express";
 import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
-// import data from "../data/setupDatabase.js";
 // import dotenv from "dotenv";
 
 // ES module equivalent of __dirname
@@ -44,6 +43,16 @@ mongoose.connect("mongodb://localhost/dbCodemon");
 const db = mongoose.connection;
 db.on("error", (error) => console.log(error));
 db.once("open", () => console.log("Database of madness has started!"));
+
+// fill database with data
+// import AbilitiesData from "../database/dbAbilities.js";
+// getAbilities();
+// import CodemonData from "../database/dbCodemon.js";
+// getCodemon();
+// import DialogueData from "../database/dbCodemon.js";
+// getDialogue();
+// import TrainersData from "../database/dbCodemon.js";
+// getTrainers();
 
 // setup routes 
 import abilitiesRouter from "./routes/routerAbilities.js";

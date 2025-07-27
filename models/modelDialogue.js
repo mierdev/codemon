@@ -14,4 +14,4 @@ const dialogueSchema = new mongoose.Schema({
 });
 
 // export
-export default mongoose.model("Dialogues", dialogueSchema);
+export default mongoose.model("Dialogue", dialogueSchema);
