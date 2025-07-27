@@ -31,7 +31,6 @@ class EndScene extends Phaser.Scene {
 		} else {
 			this.createDefeatScreen();
 		}
-		this.createNavigationButtons();
 
 		this.setupInputHandlers();
 	}
@@ -94,13 +93,13 @@ class EndScene extends Phaser.Scene {
 					strokeThickness: 1,
 				}
 			)
-			.setOrignin(0.5);
+			.setOrigin(0.5);
 
 		const flavourTexts = [
 			"Your code compiled without error",
 			"No bugs detected in your logic",
 			"Performance optimized",
-			"Cod review comments: some crimes detected but approved anyway",
+			"Code review comments: some crimes detected but approved anyway",
 		];
 		this.add
 			.text(
@@ -143,7 +142,7 @@ class EndScene extends Phaser.Scene {
 			.setOrigin(0.5);
 
 		this.add
-			.text(480, 320, "Shiny coin next time... hopefully", {
+			.text(480, 320, "No shiny coin...yet", {
 				fontSize: "80px",
 			})
 			.setOrigin(0.5);
@@ -160,7 +159,7 @@ class EndScene extends Phaser.Scene {
 					strokeThickness: 1,
 				}
 			)
-			.setOrign(0.5);
+			.setOrigin(0.5);
 
 		const encouragingFlavourText = [
 			"Every bug is a learning opportunity",
@@ -195,21 +194,25 @@ class EndScene extends Phaser.Scene {
 				return {
 					name: "Bronze",
 					emoji: "🥉",
+					color: "#cd7f32",
 				};
 			case 5:
 				return {
 					name: "Silver",
 					emoji: "🥈",
+					color: "#c0c0c0",
 				};
 			case 7:
 				return {
 					name: "Gold",
 					emoji: "🥇",
+					color: "ffd700",
 				};
 			default:
 				return {
 					name: "Victory",
 					emoji: "🪙",
+					color: "#f1c40f",
 				};
 		}
 	}
@@ -237,14 +240,11 @@ class EndScene extends Phaser.Scene {
 	 */
 	setupInputHandlers() {
 		// play again
-		if (
-			this.input.keyboard.checkDown(
-				this.input.keyboard.addKey("SPACE"),
-				1000
-			) ||
-			this.input.keyboard.checkDown(this.input.keyboard.addKey("R"), 1000)
-		) {
+		this.input.keyboard.on("keydown-SPACE", () => {
 			this.scene.start("BootScene");
-		}
+		});
+		this.input.keyboard.on("keydown-R", () => {
+			this.scene.start("BootScene");
+		});
 	}
 }

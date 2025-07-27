@@ -730,14 +730,19 @@ class BattleScene extends Phaser.Scene {
 				console.log("Execute player attack: ", result);
 
 				if (result.completed) {
-					console.log("Player should have won: ", result);
-					// Handle finished tournament
-					this.battleText.setText(
-						"You won the tournament, congratulations! You get a shiny!"
-					);
-					this.turnText.setText(
-						`Final Score: ${result.wins}/${result.total} - Press SPACE or R to restart`
-					);
+					// console.log("Player should have won: ", result);
+					// // Handle finished tournament
+					// this.battleText.setText(
+					// 	"You won the tournament, congratulations! You get a shiny!"
+					// );
+					// this.turnText.setText(
+					// 	`Final Score: ${result.wins}/${result.total} - Press SPACE or R to restart`
+					// );
+					this.scene.start("EndScene", {
+						result: result,
+						playerLanguage: this.tournamentPlayerLanguage,
+						won: true,
+					});
 				} else {
 					console.log("Getting next opponent.... ");
 					const nextOpponent = result.nextOpponent;
@@ -874,10 +879,15 @@ class BattleScene extends Phaser.Scene {
 
 			if (window.gameManager.tournament) {
 				const result = window.gameManager.recordLoss();
-				this.battleText.setText(
-					`${defender.name} fainted! Tournament over. Final score: ${result.wins}/${result.total} wins`
-				);
-				this.turnText.setText("Press SPACE or R to restart");
+				// this.battleText.setText(
+				// 	`${defender.name} fainted! Tournament over. Final score: ${result.wins}/${result.total} wins`
+				// );
+				// this.turnText.setText("Press SPACE or R to restart");
+				this.scene.start("EndScene", {
+					result: result,
+					playerLanguage: this.tournamentPlayerLanguage,
+					won: false,
+				});
 			} else {
 				console.log("Single battle activated.... ");
 				// Single battle
@@ -942,6 +952,10 @@ class BattleScene extends Phaser.Scene {
 	 * Refreshes ability button text and updates the ability selection display.
 	 */
 	updateUI() {
+		console.log("update UI called for: ", this.pokemon1?.name);
+		console.log("Pokemon abilities in update: ", this.pokemon1?.abilities);
+		console.log("ability buttons lenght: ", this.abilityButtons.lenght);
+
 		this.abilityButtons.forEach((buttonData, index) => {
 			const abilities = this.pokemon1.abilities;
 			if (index < abilities.length) {

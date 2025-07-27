@@ -11,7 +11,7 @@ const config = {
 	roundPixels: true,
 	pixelArt: true,
 	antialias: false,
-	scene: [BootScene, BattleScene, endScene],
+	scene: [BootScene, BattleScene, EndScene],
 	physics: {
 		default: "arcade",
 		arcade: {
