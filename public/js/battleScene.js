@@ -36,6 +36,19 @@ class BattleScene extends Phaser.Scene {
 		this.battleState = "playerTurn";
 		this.selectedAbility = 0;
 		this.isPlayerTurn = true;
+
+		// Store tournament info if it exists
+		if (data.tournamentInfo) {
+			this.tournamentInfo = data.tournamentInfo;
+			this.tournamentPlayerLanguage = data.playerLanguage;
+		} else {
+			this.tournamentInfo = null;
+			this.tournamentPlayerLanguage = null;
+		}
+
+		if (data.playerLanguage) {
+			this.tournamentPlayerLanguage = data.playerLanguage;
+		}
 	}
 
 	/**
@@ -446,10 +459,8 @@ class BattleScene extends Phaser.Scene {
 	 * Creates the sound to go along with ability buttons using the Audio manager
 	 */
 	playAbilitySound(ability, isHit = true) {
-		console.log("In playAbilitySound with: ", ability);
 		if (!this.audioManager) return;
 		if (!isHit) {
-			console.log("Should be playing missed sound 🙊");
 			this.audioManager.playSoundEffect("miss");
 			return;
 		}
@@ -469,7 +480,6 @@ class BattleScene extends Phaser.Scene {
 		};
 
 		const soundKey = soundEffectMap[ability.type] || "physical";
-		console.log("Sound key to play: ", soundKey);
 
 		this.audioManager.playSoundEffect(soundKey);
 	}
@@ -679,7 +689,6 @@ class BattleScene extends Phaser.Scene {
 			// Play sound effect - thought is that this might be best to render first
 			// TODO:
 			// Expore idea: maybe volume could be slightly lower for less damage and slightly higher for more damage
-			console.log("Next play a hit sound...");
 			this.playAbilitySound(ability, true);
 
 			// Play hit animation on the defender (pokemon2)
@@ -688,7 +697,6 @@ class BattleScene extends Phaser.Scene {
 			console.log(`   MISS! (${accuracy.toFixed(1)}% > ${ability.accuracy}%)`);
 
 			// Play sound effect
-			console.log("Play miss sound: ");
 			this.playAbilitySound(ability, false);
 
 			this.showAbilityMessage(attacker.name, `${ability.name}!\nMissed!`);
@@ -704,12 +712,54 @@ class BattleScene extends Phaser.Scene {
 		this.updateHPBars();
 		this.updateBuffsDebuffsUI();
 
+		// if (defender.hp <= 0) {
+		// 	this.battleState = "gameOver";
+		// 	this.battleText.setText(
+		// 		`${defender.name} fainted! ${attacker.name} wins!`
+		// 	);
+		// 	this.turnText.setText("Press SPACE or R to restart");
+		// 	return;
+		// }
+
 		if (defender.hp <= 0) {
+			console.log("Defender hp dropped below zero: ");
 			this.battleState = "gameOver";
-			this.battleText.setText(
-				`${defender.name} fainted! ${attacker.name} wins!`
-			);
-			this.turnText.setText("Press SPACE or R to restart");
+
+			if (window.gameManager.tournament) {
+				const result = window.gameManager.recordWin();
+				console.log("Execute player attack: ", result);
+
+				if (result.completed) {
+					// console.log("Player should have won: ", result);
+					// // Handle finished tournament
+					// this.battleText.setText(
+					// 	"You won the tournament, congratulations! You get a shiny!"
+					// );
+					// this.turnText.setText(
+					// 	`Final Score: ${result.wins}/${result.total} - Press SPACE or R to restart`
+					// );
+					this.scene.start("EndScene", {
+						result: result,
+						playerLanguage: this.tournamentPlayerLanguage,
+					});
+				} else {
+					console.log("Getting next opponent.... ");
+					const nextOpponent = result.nextOpponent;
+					console.log("Getting next opponent: ", nextOpponent);
+					this.nextOpponent = nextOpponent;
+					this.battleText.setText(
+						`${defender.name} fainted! ${attacker.name} wins`
+					);
+					this.turnText.setText("Press SPACE for next match");
+				}
+			} else {
+				// Return single battle
+				this.battleText.setText(
+					`${defender.name} fainted! ${attacker.name} wins`
+				);
+				console.log("Single battle triggered");
+				this.turnText.setText("Press SPACE or R to restart");
+			}
 			return;
 		}
 
@@ -813,12 +863,39 @@ class BattleScene extends Phaser.Scene {
 		this.updateHPBars();
 		this.updateBuffsDebuffsUI();
 
+		// if (defender.hp <= 0) {
+		// 	this.battleState = "gameOver";
+		// 	this.battleText.setText(
+		// 		`${defender.name} fainted! ${attacker.name} wins!`
+		// 	);
+		// 	this.turnText.setText("Press SPACE or R to restart");
+		// 	return;
+		// }
 		if (defender.hp <= 0) {
+			console.log(`Game over: ${defender.hp}`);
+
 			this.battleState = "gameOver";
-			this.battleText.setText(
-				`${defender.name} fainted! ${attacker.name} wins!`
-			);
-			this.turnText.setText("Press SPACE or R to restart");
+
+			if (window.gameManager.tournament) {
+				const result = window.gameManager.recordLoss();
+				// this.battleText.setText(
+				// 	`${defender.name} fainted! Tournament over. Final score: ${result.wins}/${result.total} wins`
+				// );
+				// this.turnText.setText("Press SPACE or R to restart");
+				if (result.completed) {
+					this.scene.start("EndScene", {
+						result: result,
+						playerLanguage: this.tournamentPlayerLanguage,
+					});
+				}
+			} else {
+				console.log("Single battle activated.... ");
+				// Single battle
+				this.battleText.setText(
+					`${defender.name} fainted! ${attacker.name} wins!`
+				);
+				this.turnText.setText("Press SPACE or R to restart");
+			}
 			return;
 		}
 
@@ -875,6 +952,10 @@ class BattleScene extends Phaser.Scene {
 	 * Refreshes ability button text and updates the ability selection display.
 	 */
 	updateUI() {
+		console.log("update UI called for: ", this.pokemon1?.name);
+		console.log("Pokemon abilities in update: ", this.pokemon1?.abilities);
+		console.log("ability buttons lenght: ", this.abilityButtons?.length);
+
 		this.abilityButtons.forEach((buttonData, index) => {
 			const abilities = this.pokemon1.abilities;
 			if (index < abilities.length) {
@@ -904,14 +985,14 @@ class BattleScene extends Phaser.Scene {
 	applyAbilityEffects(attacker, defender, ability) {
 		const messages = [];
 
-		console.log(`ABILITY EFFECTS: ${attacker.name} used ${ability.name}`);
+		// console.log(`ABILITY EFFECTS: ${attacker.name} used ${ability.name}`);
 
 		switch (ability.name) {
 			// === PYTHON ABILITIES ===
 			case "Rapid Prototype":
-				console.log(
-					`   Rapid Prototype: Python's innate speed and flexibility`
-				);
+				// console.log(
+				// 	`   Rapid Prototype: Python's innate speed and flexibility`
+				// );
 				// This is a passive ability, but we can show it's working
 				messages.push(
 					`${attacker.name} demonstrates rapid prototyping capabilities!`
@@ -919,9 +1000,9 @@ class BattleScene extends Phaser.Scene {
 				break;
 
 			case "Ecosystem Call":
-				console.log(
-					`   Ecosystem Call: Python imports a module for type advantage`
-				);
+				// console.log(
+				// 	`   Ecosystem Call: Python imports a module for type advantage`
+				// );
 				// Simulate type change for 3 turns
 				const pythonAvailableTypes = [
 					"System",
@@ -944,16 +1025,16 @@ class BattleScene extends Phaser.Scene {
 					bestType = "System";
 				}
 
-				console.log(`   Python temporarily gains ${bestType} type advantage!`);
+				// console.log(`   Python temporarily gains ${bestType} type advantage!`);
 				messages.push(
 					`${attacker.name} imported ${bestType} module! Type advantage gained!`
 				);
 				break;
 
 			case "GIL Lock":
-				console.log(
-					`   GIL Lock: Prevents multi-core/parallel execution abilities`
-				);
+				// console.log(
+				// 	`   GIL Lock: Prevents multi-core/parallel execution abilities`
+				// );
 				// Mark the defender as GIL-locked for 2 turns
 				defender.gilLocked = 2;
 				messages.push(
@@ -966,18 +1047,18 @@ class BattleScene extends Phaser.Scene {
 
 			// === GO ABILITIES ===
 			case "Fast Compilation":
-				console.log(
-					`   Fast Compilation: Go's rapid compilation and robustness`
-				);
+				// console.log(
+				// 	`   Fast Compilation: Go's rapid compilation and robustness`
+				// );
 				// Check if fighting Script or Managed types for turn priority
 				const opponentTypes = defender.type.split("/");
 				if (
 					opponentTypes.includes("Script") ||
 					opponentTypes.includes("Managed")
 				) {
-					console.log(
-						`   Go gains turn priority vs ${defender.name} (Script/Managed type)`
-					);
+					// console.log(
+					// 	`   Go gains turn priority vs ${defender.name} (Script/Managed type)`
+					// );
 					messages.push(
 						`${attacker.name} compiles faster against ${defender.name}!`
 					);
@@ -989,7 +1070,7 @@ class BattleScene extends Phaser.Scene {
 					`   Goroutine Swarm: 25% chance to inflict Concurrency Bottleneck`
 				);
 				if (Math.random() < 0.25) {
-					console.log(`   Concurrency Bottleneck triggered!`);
+					// console.log(`   Concurrency Bottleneck triggered!`);
 					messages.push(window.gameManager.applyDebuff(defender, "speed", 1));
 					messages.push(`${defender.name} is overwhelmed by goroutines!`);
 					messages.push(
@@ -1001,9 +1082,9 @@ class BattleScene extends Phaser.Scene {
 				break;
 
 			case "Strict Typing":
-				console.log(
-					`   Strict Typing: Go ensures type safety and cleanses status`
-				);
+				// console.log(
+				// 	`   Strict Typing: Go ensures type safety and cleanses status`
+				// );
 				// Cleanse all status effects
 				if (defender.statusEffects && defender.statusEffects.length > 0) {
 					defender.statusEffects = [];
@@ -1018,7 +1099,7 @@ class BattleScene extends Phaser.Scene {
 
 			// === RUST ABILITIES ===
 			case "Borrow Checker":
-				console.log(`   Borrow Checker: Rust's memory safety protection`);
+				// console.log(`   Borrow Checker: Rust's memory safety protection`);
 				// This is passive, but we can show it's working
 				messages.push(
 					`${attacker.name}'s borrow checker prevents memory corruption!`
@@ -1026,9 +1107,9 @@ class BattleScene extends Phaser.Scene {
 				break;
 
 			case "Zero-Cost Abstraction":
-				console.log(
-					`   Zero-Cost Abstraction: Rust applies powerful optimizations`
-				);
+				// console.log(
+				// 	`   Zero-Cost Abstraction: Rust applies powerful optimizations`
+				// );
 				messages.push(window.gameManager.applyBuff(attacker, "attack", 1));
 				messages.push(
 					window.gameManager.applyBuff(attacker, "specialAttack", 1)
@@ -1038,7 +1119,7 @@ class BattleScene extends Phaser.Scene {
 				break;
 
 			case "Ownership Transfer":
-				console.log(`   Ownership Transfer: Rust transfers resource ownership`);
+				// console.log(`   Ownership Transfer: Rust transfers resource ownership`);
 				const buffStats = Object.keys(defender.buffs).filter(
 					(stat) => defender.buffs[stat] > 0
 				);
@@ -1050,12 +1131,12 @@ class BattleScene extends Phaser.Scene {
 						0,
 						defender.buffs[randomStat] - 1
 					);
-					console.log(`   Rust transferred ownership of ${randomStat} buff`);
+					// console.log(`   Rust transferred ownership of ${randomStat} buff`);
 					messages.push(
 						`${defender.name}'s ${randomStat} buff was transferred!`
 					);
 				} else {
-					console.log(`   No buffs to transfer - applying Rust-Bound`);
+					// console.log(`   No buffs to transfer - applying Rust-Bound`);
 					defender.rustBound = 1;
 					messages.push(
 						`${defender.name} is Rust-Bound! Cannot use primary offensive ability!`
@@ -1065,7 +1146,7 @@ class BattleScene extends Phaser.Scene {
 
 			// === OCAML ABILITIES ===
 			case "Type Inference":
-				console.log(`   Type Inference: OCaml's strong, implicit typing`);
+				// console.log(`   Type Inference: OCaml's strong, implicit typing`);
 				// This is passive, but we can show it's working
 				const hasMultipleTypes = defender.type.includes("/");
 				if (hasMultipleTypes) {
@@ -1077,17 +1158,17 @@ class BattleScene extends Phaser.Scene {
 				break;
 
 			case "Pattern Matching":
-				console.log(
-					`   Pattern Matching: OCaml dissects logic and data structures`
-				);
+				// console.log(
+				// 	`   Pattern Matching: OCaml dissects logic and data structures`
+				// );
 				// Check if target is "complex" (C++ or JS/TS)
 				if (
 					defender.name === "C++" ||
 					defender.name === "JavaScript & TypeScript"
 				) {
-					console.log(
-						`   Pattern Matching gains +25 bonus vs complex language`
-					);
+					// console.log(
+					// 	`   Pattern Matching gains +25 bonus vs complex language`
+					// );
 					messages.push(
 						`${attacker.name} perfectly matched ${defender.name}'s patterns!`
 					);
@@ -1106,16 +1187,16 @@ class BattleScene extends Phaser.Scene {
 			case "Immutability":
 				// Check if Immutability is on round-based cooldown
 				if (this.isAbilityOnRoundCooldown(attacker, "Immutability")) {
-					console.log(
-						`   Immutability: Already used this round, skipping effect`
-					);
+					// console.log(
+					// 	`   Immutability: Already used this round, skipping effect`
+					// );
 					messages.push(
 						`${attacker.name} cannot use Immutability again this round!`
 					);
 					break;
 				}
 
-				console.log(`   Immutability: OCaml's state is immutable and pure`);
+				// console.log(`   Immutability: OCaml's state is immutable and pure`);
 				const healAmount = Math.floor(attacker.maxHp * 0.35);
 				attacker.hp = Math.min(attacker.maxHp, attacker.hp + healAmount);
 				console.log(`   OCaml healed ${healAmount} HP through immutability`);
@@ -1139,9 +1220,9 @@ class BattleScene extends Phaser.Scene {
 
 			// === C++ ABILITIES ===
 			case "Unsafe Block":
-				console.log(
-					`   Unsafe Block: C++ directly manipulates memory and hardware`
-				);
+				// console.log(
+				// 	`   Unsafe Block: C++ directly manipulates memory and hardware`
+				// );
 				if (Math.random() < 0.2) {
 					console.log(`   Undefined Behavior triggered!`);
 					const recoilDamage = Math.floor(attacker.maxHp * 0.15);
@@ -1154,9 +1235,9 @@ class BattleScene extends Phaser.Scene {
 					if (!attacker.statusEffects) attacker.statusEffects = [];
 					attacker.statusEffects.push(randomStatus);
 
-					console.log(
-						`   C++ suffered ${randomStatus} from Undefined Behavior`
-					);
+					// console.log(
+					// 	`   C++ suffered ${randomStatus} from Undefined Behavior`
+					// );
 					messages.push(`${attacker.name} suffered Undefined Behavior!`);
 					messages.push(`${attacker.name} took ${recoilDamage} recoil damage!`);
 					messages.push(`${attacker.name} is afflicted with ${randomStatus}!`);
@@ -1166,11 +1247,11 @@ class BattleScene extends Phaser.Scene {
 				break;
 
 			case "Optimized Parallelism":
-				console.log(
-					`   Optimized Parallelism: C++ leverages multi-core architectures`
-				);
+				// console.log(
+				// 	`   Optimized Parallelism: C++ leverages multi-core architectures`
+				// );
 				if (this.currentTurn % 2 === 0) {
-					console.log(`   Every 2 turns: Speed and Attack increase`);
+					// console.log(`   Every 2 turns: Speed and Attack increase`);
 					messages.push(window.gameManager.applyBuff(attacker, "speed", 1));
 					messages.push(window.gameManager.applyBuff(attacker, "attack", 1));
 					messages.push(`${attacker.name} optimized parallel execution!`);
@@ -1180,7 +1261,7 @@ class BattleScene extends Phaser.Scene {
 				break;
 
 			case "Legacy Integration":
-				console.log(`   Legacy Integration: C++ draws upon existing codebases`);
+				// console.log(`   Legacy Integration: C++ draws upon existing codebases`);
 				attacker.compatibilityShield = 2;
 				messages.push(`${attacker.name} integrated legacy systems!`);
 				messages.push(
@@ -1190,9 +1271,9 @@ class BattleScene extends Phaser.Scene {
 
 			// === JAVASCRIPT & TYPESCRIPT ABILITIES ===
 			case "Asynchronous Promise":
-				console.log(
-					`   Asynchronous Promise: JS/TS initiates non-blocking call`
-				);
+				// console.log(
+				// 	`   Asynchronous Promise: JS/TS initiates non-blocking call`
+				// );
 				// Schedule delayed damage for next turn
 				if (!attacker.pendingDamage) attacker.pendingDamage = [];
 				attacker.pendingDamage.push({
@@ -1207,7 +1288,7 @@ class BattleScene extends Phaser.Scene {
 
 				// 25% chance of Callback Hell
 				if (Math.random() < 0.25) {
-					console.log(`   Callback Hell inflicted!`);
+					// console.log(`   Callback Hell inflicted!`);
 					if (!defender.statusEffects) defender.statusEffects = [];
 					defender.statusEffects.push("Callback Hell");
 					messages.push(`${defender.name} is suffering from Callback Hell!`);
@@ -1217,9 +1298,9 @@ class BattleScene extends Phaser.Scene {
 				break;
 
 			case "Framework Flux":
-				console.log(
-					`   Framework Flux: JS/TS power fluctuates with framework landscape`
-				);
+				// console.log(
+				// 	`   Framework Flux: JS/TS power fluctuates with framework landscape`
+				// );
 				const fluxRoll = Math.random();
 				if (fluxRoll < 0.4) {
 					const stats = [
@@ -1230,11 +1311,11 @@ class BattleScene extends Phaser.Scene {
 						"speed",
 					];
 					const randomStat = stats[Math.floor(Math.random() * stats.length)];
-					console.log(
-						`   +1 ${randomStat} buff applied (${(fluxRoll * 100).toFixed(
-							1
-						)}% < 40%)`
-					);
+					// console.log(
+					// 	`   +1 ${randomStat} buff applied (${(fluxRoll * 100).toFixed(
+					// 		1
+					// 	)}% < 40%)`
+					// );
 					messages.push(window.gameManager.applyBuff(attacker, randomStat, 1));
 					messages.push(`${attacker.name} adopted a new framework!`);
 				} else if (fluxRoll < 0.5) {
@@ -1246,25 +1327,25 @@ class BattleScene extends Phaser.Scene {
 						"speed",
 					];
 					const randomStat = stats[Math.floor(Math.random() * stats.length)];
-					console.log(
-						`   -1 ${randomStat} debuff applied (${(fluxRoll * 100).toFixed(
-							1
-						)}% < 50%)`
-					);
+					// console.log(
+					// 	`   -1 ${randomStat} debuff applied (${(fluxRoll * 100).toFixed(
+					// 		1
+					// 	)}% < 50%)`
+					// );
 					messages.push(
 						window.gameManager.applyDebuff(attacker, randomStat, 1)
 					);
 					messages.push(`${attacker.name} deprecated an old framework!`);
 				} else {
-					console.log(
-						`   No stat change (${(fluxRoll * 100).toFixed(1)}% > 50%)`
-					);
+					// console.log(
+					// 	`   No stat change (${(fluxRoll * 100).toFixed(1)}% > 50%)`
+					// );
 					messages.push(`${attacker.name} maintained framework stability!`);
 				}
 				break;
 
 			case "Transpilation":
-				console.log(`   Transpilation: JS/TS changes to advantageous type`);
+				// console.log(`   Transpilation: JS/TS changes to advantageous type`);
 				const jsAvailableTypes = [
 					"System",
 					"Concurrent",
@@ -1285,7 +1366,7 @@ class BattleScene extends Phaser.Scene {
 					transpiledType = "Functional";
 				}
 
-				console.log(`   JS/TS transpiled to ${transpiledType} type!`);
+				// console.log(`   JS/TS transpiled to ${transpiledType} type!`);
 				messages.push(`${attacker.name} transpiled to ${transpiledType}!`);
 				messages.push(`Type advantage gained for 2 turns!`);
 				break;
@@ -1347,16 +1428,89 @@ class BattleScene extends Phaser.Scene {
 	 * Main update loop that runs every frame.
 	 * Handles restart controls when the game is over (SPACE or R key).
 	 */
-	update() {
-		if (
-			this.battleState === "gameOver" &&
-			this.input.keyboard.checkDown(this.input.keyboard.addKey("SPACE"), 1000)
-		) {
-			this.scene.start("BootScene");
-		}
+	// update() {
+	// 	if (
+	// 		this.battleState === "gameOver" &&
+	// 		this.nextOpponent &&
+	// 		this.input.keyboard.checkDown(this.input.keyboard.addKey("SPACE"), 1000)
+	// 	) {
+	// 		// this.scene.start("BootScene");
+	// 		const battleData = window.gameManager.startBattle(
+	// 			this.tournamentPlayerLanguage,
+	// 			this.nextOpponent.trainer.language
+	// 		);
+	// 		if (battleData) {
+	// 			battleData.tournamentInfo = this.nextOpponent;
+	// 			battleData.playerLanguage = this.tournamentPlayerLanguage;
+	// 			this.scene.start("BattleScene", battleData);
+	// 		}
+	// 	} else if (
+	// 		this.battleState === "gameOver" &&
+	// 		!this.nextOpponent &&
+	// 		this.input.keyboard.checkDown(this.input.keyboard.addKey("SPACE"), 1000)
+	// 	) {
+	// 		this.scene.start("BootScene");
+	// 	}
 
-		if (this.input.keyboard.checkDown(this.input.keyboard.addKey("R"), 1000)) {
-			this.scene.start("BootScene");
+	// 	// Allow R to always refresh
+	// 	if (this.input.keyboard.checkDown(this.input.keyboard.addKey("R"), 1000)) {
+	// 		this.scene.start("BootScene");
+	// 	}
+	// }
+	update() {
+		if (this.battleState === "gameOver") {
+			// Check for SPACE key press
+			if (
+				this.input.keyboard.checkDown(this.input.keyboard.addKey("SPACE"), 1000)
+			) {
+				if (this.nextOpponent) {
+					// Debug logging
+					console.log(
+						"Debug - tournamentPlayerLanguage:",
+						this.tournamentPlayerLanguage
+					);
+					console.log("Debug - nextOpponent:", this.nextOpponent);
+					console.log(
+						"Debug - trainer language:",
+						this.nextOpponent.trainer.language
+					);
+
+					// Check if these Pokemon IDs exist
+					const pokemon1Data = window.gameManager.getPokemonData(
+						this.tournamentPlayerLanguage
+					);
+					const pokemon2Data = window.gameManager.getPokemonData(
+						this.nextOpponent.trainer.language
+					);
+
+					// console.log("Debug - pokemon1Data exists:", !!pokemon1Data);
+					// console.log("Debug - pokemon2Data exists:", !!pokemon2Data);
+
+					// There's a next opponent - start next battle
+					const battleData = window.gameManager.startBattle(
+						this.tournamentPlayerLanguage,
+						this.nextOpponent.trainer.language
+					);
+
+					if (battleData) {
+						battleData.tournamentInfo = this.nextOpponent;
+						battleData.playerLanguage = this.tournamentPlayerLanguage;
+						this.scene.start("BattleScene", battleData);
+					} else {
+						console.error("Failed to create battle data!");
+					}
+				} else {
+					// No next opponent or tournament completed - go back to main menu
+					this.scene.start("BootScene");
+				}
+			}
+
+			// Allow R to always restart from beginning
+			if (
+				this.input.keyboard.checkDown(this.input.keyboard.addKey("R"), 1000)
+			) {
+				this.scene.start("BootScene");
+			}
 		}
 	}
 }

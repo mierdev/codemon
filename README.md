@@ -9,9 +9,11 @@ The game is live hosted! **<a href="https://cdn.bookey.app/files/publish-book/Le
 ## In-game sreenshots
 
 <img height="300px" src="https://raw.githubusercontent.com/mierdev/codemon/refs/heads/main/public/assets/readme/screenshot_1.png" alt="screenshot 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img height="300px" src="https://raw.githubusercontent.com/mierdev/codemon/refs/heads/main/public/assets/readme/screenshot_2.png" alt="screenshot 2">
+
 </div>
 
 ## Build by
+
 - [Nallo](https://github.com/nallovint)
 - [TokiLoshi](https://github.com/TokiLoshi)
 - [Miranda](https://github.com/mierdev)
@@ -23,28 +25,35 @@ The game is live hosted! **<a href="https://cdn.bookey.app/files/publish-book/Le
 ## Installation
 
 1. Clone the repo:
+
 ```bash
 git clone git@github.com:mierdev/codemon.git
 ```
 
 2. Open the project folder:
+
 ```bash
 cd codemon
 ```
 
 3. Install dependencies:
+
 ```bash
 npm install
 ```
 
 4. Install MongoDB
-*On WSL2/Ubuntu (Windows)*
+   _On WSL2/Ubuntu (Windows)_
+
 - Import the public key:
-From a terminal, install `gnupg` and `curl` if they are not already available:
+  From a terminal, install `gnupg` and `curl` if they are not already available:
+
 ```bash
 sudo apt-get install gnupg curl
 ```
+
 To import the MongoDB public GPG key, run the following command:
+
 ```bash
 curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
   sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg \
@@ -52,44 +61,56 @@ curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
 ```
 
 - Create the list file:
-Create the list file `/etc/apt/sources.list.d/mongodb-org-8.0.list` for your version of Ubuntu (we are presuming you've installed it with Boot.dev's instructions and are using Ubuntu 22.04 Jammy, if not follow the [Installation guide](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/))
+  Create the list file `/etc/apt/sources.list.d/mongodb-org-8.0.list` for your version of Ubuntu (we are presuming you've installed it with Boot.dev's instructions and are using Ubuntu 22.04 Jammy, if not follow the [Installation guide](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/))
+
 ```bash
 echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/8.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
 ```
 
 - Reload the package database:
-Issue the following command to reload the local package database:
+  Issue the following command to reload the local package database:
+
 ```bash
 sudo apt-get update
 ```
 
 - Install MongoDB Community Server:
+
 ```bash
 sudo apt-get install -y mongodb-org
 ```
 
 ## Usage
+
 1. Start MongoDB
-*On WSL2/Ubuntu (Windows)*
+   _On WSL2/Ubuntu (Windows)_
+
 - Run this command to start MongoDBL:
+
 ```bash
 sudo systemctl start mongod
 ```
+
 - If you receive an error similar to the following when starting mongod:
-`Failed to start mongod.service: Unit mongod.service not found.`
-Run the following command first:
+  `Failed to start mongod.service: Unit mongod.service not found.`
+  Run the following command first:
+
 ```bash
 sudo systemctl daemon-reload
 ```
+
 Then run the start command above again.
 
 2. Start the server
+
 - Run this command in your CLI:
+
 ```bash
 npm run devStart
 ```
 
 - If you are on Mac you might run into issues. When you do run this command instead:
+
 ```bash
 npm run macStart
 ```
@@ -122,6 +143,10 @@ A bit about our architecture.
 - Control: Sound Effect by [jsfxr](https://sfxr.me/)
 - Recover: Sound Effect by [freesound_community](https://pixabay.com/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=6860) from [Pixabay](https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=6860)
 - Support: Sound Effect by [freesound_community](https://pixabay.com/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=46004) from [Pixabay](https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=46004)
+
+Maybes:
+Fire sounds:
+fire-sounds-356121 Sound Effect by [DRAGON-STUDIO](https://pixabay.com/users/dragon-studio-38165424/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=356121) from [Pixabay](https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=356121)
 
 More sounds:
 https://sfxr.me/
