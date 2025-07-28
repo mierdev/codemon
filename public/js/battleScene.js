@@ -1044,7 +1044,6 @@ class BattleScene extends Phaser.Scene {
 		if (result.completed) {
 			console.log("Tournament completed - player wins");
 			this.tournamentResult = result;
-<<<<<<< HEAD
 			this.tournamentPlayerLanguage = this.tournamentInfo?.playerLanguage;
 			this.turnText.setText("Press SPACE for next battle");
 			this.nextOpponent = result.nextOpponent;
@@ -1052,19 +1051,6 @@ class BattleScene extends Phaser.Scene {
 			if (result.nextOpponent && result.nextOpponent.trainer) {
 				console.log(`Next match: ${this.tournamentPlayerLanguage} vs ${result.nextOpponent.trainer.codemon}`);
 			}
-=======
-			
-			// Fade out music and transition to end scene
-			if (this.audioManager) {
-				this.audioManager.fadeOutMusic(1000);
-			}
-			
-			window.transitionManager.resetTransitionState();
-			window.transitionManager.startTransition(this, 'BattleScene', 'EndScene', {
-				result: result,
-				playerLanguage: this.tournamentPlayerLanguage
-			});
->>>>>>> parent of 691654e (cleanup)
 		} else {
 			console.log("Tournament continues - next opponent:", result.nextOpponent);
 			this.nextOpponent = result.nextOpponent;
@@ -1084,7 +1070,6 @@ class BattleScene extends Phaser.Scene {
 		if (result.completed) {
 			console.log("Tournament completed - AI wins");
 			this.tournamentResult = result;
-<<<<<<< HEAD
 			this.tournamentPlayerLanguage = this.tournamentInfo?.playerLanguage;
 			this.turnText.setText("Press SPACE for next battle");
 			this.nextOpponent = result.nextOpponent;
@@ -1092,19 +1077,6 @@ class BattleScene extends Phaser.Scene {
 			if (result.nextOpponent && result.nextOpponent.trainer) {
 				console.log(`Next match: ${this.tournamentPlayerLanguage} vs ${result.nextOpponent.trainer.codemon}`);
 			}
-=======
-			
-			// Fade out music and transition to end scene
-			if (this.audioManager) {
-				this.audioManager.fadeOutMusic(1000);
-			}
-			
-			window.transitionManager.resetTransitionState();
-			window.transitionManager.startTransition(this, 'BattleScene', 'EndScene', {
-				result: result,
-				playerLanguage: this.tournamentPlayerLanguage
-			});
->>>>>>> parent of 691654e (cleanup)
 		} else {
 			console.log("Tournament continues - next opponent:", result.nextOpponent);
 			this.nextOpponent = result.nextOpponent;
