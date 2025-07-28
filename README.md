@@ -102,7 +102,7 @@ MONGODB_DB=codemon
 
 ## Usage
 
-1. Start MongoDB
+1. Start MongoDB:
 
 **On Mac**
 
@@ -126,12 +126,12 @@ sudo systemctl daemon-reload
 
 Then run the start command above again.
 
-2. Add data to the database
+2. Add data to the database:
 ```bash
 npm run seed
 ```
 
-2. Start the server
+2. Start the server:
 ```bash
 npm run devStart
 ```
