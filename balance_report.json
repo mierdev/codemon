@@ -1,0 +1,99 @@
+{
+  "summary": {
+    "total_battles": 1500,
+    "languages_tested": 6,
+    "abilities_tested": 12
+  },
+  "balance_issues": {
+    "overpowered_languages": [
+      {
+        "language": "OCaml",
+        "win_rate": 0.87,
+        "suggestion": "Consider nerfing abilities or reducing base stats"
+      },
+      {
+        "language": "C#",
+        "win_rate": 0.562,
+        "suggestion": "Consider nerfing abilities or reducing base stats"
+      },
+      {
+        "language": "JavaScript & TypeScript",
+        "win_rate": 0.602,
+        "suggestion": "Consider nerfing abilities or reducing base stats"
+      }
+    ],
+    "underpowered_languages": [
+      {
+        "language": "Python",
+        "win_rate": 0.182,
+        "suggestion": "Consider buffing abilities or increasing base stats"
+      },
+      {
+        "language": "Go",
+        "win_rate": 0.282,
+        "suggestion": "Consider buffing abilities or increasing base stats"
+      }
+    ],
+    "overpowered_abilities": [
+      {
+        "language": "Rust",
+        "ability": "Borrow Checker",
+        "win_rate": 0.75,
+        "power": 25,
+        "suggestion": "Reduce power from 25 to 5"
+      },
+      {
+        "language": "OCaml",
+        "ability": "Type Inference",
+        "win_rate": 0.7593984962406015,
+        "power": 25,
+        "suggestion": "Reduce power from 25 to 5"
+      },
+      {
+        "language": "OCaml",
+        "ability": "Pattern Matching",
+        "win_rate": 0.9957264957264957,
+        "power": 60,
+        "suggestion": "Reduce power from 60 to 40"
+      },
+      {
+        "language": "C#",
+        "ability": "LINQ Query",
+        "win_rate": 0.8745098039215686,
+        "power": 50,
+        "suggestion": "Reduce power from 50 to 30"
+      }
+    ],
+    "underpowered_abilities": [
+      {
+        "language": "Python",
+        "ability": "Rapid Prototype",
+        "win_rate": 0.08627450980392157,
+        "power": 10,
+        "suggestion": "Increase power from 10 to 30"
+      },
+      {
+        "language": "Python",
+        "ability": "Ecosystem Call",
+        "win_rate": 0.2816326530612245,
+        "power": 15,
+        "suggestion": "Increase power from 15 to 35"
+      },
+      {
+        "language": "Go",
+        "ability": "Fast Compilation",
+        "win_rate": 0.0,
+        "power": 10,
+        "suggestion": "Increase power from 10 to 30"
+      },
+      {
+        "language": "C#",
+        "ability": "Garbage Collection",
+        "win_rate": 0.23673469387755103,
+        "power": 15,
+        "suggestion": "Increase power from 15 to 35"
+      }
+    ]
+  },
+  "recommendations": []
+}

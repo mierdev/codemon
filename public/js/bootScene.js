@@ -58,12 +58,17 @@ class BootScene extends Phaser.Scene {
 	create() {
 		window.gameManager = new GameManager();
 
+<<<<<<< Updated upstream
 		// Check Audio manager has loaded
 		if (!window.audioManager && window.AudioManager) {
 			this.audioManager = new window.AudioManager(this);
 		} else {
 			console.log("something went wrong with the audio manager!");
 		}
+=======
+		// Get all available language IDs
+		// const availableLanguages = ['python', 'go', 'rust', 'ocaml', 'csharp', 'javascript'];
+>>>>>>> Stashed changes
 
 		console.log("About to play cider");
 		if (this.audioManager && !this.audioManager.currentMusic) {
@@ -92,9 +97,10 @@ class BootScene extends Phaser.Scene {
 			.text(480, 335, "Choose language: ", { fontSize: "24px", fill: "#fff" })
 			.setOrigin(0.5);
 
-		this.createLanguageButton("python", "Python", 280, 400);
-		this.createLanguageButton("go", "Go", 480, 400);
-		this.createLanguageButton("javascript", "JavaScript", 680, 400);
+		this.createLanguageButton("python", "Python", 200, 400);
+		this.createLanguageButton("go", "Go", 350, 400);
+		this.createLanguageButton("csharp", "C#", 500, 400);
+		this.createLanguageButton("javascript", "JavaScript", 650, 400);
 
 		// Start button
 		const startButton = this.add.image(480, 500, "greyUnpressed");

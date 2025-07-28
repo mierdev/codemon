@@ -326,7 +326,7 @@ class EndScene extends Phaser.Scene {
 			go: "Go",
 			rust: "Rust",
 			ocaml: "OCaml",
-			cpp: "C++",
+			csharp: "C#",
 			javascript: "JavaScript & TypeScript",
 		};
 		if (!names[languageId]) {

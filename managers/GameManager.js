@@ -46,15 +46,6 @@ class GameManager {
 					description: "Temporarily gains a secondary type for 3 turns.",
 					cooldown: 5,
 				},
-				{
-					name: "GIL Lock",
-					type: "Debuff",
-					power: 20,
-					accuracy: 85,
-					description:
-						"Prevents target from using multi-core abilities for 2 turns.",
-					cooldown: 3,
-				},
 			],
 		});
 
@@ -81,20 +72,11 @@ class GameManager {
 				{
 					name: "Goroutine Swarm",
 					type: "Special",
-					power: 45,
+					power: 35,
 					accuracy: 75,
 					description:
 						"Deals special damage. 25% chance to inflict Concurrency Bottleneck.",
 					cooldown: 2,
-				},
-				{
-					name: "Strict Typing",
-					type: "Defensive",
-					power: 15,
-					accuracy: 100,
-					description:
-						"Cleanses status effects. Gains shield vs type coercion for 1 turn.",
-					cooldown: 3,
 				},
 			],
 		});
@@ -113,7 +95,7 @@ class GameManager {
 				{
 					name: "Borrow Checker",
 					type: "Passive",
-					power: 10,
+					power: 25,
 					accuracy: 100,
 					description: "Takes 50% less damage from memory corruption attacks.",
 					cooldown: 0,
@@ -125,15 +107,6 @@ class GameManager {
 					accuracy: 100,
 					description:
 						"Increases Attack and Special Attack by 1 stage for 3 turns.",
-					cooldown: 3,
-				},
-				{
-					name: "Ownership Transfer",
-					type: "Control",
-					power: 20,
-					accuracy: 80,
-					description:
-						"Removes one random buff or inflicts Rust-Bound for 1 turn.",
 					cooldown: 3,
 				},
 			],
@@ -153,7 +126,7 @@ class GameManager {
 				{
 					name: "Type Inference",
 					type: "Passive",
-					power: 10,
+					power: 25,
 					accuracy: 100,
 					description:
 						"All abilities gain +10% accuracy. +15% crit vs multi-type targets.",
@@ -162,58 +135,41 @@ class GameManager {
 				{
 					name: "Pattern Matching",
 					type: "Special",
-					power: 80,
+					power: 60,
 					accuracy: 85,
 					description: "Deals special damage. +25 bonus vs C++ and JS/TS.",
-					cooldown: 3,
-				},
-				{
-					name: "Immutability",
-					type: "Recovery",
-					power: 15,
-					accuracy: 100,
-					description: "Heals 35% max HP and cleanses non-volatile status.",
 					cooldown: 3,
 				},
 			],
 		});
 
-		this.pokemonData.set("cpp", {
-			name: "C++",
-			type: "System",
+		this.pokemonData.set("csharp", {
+			name: "C#",
+			type: "Managed/Enterprise",
 			hp: 100,
 			maxHp: 100,
-			attack: 100,
-			specialAttack: 100,
-			defense: 60,
-			specialDefense: 60,
-			speed: 70,
+			attack: 85,
+			specialAttack: 90,
+			defense: 80,
+			specialDefense: 85,
+			speed: 75,
 			abilities: [
 				{
-					name: "Unsafe Block",
-					type: "Physical",
-					power: 65,
-					accuracy: 80,
-					description:
-						"Deals high physical damage. 20% chance of Undefined Behavior.",
-					cooldown: 3,
-				},
-				{
-					name: "Optimized Parallelism",
-					type: "Passive",
-					power: 10,
-					accuracy: 100,
-					description: "Every 2 turns, Speed and Attack increase by 1 stage.",
-					cooldown: 0,
-				},
-				{
-					name: "Legacy Integration",
-					type: "Defensive",
+					name: "Garbage Collection",
+					type: "Recovery",
 					power: 15,
 					accuracy: 100,
 					description:
-						"Grants Compatibility Shield for 2 turns vs Script/Web damage.",
+						"Heals 30% max HP and removes one debuff. 25% chance to gain +1 Defense.",
 					cooldown: 4,
+				},
+				{
+					name: "LINQ Query",
+					type: "Special",
+					power: 50,
+					accuracy: 85,
+					description: "Deals special damage. 30% chance to inflict 'Data Binding Error'.",
+					cooldown: 3,
 				},
 			],
 		});
@@ -232,7 +188,7 @@ class GameManager {
 				{
 					name: "Asynchronous Promise",
 					type: "Special",
-					power: 60,
+					power: 45,
 					accuracy: 75,
 					description:
 						"Deals initial damage + 25 delayed damage. 25% chance of Callback Hell.",
@@ -241,19 +197,11 @@ class GameManager {
 				{
 					name: "Framework Flux",
 					type: "Passive",
-					power: 10,
+					power: 30,
 					accuracy: 100,
 					description:
 						"40% chance each turn to gain +1 random stat. 10% chance to lose -1.",
 					cooldown: 0,
-				},
-				{
-					name: "Transpilation",
-					type: "Support",
-					power: 15,
-					accuracy: 100,
-					description: "Changes primary type to advantageous type for 2 turns.",
-					cooldown: 4,
 				},
 			],
 		});
@@ -497,7 +445,7 @@ class GameManager {
 			{ name: "Miranda", language: "python" },
 			{ name: "Nuc", language: "ocaml" },
 			{ name: "Lane", language: "go" },
-			{ name: "Lyle", language: "cpp" },
+			{ name: "Lyle", language: "csharp" },
 		];
 		return this.getNextOpponent();
 	}
