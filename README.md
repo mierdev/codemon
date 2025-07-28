@@ -2,13 +2,13 @@
 
 # A JRPG battle game with a coding theme
 
-Our entry for the Boot.dev Hackathon 2025.
+Compete in pokémon inspired battles to find out which is the strongest programming language. Compete in one of the competitions to earn a shiny coin. There is also a special competition to settle a fierce rivalry once and for all!
+
+> PS if you hang around the Boot.dev Discord server, you might recognize a lot of the opponents 👀
 
 ## The game is live hosted! 
 
 **<a href="https://cdn.bookey.app/files/publish-book/Learning%20TypeScript7136808.jpg" target="_blank">Play it in your browser</a>**
-
-> PS if you hang around the Boot.dev Discord server, you might recognize a lot of the opponents 👀
 
 ## In-game sreenshots
 
@@ -47,7 +47,12 @@ npm install
 ```
 
 4. Install MongoDB
-   _On WSL2/Ubuntu (Windows)_
+
+### On Mac
+
+(insert installation instructions)
+
+### On WSL2/Ubuntu (Windows)
 
 - Import the public key:
   From a terminal, install `gnupg` and `curl` if they are not already available:
