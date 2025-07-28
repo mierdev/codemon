@@ -69,7 +69,7 @@ class BattleScene extends Phaser.Scene {
 		this.load.image("lotus", ["assets/codemon/lotus_flower.png"]);
 		this.load.image("lotus2", ["assets/codemon/lotus_flower2.png"]);
 		this.load.image("snake", ["assets/codemon/snake.png"]);
-		this.load.image("windows", ["assets/codemon/windows_logo.png"]);
+		this.load.image("windows_logo", ["assets/codemon/windows_logo.png"]);
 		// Sound effects
 		this.load.audio("buff", ["assets/audio/effects/buff.mp3"]);
 		this.load.audio("control", ["assets/audio/effects/control.wav"]);
@@ -147,7 +147,7 @@ class BattleScene extends Phaser.Scene {
 		this.pokemon1Sprite.setScale(0.3);
 
 		this.pokemon2Sprite = this.add.image(720, 220, pokemon2SpriteKey);
-		if (pokemon2SpriteKey === "C++") {
+		if (pokemon2SpriteKey === "windows_logo") {
 			this.pokemon2Sprite.setScale(0.8);
 		} else {
 			this.pokemon2Sprite.setScale(0.3);
@@ -213,12 +213,10 @@ class BattleScene extends Phaser.Scene {
 		const spriteMap = {
 			Python: "snake",
 			Go: "gopher",
-			// TODO:
-			// Add fox, and lotus
-			JavaScript: "birb",
 			Rust: "crab",
 			OCaml: "camel",
-			"C++": "windows",
+			"C#": "windows_logo",
+			"JavaScript & TypeScript": "birb",
 		};
 		return spriteMap[languageName] || "fox";
 	}

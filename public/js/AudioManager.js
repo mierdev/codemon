@@ -6,18 +6,31 @@ export class AudioManager {
 		this.audioIsEnabled = true;
 		this.scene = scene;
 		this.currentMusic = null;
+		this.soundPool = new Map(); // Cache for sound effects
 	}
+	
 	playSoundEffect(key) {
 		// If sound is not enabled return
 		if (!this.audioIsEnabled) return;
-		// Setting default to 0.4 to start
-		const soundEffect = this.scene.sound.add(key, { volume: 0.4 });
+		
+		// Check if we already have this sound in our pool
+		let soundEffect = this.soundPool.get(key);
+		
+		if (!soundEffect) {
+			// Create new sound instance and cache it
+			soundEffect = this.scene.sound.add(key, { volume: 0.4 });
+			this.soundPool.set(key, soundEffect);
+		}
+		
+		// Stop the sound if it's currently playing to prevent overlap
+		if (soundEffect.isPlaying) {
+			soundEffect.stop();
+		}
+		
+		// Play the sound
 		soundEffect.play();
-		// Clean up after playing
-		soundEffect.once("complete", () => {
-			soundEffect.destroy();
-		});
 	}
+	
 	playMusic(key, options = {}) {
 		if (!this.audioIsEnabled) return;
 
@@ -50,6 +63,7 @@ export class AudioManager {
 			});
 		}
 	}
+	
 	stopMusic() {
 		if (this.currentMusic) {
 			this.currentMusic.stop();
@@ -57,10 +71,13 @@ export class AudioManager {
 			this.currentMusic = null;
 		}
 	}
+	
 	// HACK:
 	// Trying to stop all audio
 	stopAll() {
 		this.scene.sound.stopAll();
+		// Clear the sound pool
+		this.soundPool.clear();
 	}
 
 	toggleSoundEffect() {
@@ -69,6 +86,7 @@ export class AudioManager {
 		// toggle mute
 		this.scene.sound.mute = !this.audioIsEnabled;
 	}
+	
 	isAudioEnabled() {
 		return this.audioIsEnabled;
 	}
