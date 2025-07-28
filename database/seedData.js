@@ -13,6 +13,20 @@ const seedData = async () => {
 
     // Seed abilities
     const abilities = await Ability.insertMany([
+      /*
+      { 	
+        name: "",
+        type: "" ,
+        description: "",
+        power: "",
+        accuracy: "",
+        statusEffectAttack: "",
+        statusEffectSpecialAttack: "",
+        statusEffectDefense: "",
+        statusEffectSpecialDefense: "",
+        statusEffectSpeed: ""
+      },
+      */
       {
         name: "Fire Blast",
         type: "Special",
