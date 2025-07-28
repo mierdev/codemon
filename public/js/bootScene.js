@@ -68,6 +68,9 @@ class BootScene extends Phaser.Scene {
 =======
 		// Get all available language IDs
 		// const availableLanguages = ['python', 'go', 'rust', 'ocaml', 'csharp', 'javascript'];
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 		console.log("About to play cider");
