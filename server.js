@@ -3,7 +3,9 @@ import express from "express";
 import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
-// import dotenv from "dotenv";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // ES module equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -19,12 +21,12 @@ app.use(express.json());
 
 // route logging middleware
 app.use((req, _, next) => {
-    console.log(`${req.method} ${req.url}`);
-    next();
+	console.log(`${req.method} ${req.url}`);
+	next();
 });
 
 // connect to database
-mongoose.connect("mongodb://localhost/dbCodemon");
+mongoose.connect(process.env.MONGODB_URI);
 /* 
   normally you put the database path in .env for safety!
   but for ease of use, and since it's running locally, I've put it here
@@ -57,7 +59,7 @@ db.once("open", () => console.log("Database of madness has started!"));
 // import TrainersData from "../database/dbCodemon.js";
 // getTrainers();
 
-// setup routes 
+// setup routes
 import abilitiesRouter from "./routes/routerAbilities.js";
 app.use("/abilities", abilitiesRouter);
 

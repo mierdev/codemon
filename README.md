@@ -99,7 +99,7 @@ Do something.
 
 **On WSL2/Ubuntu (Windows)**
 
-- Run this command to start MongoDBL:
+- Start MongoDB:
 
 ```bash
 sudo systemctl start mongod
@@ -115,10 +115,12 @@ sudo systemctl daemon-reload
 
 Then run the start command above again.
 
+2. Add data to the database
+```bash
+npm run seed
+```
+
 2. Start the server
-
-- Run this command in your CLI:
-
 ```bash
 npm run devStart
 ```
