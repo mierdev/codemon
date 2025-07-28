@@ -10,6 +10,7 @@ async function initializeGame() {
 	// Check if all required scenes are available
 	if (typeof TitlePage === 'undefined' || typeof IntroScene === 'undefined' || typeof BootScene === 'undefined' || 
 		typeof BattleScene === 'undefined' || typeof EndScene === 'undefined') {
+		console.log('Waiting for scenes to load...');
 		setTimeout(initializeGame, 100);
 		return;
 	}
@@ -18,8 +19,11 @@ async function initializeGame() {
 	window.gameManager = new GameManager();
 	
 	try {
+		console.log('Loading game data from database...');
+		// Add a small delay to ensure server is ready
 		await new Promise(resolve => setTimeout(resolve, 100));
 		await window.gameManager.loadGameData();
+		console.log('Game data loaded successfully');
 	} catch (error) {
 		console.error('Failed to load game data from database, using fallback data:', error);
 	}
@@ -49,6 +53,7 @@ async function initializeGame() {
 	// Initialize transition manager
 	window.transitionManager = new window.TransitionManager();
 	
+	console.log('Game initialized successfully');
 }
 
 // Initialize game when DOM is ready

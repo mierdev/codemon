@@ -15,20 +15,44 @@ class GameManager {
 	 */
 	async loadGameData() {
 		try {
+			console.log('Attempting to fetch game data from database...');
 			const response = await fetch('/api/language-abilities/game-data');
+			console.log('Response status:', response.status);
+			console.log('Response ok:', response.ok);
+			
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}
-			const gameData = await response.json();
 			
+			const gameData = await response.json();
+			console.log('Game data received:', gameData.length, 'languages');
+			
+			// Clear existing data
 			this.pokemonData.clear();
+			
+			// Load data into the map
 			gameData.forEach(language => {
-				this.pokemonData.set(language.id, language);
+				this.pokemonData.set(language.id, {
+					name: language.name,
+					type: language.type,
+					hp: language.stats.hp,
+					maxHp: language.stats.maxHp,
+					attack: language.stats.attack,
+					specialAttack: language.stats.specialAttack,
+					defense: language.stats.defense,
+					specialDefense: language.stats.specialDefense,
+					speed: language.stats.speed,
+					abilities: language.abilities
+				});
 			});
 			
 			this.isDataLoaded = true;
+			console.log('Game data loaded from database:', this.pokemonData.size, 'languages');
 		} catch (error) {
-			console.error('Failed to load game data from database, using fallback data:', error);
+			console.error('Error loading game data:', error);
+			console.error('Error details:', error.message);
+			console.error('Error stack:', error.stack);
+			// Fallback to hardcoded data if database fails
 			this.initializePokemonData();
 		}
 	}
@@ -367,12 +391,10 @@ class GameManager {
 	 * @param {number} stages - Number of buff stages to apply (default: 1)
 	 */
 	applyBuff(pokemon, stat, stages = 1) {
-		if (!pokemon.buffs) {
-			pokemon.buffs = {};
-		}
 		const currentBuffs = pokemon.buffs[stat] || 0;
-		const newBuffs = Math.min(currentBuffs + stages, 6);
+		const newBuffs = Math.min(6, currentBuffs + stages); // Max +6 stages
 		pokemon.buffs[stat] = newBuffs;
+		console.log(`${pokemon.name}'s ${stat} buffed by ${stages} stage(s) to +${newBuffs}`);
 	}
 
 	/**
@@ -382,12 +404,10 @@ class GameManager {
 	 * @param {number} stages - Number of debuff stages to apply (default: 1)
 	 */
 	applyDebuff(pokemon, stat, stages = 1) {
-		if (!pokemon.debuffs) {
-			pokemon.debuffs = {};
-		}
 		const currentDebuffs = pokemon.debuffs[stat] || 0;
-		const newDebuffs = Math.min(currentDebuffs + stages, 6);
+		const newDebuffs = Math.min(6, currentDebuffs + stages); // Max -6 stages
 		pokemon.debuffs[stat] = newDebuffs;
+		console.log(`${pokemon.name}'s ${stat} debuffed by ${stages} stage(s) to -${newDebuffs}`);
 	}
 
 	/**
@@ -398,25 +418,42 @@ class GameManager {
 	 * @returns {number} The calculated damage
 	 */
 	calculateDamage(attacker, defender, ability) {
+		// Determine which attack and defense stats to use based on ability type
 		let attackStat, defenseStat;
-
-		if (ability.type === "Physical") {
-			attackStat = this.getEffectiveStat(attacker, "attack");
-			defenseStat = this.getEffectiveStat(defender, "defense");
-		} else if (ability.type === "Special") {
+		
+		if (ability.type === "Special") {
 			attackStat = this.getEffectiveStat(attacker, "specialAttack");
 			defenseStat = this.getEffectiveStat(defender, "specialDefense");
+		} else if (ability.type === "Physical") {
+			attackStat = this.getEffectiveStat(attacker, "attack");
+			defenseStat = this.getEffectiveStat(defender, "defense");
 		} else {
+			// For Passive, Defensive, Recovery, Utility - use attack/defense as default
 			attackStat = this.getEffectiveStat(attacker, "attack");
 			defenseStat = this.getEffectiveStat(defender, "defense");
 		}
 
+		// Debug logging
+		console.log(`Damage calculation for ${ability.name} (${ability.type}):`);
+		console.log(`  Attacker: ${attacker.name}, Attack: ${attackStat}, Type: ${attacker.type}`);
+		console.log(`  Defender: ${defender.name}, Defense: ${defenseStat}, Type: ${defender.type}`);
+		console.log(`  Ability Power: ${ability.power}`);
+
+		// Base damage calculation (simplified formula without level)
 		let damage = Math.floor((attackStat * ability.power) / (defenseStat * 2) + 10);
 
+		// Apply type effectiveness (simplified)
 		const typeEffectiveness = this.getTypeEffectiveness(attacker.type, defender.type);
 		damage = Math.floor(damage * typeEffectiveness);
 
-		return Math.max(1, damage);
+		// Apply random variation (85-100%)
+		const randomFactor = 0.85 + Math.random() * 0.15;
+		damage = Math.floor(damage * randomFactor);
+
+		// Ensure minimum damage of 1
+		const finalDamage = Math.max(1, damage);
+		console.log(`  Final Damage: ${finalDamage}`);
+		return finalDamage;
 	}
 
 	/**
@@ -461,7 +498,7 @@ class GameManager {
 	 */
 	startTournament(matchCount, playerLanguage) {
 		this.tournament = {
-			type: matchCount,
+			type: matchCount, // 3, 5, 7 total matches
 			matchesPlayed: 0,
 			wins: 0,
 			losses: 0,
@@ -469,7 +506,13 @@ class GameManager {
 			isActive: true,
 		};
 
+		console.log(
+			`Tournament started: ${matchCount} matches (play all matches)`
+		);
+
+		// Initialize trainers list - will be populated when needed
 		this.trainers = [];
+		// Return a promise that resolves to the next opponent
 		return this.getNextOpponent();
 	}
 
@@ -514,6 +557,7 @@ class GameManager {
 	 */
 	async getNextOpponent() {
 		if (!this.tournament || !this.tournament.isActive) {
+			console.log("No active tournament ");
 			return null;
 		}
 
@@ -528,6 +572,9 @@ class GameManager {
 		);
 		const randomTrainer =
 			availableTrainers[Math.floor(Math.random() * availableTrainers.length)];
+		console.log(
+			`getting next opponent and returning ${randomTrainer} match: ${this.tournament.matchesPlayed} total: ${this.tournament.type}`
+		);
 		return {
 			trainer: randomTrainer,
 			match: this.tournament.matchesPlayed + 1,
@@ -543,34 +590,33 @@ class GameManager {
 		if (!this.tournament) return null;
 		this.tournament.wins++;
 		this.tournament.matchesPlayed++;
+		console.log(
+			`In record win, with: ${this.tournament.wins} wins, ${this.tournament.losses} losses, ${this.tournament.matchesPlayed} matches played, total: ${this.tournament.type}`
+		);
 
 		// Only end tournament after all matches are played
 		if (this.tournament.matchesPlayed >= this.tournament.type) {
-			const won = this.tournament.wins > this.tournament.losses;
+			console.log(`Tournament completed - played all ${this.tournament.matchesPlayed} matches`);
 			const result = {
 				completed: true,
-				won: won,
+				won: this.tournament.wins > this.tournament.losses,
 				wins: this.tournament.wins,
 				losses: this.tournament.losses,
 				total: this.tournament.type,
-				trophy: won ? 
+				trophy: this.tournament.wins > this.tournament.losses ? 
 					(this.tournament.type === 3 ? "Bronze" : this.tournament.type === 5 ? "Silver" : "Gold") :
 					"No shiny - didn't win enough matches",
 			};
 
-			this.tournament.isActive = false;
+			this.tournament = null;
 			return result;
 		}
 
 		// Continue tournament until all matches are played
-		const nextOpponent = await this.getNextOpponent();
+		console.log(`Continuing tournament - ${this.tournament.matchesPlayed} < ${this.tournament.type} matches`);
 		return {
 			completed: false,
-			nextOpponent: nextOpponent,
-			wins: this.tournament.wins,
-			losses: this.tournament.losses,
-			total: this.tournament.type,
-			won: false,
+			nextOpponent: await this.getNextOpponent(),
 		};
 	}
 
@@ -582,34 +628,33 @@ class GameManager {
 		if (!this.tournament) return null;
 		this.tournament.losses++;
 		this.tournament.matchesPlayed++;
+		console.log(
+			`In record loss, with: ${this.tournament.losses} losses, ${this.tournament.wins} wins, ${this.tournament.matchesPlayed} matches played, total: ${this.tournament.type}`
+		);
 
 		// Only end tournament after all matches are played
 		if (this.tournament.matchesPlayed >= this.tournament.type) {
-			const won = this.tournament.wins > this.tournament.losses;
+			console.log(`Tournament completed - played all ${this.tournament.matchesPlayed} matches`);
 			const result = {
 				completed: true,
-				won: won,
+				won: this.tournament.wins > this.tournament.losses,
 				wins: this.tournament.wins,
 				losses: this.tournament.losses,
 				total: this.tournament.type,
-				trophy: won ? 
+				trophy: this.tournament.wins > this.tournament.losses ? 
 					(this.tournament.type === 3 ? "Bronze" : this.tournament.type === 5 ? "Silver" : "Gold") :
 					"No shiny - didn't win enough matches",
 			};
 
-			this.tournament.isActive = false;
+			this.tournament = null;
 			return result;
 		}
 
 		// Continue tournament until all matches are played
-		const nextOpponent = await this.getNextOpponent();
+		console.log(`Continuing tournament - ${this.tournament.matchesPlayed} < ${this.tournament.type} matches`);
 		return {
 			completed: false,
-			nextOpponent: nextOpponent,
-			wins: this.tournament.wins,
-			losses: this.tournament.losses,
-			total: this.tournament.type,
-			won: false,
+			nextOpponent: await this.getNextOpponent(),
 		};
 	}
 
@@ -620,10 +665,20 @@ class GameManager {
 	 * @returns {Object|null} Battle data or null if invalid
 	 */
 	startTournamentBattle(playerLanguageId, opponentLanguageId) {
+		console.log('startTournamentBattle - playerLanguageId:', playerLanguageId);
+		console.log('startTournamentBattle - opponentLanguageId:', opponentLanguageId);
+		console.log('startTournamentBattle - available language IDs:', Array.from(this.pokemonData.keys()));
+		
 		const playerLanguage = this.getLanguageData(playerLanguageId);
 		const opponentLanguage = this.getLanguageData(opponentLanguageId);
+		
+		console.log('startTournamentBattle - playerLanguage:', playerLanguage);
+		console.log('startTournamentBattle - opponentLanguage:', opponentLanguage);
 
 		if (!playerLanguage || !opponentLanguage) {
+			console.error("Invalid language IDs provided");
+			console.error("playerLanguageId:", playerLanguageId, "playerLanguage:", playerLanguage);
+			console.error("opponentLanguageId:", opponentLanguageId, "opponentLanguage:", opponentLanguage);
 			return null;
 		}
 
