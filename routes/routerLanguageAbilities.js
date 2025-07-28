@@ -3,6 +3,7 @@ import LanguageAbilities from "../models/modelLanguageAbilities.js";
 import Codemon from "../models/modelCodemon.js";
 import Ability from "../models/modelAbilities.js";
 import Trainer from "../models/modelTrainers.js";
+import Dialogue from "../models/modelDialogue.js";
 import { error } from "console";
 
 const router = express.Router();
@@ -116,6 +117,24 @@ router.get("/trainers/:language", async (req, res) => {
     const { language } = req.params;
     const trainers = await Trainer.find({ codemon: language });
     res.json(trainers);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+/**
+ * Retrieves dialogue by trainer name
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
+router.get("/dialogue/:trainerName", async (req, res) => {
+  try {
+    const { trainerName } = req.params;
+    const dialogue = await Dialogue.findOne({ name: trainerName });
+    if (!dialogue) {
+      return res.status(404).json({ message: "Dialogue not found" });
+    }
+    res.json(dialogue);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

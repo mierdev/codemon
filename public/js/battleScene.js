@@ -31,26 +31,29 @@ class BattleScene extends Phaser.Scene {
 	 * @param {Object} data - Battle data containing pokemon1 and pokemon2 objects
 	 */
 	init(data) {
+		console.log("BattleScene initialized with data:", data);
+		
+		// Initialize battle data
 		this.pokemon1 = data.pokemon1;
 		this.pokemon2 = data.pokemon2;
-		this.currentTurn = 1;
+		this.tournamentInfo = data.tournamentInfo;
+		this.tournamentPlayerLanguage = data.tournamentPlayerLanguage;
+		this.nextOpponent = data.nextOpponent;
+		
+		// Initialize dialogue and trainer data
+		this.dialogueData = { pokemon1: null, pokemon2: null };
+		this.trainerData = { pokemon1: null, pokemon2: null };
+		
+		// Initialize battle state
 		this.battleState = "playerTurn";
 		this.selectedAbility = 0;
-		this.isPlayerTurn = true;
-		this.trainerData = { pokemon1: null, pokemon2: null };
-
-		// Store tournament info if it exists
-		if (data.tournamentInfo) {
-			this.tournamentInfo = data.tournamentInfo;
-			this.tournamentPlayerLanguage = data.playerLanguage;
-		} else {
-			this.tournamentInfo = null;
-			this.tournamentPlayerLanguage = null;
-		}
-
-		if (data.playerLanguage) {
-			this.tournamentPlayerLanguage = data.playerLanguage;
-		}
+		this.currentTurn = 1;
+		
+		// Initialize UI elements
+		this.abilityButtons = [];
+		this.battleLog = [];
+		
+		console.log("BattleScene initialized as TOURNAMENT battle");
 	}
 
 	/**
@@ -173,10 +176,11 @@ class BattleScene extends Phaser.Scene {
 		// Fetch trainer data and create language banners
 		this.fetchAndCreateLanguageBanners();
 
+		// Create UI elements
 		this.createHPBars();
-		this.createBuffsDebuffsUI();
-		this.createAbilityUI();
+		this.createDialogueUI();
 		this.createAbilityMessageBoxes();
+		this.createAbilityUI();
 
 		this.add.image(470, 470, "sword").setOrigin(0.5);
 		this.turnText = this.add
@@ -280,15 +284,53 @@ class BattleScene extends Phaser.Scene {
 			this.trainerData.pokemon1 = trainer1;
 			this.trainerData.pokemon2 = trainer2;
 
+			// Fetch dialogue data for both trainers (with error handling)
+			let dialogue1 = null;
+			let dialogue2 = null;
+			
+			if (trainer1) {
+				try {
+					dialogue1 = await this.fetchDialogueForTrainer(trainer1.name);
+				} catch (error) {
+					console.warn(`Failed to fetch dialogue for ${trainer1.name}:`, error);
+				}
+			}
+			
+			if (trainer2) {
+				try {
+					dialogue2 = await this.fetchDialogueForTrainer(trainer2.name);
+				} catch (error) {
+					console.warn(`Failed to fetch dialogue for ${trainer2.name}:`, error);
+				}
+			}
+
+			// Store dialogue data
+			this.dialogueData.pokemon1 = dialogue1;
+			this.dialogueData.pokemon2 = dialogue2;
+
 			// Create language banners with trainer data
 			this.createLanguageBanner(this.pokemon1.name, 240, 94, trainer1);
 			this.createLanguageBanner(this.pokemon2.name, 720, 94, trainer2);
+
+			// Show start dialogue for AI trainer
+			if (dialogue2 && dialogue2.startDialogue && dialogue2.startDialogue.trim() !== "") {
+				this.showDialogue(dialogue2.startDialogue, 3000);
+				// Delay showing ability buttons until dialogue is done
+				this.time.delayedCall(3000, () => {
+					this.showAbilityButtons();
+				});
+			} else {
+				// Show ability buttons immediately if no dialogue
+				this.showAbilityButtons();
+			}
 
 		} catch (error) {
 			console.error('Error fetching trainer data:', error);
 			// Fallback to creating banners without trainer data
 			this.createLanguageBanner(this.pokemon1.name, 240, 94);
 			this.createLanguageBanner(this.pokemon2.name, 720, 94);
+			// Show ability buttons immediately
+			this.showAbilityButtons();
 		}
 	}
 
@@ -353,131 +395,86 @@ class BattleScene extends Phaser.Scene {
 	}
 
 	/**
-	 * Creates the buffs and debuffs display UI for both Pokemon.
-	 * Shows current stat modifications below each Pokemon.
+	 * Creates the dialogue UI for displaying trainer dialogue during battles
 	 */
-	createBuffsDebuffsUI() {
-		this.buffsDebuffsUI = {
-			pokemon1: this.createPokemonBuffsDebuffs(this.pokemon1, 240, 220),
-			pokemon2: this.createPokemonBuffsDebuffs(this.pokemon2, 720, 220),
-		};
+	createDialogueUI() {
+		// Create dialogue box background
+		this.dialogueBox = this.add.image(720, 340, "greyPressed");
+		this.dialogueBox.setDisplaySize(384, 80);
+		this.dialogueBox.setAlpha(0.9);
+
+		// Create dialogue text
+		this.dialogueText = this.add
+			.text(720, 340, "", {
+				fontSize: "14px",
+				fill: "#000000",
+				wordWrap: { width: 360 },
+				align: "center"
+			})
+			.setOrigin(0.5);
+
+		// Initially hide dialogue
+		this.dialogueBox.setVisible(false);
+		this.dialogueText.setVisible(false);
 	}
 
 	/**
-	 * Creates buffs and debuffs display for a single Pokemon.
-	 * @param {Object} pokemon - The Pokemon to create UI for
-	 * @param {number} x - X position for the UI
-	 * @param {number} y - Y position for the UI
-	 * @returns {Object} UI elements for buffs and debuffs
+	 * Fetches dialogue data for a specific trainer
+	 * @param {string} trainerName - The name of the trainer to fetch dialogue for
+	 * @returns {Promise<Object|null>} The dialogue data or null if not found
 	 */
-	createPokemonBuffsDebuffs(pokemon, x, y) {
-		// Create background box for status effects - positioned further down
-		const boxWidth = 220;
-		const boxHeight = 120;
-		const boxY = y + 160; // Double the distance down
-
-		// const backgroundBox = this.add.rectangle(
-		// 	x,
-		// 	boxY,
-		// 	boxWidth,
-		// 	boxHeight,
-		// 	0x000000,
-		// 	0.7
-		// );
-		// backgroundBox.setStrokeStyle(2, 0xffffff);
-		const backgroundBox = this.add.image(x, boxY, "statusEffects");
-		backgroundBox.setDisplaySize(boxWidth, boxHeight);
-
-		const ui = {
-			backgroundBox: backgroundBox,
-			buffsContainer: [],
-			debuffsContainer: [],
-			titleText: this.add
-				.text(x, boxY - 45, "Status Effects:", {
-					fontSize: "14px",
-					fill: "#FFFFFF",
-					stroke: "#000",
-					strokeThickness: 2,
-				})
-				.setOrigin(0.5),
-		};
-
-		this.updateBuffsDebuffsDisplay(pokemon, ui);
-		return ui;
+	async fetchDialogueForTrainer(trainerName) {
+		try {
+			const response = await fetch(`/api/language-abilities/dialogue/${encodeURIComponent(trainerName)}`);
+			if (!response.ok) {
+				console.warn(`Failed to fetch dialogue for ${trainerName}`);
+				return null;
+			}
+			const dialogue = await response.json();
+			return dialogue;
+		} catch (error) {
+			console.error(`Error fetching dialogue for ${trainerName}:`, error);
+			return null;
+		}
 	}
 
 	/**
-	 * Updates the buffs and debuffs display for a Pokemon.
-	 * @param {Object} pokemon - The Pokemon to update
-	 * @param {Object} ui - The UI elements to update
+	 * Shows dialogue for a specified duration
+	 * @param {string} text - The dialogue text to display
+	 * @param {number} duration - Duration in milliseconds (default: 3000)
 	 */
-	updateBuffsDebuffsDisplay(pokemon, ui) {
-		// Clear existing buff/debuff text elements
-		ui.buffsContainer.forEach((text) => text.destroy());
-		ui.debuffsContainer.forEach((text) => text.destroy());
-		ui.buffsContainer = [];
-		ui.debuffsContainer = [];
-
-		const stats = [
-			"attack",
-			"specialAttack",
-			"defense",
-			"specialDefense",
-			"speed",
-		];
-		let buffCount = 0;
-		let debuffCount = 0;
-
-		stats.forEach((stat) => {
-			const buffStages = pokemon.buffs[stat] || 0;
-			const debuffStages = pokemon.debuffs[stat] || 0;
-
-			if (buffStages > 0) {
-				const buffText = this.add
-					.text(
-						ui.titleText.x,
-						ui.titleText.y + 15 + buffCount * 15,
-						`• ${stat.toUpperCase()}: +${buffStages}`,
-						{
-							fontSize: "12px",
-							fill: "#00FF00",
-							stroke: "#000",
-							strokeThickness: 1,
-						}
-					)
-					.setOrigin(0.5);
-				ui.buffsContainer.push(buffText);
-				buffCount++;
-			}
+	showDialogue(text, duration = 3000) {
+		this.dialogueBox.setVisible(true);
+		this.dialogueText.setVisible(true);
+		this.dialogueText.setText(text);
+		
+		// Hide dialogue after duration
+		this.time.delayedCall(duration, () => {
+			this.dialogueBox.setVisible(false);
+			this.dialogueText.setVisible(false);
 		});
+	}
 
-		// Add debuffs after buffs
-		stats.forEach((stat) => {
-			const debuffStages = pokemon.debuffs[stat] || 0;
-
-			if (debuffStages > 0) {
-				const debuffText = this.add
-					.text(
-						ui.titleText.x,
-						ui.titleText.y + 15 + (buffCount + debuffCount) * 15,
-						`• ${stat.toUpperCase()}: -${debuffStages}`,
-						{
-							fontSize: "12px",
-							fill: "#FF0000",
-							stroke: "#000",
-							strokeThickness: 1,
-						}
-					)
-					.setOrigin(0.5);
-				ui.debuffsContainer.push(debuffText);
-				debuffCount++;
+	/**
+	 * Shows a random battle dialogue for the AI trainer
+	 * @param {string} trainerName - The name of the AI trainer
+	 */
+	showRandomBattleDialogue(trainerName) {
+		// Find the dialogue data for the specific trainer
+		let dialogue = null;
+		if (this.trainerData.pokemon1 && this.trainerData.pokemon1.name === trainerName) {
+			dialogue = this.dialogueData.pokemon1;
+		} else if (this.trainerData.pokemon2 && this.trainerData.pokemon2.name === trainerName) {
+			dialogue = this.dialogueData.pokemon2;
+		}
+		
+		if (dialogue && dialogue.battleDialogue && dialogue.battleDialogue.length > 0) {
+			const randomIndex = Math.floor(Math.random() * dialogue.battleDialogue.length);
+			const randomDialogue = dialogue.battleDialogue[randomIndex];
+			if (randomDialogue && randomDialogue.trim() !== "") {
+				this.showDialogue(randomDialogue, 3000);
 			}
-		});
-
-		// Show/hide title and background box based on whether there are any effects
-		const hasEffects = buffCount > 0 || debuffCount > 0;
-		ui.titleText.setVisible(hasEffects);
-		ui.backgroundBox.setVisible(hasEffects);
+		}
 	}
 
 	/**
@@ -692,15 +689,15 @@ class BattleScene extends Phaser.Scene {
 		this.abilityButtons = [];
 
 		const abilities = this.pokemon1.abilities;
-		const startX = 120;
-		const startY = 580;
+		const startX = 240;
+		const startY = 400;
 		const buttonWidth = 120;
 		const buttonHeight = 40;
 		const spacing = 10;
 
 		abilities.forEach((ability, index) => {
-			const x = startX + (index % 3) * (buttonWidth + spacing);
-			const y = startY + Math.floor(index / 3) * (buttonHeight + spacing);
+			const x = startX + (index % 2) * (buttonWidth + spacing);
+			const y = startY + Math.floor(index / 2) * (buttonHeight + spacing);
 
 			// const button = this.add.rectangle(
 			// 	x,
@@ -750,6 +747,38 @@ class BattleScene extends Phaser.Scene {
 	}
 
 	/**
+	 * Shows the ability buttons for player selection
+	 */
+	showAbilityButtons() {
+		if (this.abilityButtons) {
+			this.abilityButtons.forEach(buttonData => {
+				if (buttonData.button) {
+					buttonData.button.setVisible(true);
+				}
+				if (buttonData.text) {
+					buttonData.text.setVisible(true);
+				}
+			});
+		}
+	}
+
+	/**
+	 * Hides the ability buttons
+	 */
+	hideAbilityButtons() {
+		if (this.abilityButtons) {
+			this.abilityButtons.forEach(buttonData => {
+				if (buttonData.button) {
+					buttonData.button.setVisible(false);
+				}
+				if (buttonData.text) {
+					buttonData.text.setVisible(false);
+				}
+			});
+		}
+	}
+
+	/**
 	 * Sets up keyboard input handlers for battle controls.
 	 * Configures arrow key navigation for ability selection, SPACE/ENTER for attack execution,
 	 * and restart controls (SPACE/R) for game over state.
@@ -794,6 +823,9 @@ class BattleScene extends Phaser.Scene {
 		this.input.keyboard.on("keydown-SPACE", () => {
 			if (this.battleState === "playerTurn") {
 				this.executePlayerAttack();
+			} else if (this.battleState === "gameOver") {
+				// Handle next battle in tournament
+				this.startNextBattle();
 			}
 		});
 
@@ -846,6 +878,9 @@ class BattleScene extends Phaser.Scene {
 	 * Handles miss scenarios and game over conditions.
 	 */
 	executePlayerAttack() {
+		// Hide ability buttons during attack
+		this.hideAbilityButtons();
+
 		const attacker = this.pokemon1;
 		const defender = this.pokemon2;
 		const ability = attacker.abilities[this.selectedAbility];
@@ -921,64 +956,27 @@ class BattleScene extends Phaser.Scene {
 			);
 		}
 
+		// Update UI
 		this.updateHPBars();
-		this.updateBuffsDebuffsUI();
+		this.updateBattleLogDisplay();
 
-		// if (defender.hp <= 0) {
-		// 	this.battleState = "gameOver";
-		// 	this.battleText.setText(
-		// 		`${defender.name} fainted! ${attacker.name} wins!`
-		// 	);
-		// 	this.turnText.setText("Press SPACE or R to restart");
-		// 	return;
-		// }
-
+		// Handle game over
 		if (defender.hp <= 0) {
-			console.log("Defender hp dropped below zero: ");
-			this.battleState = "gameOver";
+			console.log(`   ${defender.name} fainted!`);
+			this.addToBattleLog(`${defender.name} fainted!`);
 
-			if (window.gameManager.tournament) {
-				const result = window.gameManager.recordWin();
-				console.log("Execute player attack: ", result);
-
-				if (result.completed) {
-					// console.log("Player should have won: ", result);
-					// // Handle finished tournament
-					// this.battleText.setText(
-					// 	"You won the tournament, congratulations! You get a shiny!"
-					// );
-					// this.turnText.setText(
-					// 	`Final Score: ${result.wins}/${result.total} - Press SPACE or R to restart`
-					// );
-					// Use transition manager if available, otherwise fall back to direct scene change
-					if (window.transitionManager) {
-						window.transitionManager.startTransition(this, 'BattleScene', 'EndScene', {
-							result: result,
-							playerLanguage: this.tournamentPlayerLanguage,
-						});
-					} else {
-						this.scene.start("EndScene", {
-							result: result,
-							playerLanguage: this.tournamentPlayerLanguage,
-						});
-					}
+			// Show win/lose dialogue
+			if (this.trainerData.pokemon2 && this.dialogueData.pokemon2) {
+				if (this.dialogueData.pokemon2.loseDialogue && this.dialogueData.pokemon2.loseDialogue.trim() !== "") {
+					this.showDialogue(this.dialogueData.pokemon2.loseDialogue, 3000);
+					this.time.delayedCall(3000, () => {
+						this.handlePlayerWin();
+					});
 				} else {
-					console.log("Getting next opponent.... ");
-					const nextOpponent = result.nextOpponent;
-					console.log("Getting next opponent: ", nextOpponent);
-					this.nextOpponent = nextOpponent;
-					this.battleText.setText(
-						`${defender.name} fainted! ${attacker.name} wins`
-					);
-					this.turnText.setText("Press SPACE for next match");
+					this.handlePlayerWin();
 				}
 			} else {
-				// Return single battle
-				this.battleText.setText(
-					`${defender.name} fainted! ${attacker.name} wins`
-				);
-				console.log("Single battle triggered");
-				this.turnText.setText("Press SPACE or R to restart");
+				this.handlePlayerWin();
 			}
 			return;
 		}
@@ -986,6 +984,80 @@ class BattleScene extends Phaser.Scene {
 		this.time.delayedCall(2000, () => {
 			this.startAITurn();
 		});
+	}
+
+	/**
+	 * Handles the player winning the battle
+	 */
+	handlePlayerWin() {
+		this.battleState = "gameOver";
+		// Tournament battle only
+		console.log("Handling player win as TOURNAMENT battle");
+		const result = window.gameManager.recordWin();
+		console.log("Player win result: ", result);
+
+		if (result.completed) {
+			// Tournament finished
+			console.log("Tournament completed - transitioning to EndScene");
+			this.tournamentResult = result;
+			if (window.transitionManager) {
+				window.transitionManager.resetTransitionState();
+				window.transitionManager.startTransition(this, 'BattleScene', 'EndScene', {
+					result: result,
+					playerLanguage: this.tournamentPlayerLanguage,
+				});
+			} else {
+				this.scene.start("EndScene", {
+					result: result,
+					playerLanguage: this.tournamentPlayerLanguage,
+				});
+			}
+		} else {
+			// Continue tournament
+			console.log("Tournament continues - next opponent: ", result.nextOpponent);
+			this.nextOpponent = result.nextOpponent;
+			this.battleText.setText(
+				`${this.pokemon2.name} fainted! ${this.pokemon1.name} wins!`
+			);
+			this.turnText.setText("Press SPACE for next battle");
+		}
+	}
+
+	/**
+	 * Handles the AI winning the battle
+	 */
+	handleAIWin() {
+		this.battleState = "gameOver";
+		// Tournament battle only
+		console.log("Handling AI win as TOURNAMENT battle");
+		const result = window.gameManager.recordLoss();
+		console.log("AI win result: ", result);
+
+		if (result.completed) {
+			// Tournament finished
+			console.log("Tournament completed - transitioning to EndScene");
+			this.tournamentResult = result;
+			if (window.transitionManager) {
+				window.transitionManager.resetTransitionState();
+				window.transitionManager.startTransition(this, 'BattleScene', 'EndScene', {
+					result: result,
+					playerLanguage: this.tournamentPlayerLanguage,
+				});
+			} else {
+				this.scene.start("EndScene", {
+					result: result,
+					playerLanguage: this.tournamentPlayerLanguage,
+				});
+			}
+		} else {
+			// Continue tournament
+			console.log("Tournament continues - next opponent: ", result.nextOpponent);
+			this.nextOpponent = result.nextOpponent;
+			this.battleText.setText(
+				`${this.pokemon1.name} fainted! ${this.pokemon2.name} wins!`
+			);
+			this.turnText.setText("Press SPACE for next battle");
+		}
 	}
 
 	/**
@@ -1065,6 +1137,11 @@ class BattleScene extends Phaser.Scene {
 
 			// Play hit animation on the defender (pokemon1)
 			this.playHitAnimation(this.pokemon1Sprite);
+
+			// Show random battle dialogue for AI trainer
+			if (this.trainerData.pokemon2 && this.trainerData.pokemon2.name) {
+				this.showRandomBattleDialogue(this.trainerData.pokemon2.name);
+			}
 		} else {
 			console.log(`   MISS! (${accuracy.toFixed(1)}% > ${ability.accuracy}%)`);
 			this.showAbilityMessage(attacker.name, `${ability.name}!\nMissed!`);
@@ -1080,50 +1157,27 @@ class BattleScene extends Phaser.Scene {
 			);
 		}
 
+		// Update UI
 		this.updateHPBars();
-		this.updateBuffsDebuffsUI();
+		this.updateBattleLogDisplay();
 
 		// Handle game over
 		if (defender.hp <= 0) {
-			console.log(`Game over: ${defender.hp}`);
+			console.log(`   ${defender.name} fainted!`);
+			this.addToBattleLog(`${defender.name} fainted!`);
 
-			this.battleState = "gameOver";
-
-			if (window.gameManager.tournament) {
-				const result = window.gameManager.recordLoss();
-				console.log("AI Attack - Tournament result: ", result);
-
-				if (result && result.completed) {
-					// Use transition manager if available, otherwise fall back to direct scene change
-					if (window.transitionManager) {
-						window.transitionManager.startTransition(this, 'BattleScene', 'EndScene', {
-							result: result,
-							playerLanguage: this.tournamentPlayerLanguage,
-						});
-					} else {
-						this.scene.start("EndScene", {
-							result: result,
-							playerLanguage: this.tournamentPlayerLanguage,
-						});
-					}
-				} else if (result && !result.completed) {
-					this.nextOpponent = result.nextOpponent;
-					this.battleText.setText(
-						`${defender.name} fainted! ${attacker.name} wins!`
-					);
-					this.turnText.setText("Press SPACE for next battle");
+			// Show win/lose dialogue
+			if (this.trainerData.pokemon2 && this.dialogueData.pokemon2) {
+				if (this.dialogueData.pokemon2.winDialogue && this.dialogueData.pokemon2.winDialogue.trim() !== "") {
+					this.showDialogue(this.dialogueData.pokemon2.winDialogue, 3000);
+					this.time.delayedCall(3000, () => {
+						this.handleAIWin();
+					});
 				} else {
-					console.error(
-						"Tournament result is null.. it shouldn't be doing that...restarting!"
-					);
-					this.scene.start("BootScene");
+					this.handleAIWin();
 				}
 			} else {
-				console.log("Single battle activated - AI wins");
-				this.battleText.setText(
-					`${defender.name} fainted! ${attacker.name} wins!`
-				);
-				this.turnText.setText("Press SPACE for next battle");
+				this.handleAIWin();
 			}
 			return;
 		}
@@ -1138,22 +1192,16 @@ class BattleScene extends Phaser.Scene {
 	 * Resets ability selection, updates turn indicator, and re-enables ability buttons.
 	 */
 	startPlayerTurn() {
-		this.currentTurn++;
+		console.log("Starting player turn...");
 		this.battleState = "playerTurn";
-		this.selectedAbility = 0;
-		this.turnText.setText(`Turn ${this.currentTurn}: ${this.pokemon1.name}`);
-		this.battleText.setText(
-			"Your turn! Click an ability or use arrow keys + SPACE!"
-		);
+		this.battleText.setText("Choose your ability!");
+		this.turnText.setText("Select an ability to attack!");
+		
+		// Show ability buttons
+		this.showAbilityButtons();
+		
+		// Update ability selection
 		this.updateAbilitySelection();
-
-		// Clear round-based cooldowns at the start of each new round
-		this.clearRoundCooldowns();
-
-		this.abilityButtons.forEach((buttonData) => {
-			// buttonData.button.setFillStyle(0x444444);
-			buttonData.button.setTexture("enterButton");
-		});
 	}
 
 	/**
@@ -1200,14 +1248,6 @@ class BattleScene extends Phaser.Scene {
 		});
 
 		this.updateAbilitySelection();
-	}
-
-	/**
-	 * Updates the buffs and debuffs display for both Pokemon.
-	 */
-	updateBuffsDebuffsUI() {
-		this.updateBuffsDebuffsDisplay(this.pokemon1, this.buffsDebuffsUI.pokemon1);
-		this.updateBuffsDebuffsDisplay(this.pokemon2, this.buffsDebuffsUI.pokemon2);
 	}
 
 	/**
@@ -1665,91 +1705,30 @@ class BattleScene extends Phaser.Scene {
 
 	/**
 	 * Main update loop that runs every frame.
-	 * Handles restart controls when the game is over (SPACE or R key).
 	 */
-	// update() {
-	// 	if (
-	// 		this.battleState === "gameOver" &&
-	// 		this.nextOpponent &&
-	// 		this.input.keyboard.checkDown(this.input.keyboard.addKey("SPACE"), 1000)
-	// 	) {
-	// 		// this.scene.start("BootScene");
-	// 		const battleData = window.gameManager.startBattle(
-	// 			this.tournamentPlayerLanguage,
-	// 			this.nextOpponent.trainer.language
-	// 		);
-	// 		if (battleData) {
-	// 			battleData.tournamentInfo = this.nextOpponent;
-	// 			battleData.playerLanguage = this.tournamentPlayerLanguage;
-	// 			this.scene.start("BattleScene", battleData);
-	// 		}
-	// 	} else if (
-	// 		this.battleState === "gameOver" &&
-	// 		!this.nextOpponent &&
-	// 		this.input.keyboard.checkDown(this.input.keyboard.addKey("SPACE"), 1000)
-	// 	) {
-	// 		this.scene.start("BootScene");
-	// 	}
-
-	// 	// Allow R to always refresh
-	// 	if (this.input.keyboard.checkDown(this.input.keyboard.addKey("R"), 1000)) {
-	// 		this.scene.start("BootScene");
-	// 	}
-	// }
 	update() {
-		if (this.battleState === "gameOver") {
-			// Check for SPACE key press
-			if (
-				this.input.keyboard.checkDown(this.input.keyboard.addKey("SPACE"), 1000)
-			) {
-				if (this.nextOpponent) {
-					// Debug logging
-					console.log(
-						"Debug - tournamentPlayerLanguage:",
-						this.tournamentPlayerLanguage
-					);
-					console.log("Debug - nextOpponent:", this.nextOpponent);
-					console.log(
-						"Debug - trainer language:",
-						this.nextOpponent.trainer.language
-					);
+		// Tournament battles only - no restart functionality needed
+	}
 
-					// Check if these Pokemon IDs exist
-					const pokemon1Data = window.gameManager.getPokemonData(
-						this.tournamentPlayerLanguage
-					);
-					const pokemon2Data = window.gameManager.getPokemonData(
-						this.nextOpponent.trainer.language
-					);
-
-					// console.log("Debug - pokemon1Data exists:", !!pokemon1Data);
-					// console.log("Debug - pokemon2Data exists:", !!pokemon2Data);
-
-					// There's a next opponent - start next battle
-					const battleData = window.gameManager.startBattle(
-						this.tournamentPlayerLanguage,
-						this.nextOpponent.trainer.language
-					);
-
-					if (battleData) {
-						battleData.tournamentInfo = this.nextOpponent;
-						battleData.playerLanguage = this.tournamentPlayerLanguage;
-						this.scene.start("BattleScene", battleData);
-					} else {
-						console.error("Failed to create battle data!");
-					}
-				} else {
-					// No next opponent or tournament completed - go back to main menu
-					this.scene.start("BootScene");
-				}
-			}
-
-			// Allow R to always restart from beginning
-			if (
-				this.input.keyboard.checkDown(this.input.keyboard.addKey("R"), 1000)
-			) {
-				this.scene.start("BootScene");
-			}
+	/**
+	 * Starts the next battle in the tournament
+	 */
+	startNextBattle() {
+		if (this.nextOpponent) {
+			// Start next battle with new opponent
+			this.scene.start("BattleScene", {
+				pokemon1: this.pokemon1,
+				pokemon2: this.nextOpponent,
+				tournamentInfo: this.tournamentInfo,
+				tournamentPlayerLanguage: this.tournamentPlayerLanguage,
+				nextOpponent: null // Will be set by gameManager
+			});
+		} else {
+			// Tournament finished, go to end scene
+			this.scene.start("EndScene", {
+				result: this.tournamentResult,
+				playerLanguage: this.tournamentPlayerLanguage
+			});
 		}
 	}
 }
