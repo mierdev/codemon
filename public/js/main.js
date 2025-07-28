@@ -3,64 +3,64 @@
  * Sets up the Phaser game instance with scene management and physics configuration.
  */
 function initializeGame() {
-    // Check if all required classes are available
-    if (typeof IntroScene === 'undefined') {
-        console.error('IntroScene not found, retrying...');
-        setTimeout(initializeGame, 100);
-        return;
-    }
-    
-    if (typeof BootScene === 'undefined') {
-        console.error('BootScene not found, retrying...');
-        setTimeout(initializeGame, 100);
-        return;
-    }
-    
-    if (typeof BattleScene === 'undefined') {
-        console.error('BattleScene not found, retrying...');
-        setTimeout(initializeGame, 100);
-        return;
-    }
-    
-    if (typeof EndScene === 'undefined') {
-        console.error('EndScene not found, retrying...');
-        setTimeout(initializeGame, 100);
-        return;
-    }
-    
-    console.log('All scenes loaded, initializing game...');
-    
-    const config = {
-        type: Phaser.AUTO,
-        width: 960,
-        height: 720,
-        parent: "game-container",
-        backgroundColor: "#000000",
-        roundPixels: true,
-        pixelArt: true,
-        antialias: false,
-        scene: [IntroScene, BootScene, BattleScene, EndScene],
-        physics: {
-            default: "arcade",
-            arcade: {
-                gravity: { y: 0 },
-                debug: false,
-            },
-        },
-    };
+	// Check if all required classes are available
+	if (typeof IntroScene === "undefined") {
+		console.error("IntroScene not found, retrying...");
+		setTimeout(initializeGame, 100);
+		return;
+	}
 
-    /**
-     * The main Phaser game instance.
-     * Initializes the game with the specified configuration and manages scene transitions.
-     */
-    window.game = new Phaser.Game(config);
+	if (typeof BootScene === "undefined") {
+		console.error("BootScene not found, retrying...");
+		setTimeout(initializeGame, 100);
+		return;
+	}
+
+	if (typeof BattleScene === "undefined") {
+		console.error("BattleScene not found, retrying...");
+		setTimeout(initializeGame, 100);
+		return;
+	}
+
+	if (typeof EndScene === "undefined") {
+		console.error("EndScene not found, retrying...");
+		setTimeout(initializeGame, 100);
+		return;
+	}
+
+	console.log("All scenes loaded, initializing game...");
+
+	const config = {
+		type: Phaser.AUTO,
+		width: 960,
+		height: 720,
+		parent: "game-container",
+		backgroundColor: "#000000",
+		roundPixels: true,
+		pixelArt: true,
+		antialias: false,
+		scene: [TitlePage, IntroScene, BootScene, BattleScene, EndScene],
+		physics: {
+			default: "arcade",
+			arcade: {
+				gravity: { y: 0 },
+				debug: false,
+			},
+		},
+	};
+
+	/**
+	 * The main Phaser game instance.
+	 * Initializes the game with the specified configuration and manages scene transitions.
+	 */
+	window.game = new Phaser.Game(config);
 }
 
 // Initialize game when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeGame);
+if (document.readyState === "loading") {
+	document.addEventListener("DOMContentLoaded", initializeGame);
 } else {
-    initializeGame();
+	initializeGame();
 }
 
 /**
