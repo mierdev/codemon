@@ -173,6 +173,30 @@ const seedData = async () => {
       statusEffectDefense: "0",
       statusEffectSpecialDefense: "0",
       statusEffectSpeed: "0"
+    },
+    {
+      name: "Stack Push",
+      type: "Physical",
+      description: "Deals physical damage. 30% chance to gain +1 Attack for 3 turns.",
+      power: "25",
+      accuracy: "90",
+      statusEffectAttack: "1",
+      statusEffectSpecialAttack: "0",
+      statusEffectDefense: "0",
+      statusEffectSpecialDefense: "0",
+      statusEffectSpeed: "0"
+    },
+    {
+      name: "Stack Pop",
+      type: "Special",
+      description: "Deals special damage. 35% chance to inflict 'Stack Underflow' status.",
+      power: "25",
+      accuracy: "80",
+      statusEffectAttack: "0",
+      statusEffectSpecialAttack: "0",
+      statusEffectDefense: "0",
+      statusEffectSpecialDefense: "0",
+      statusEffectSpeed: "0"
     }
     ]);
 
@@ -259,6 +283,20 @@ const seedData = async () => {
       statusEffectSpecialDefense: "0",
       statusEffectSpeed: "0",
       imagePath: "../assets/codemon/birb.png",
+      area: "../assets/background/grasslands.png"
+    },
+    {
+      name: "Ana",
+      type: "Stack-Based/Concatenative",
+      description: "Stack-based concatenative programming language",
+      power: "85",
+      accuracy: "85",
+      statusEffectAttack: "0",
+      statusEffectSpecialAttack: "0",
+      statusEffectDefense: "0",
+      statusEffectSpecialDefense: "0",
+      statusEffectSpeed: "0",
+      imagePath: "../assets/codemon/fox_with_many_tails.png",
       area: "../assets/background/grasslands.png"
     }
     ]);
@@ -402,6 +440,10 @@ const seedData = async () => {
       {
         name: "javascript",
         languageAbilities: ["Asynchronous Promise", "Framework Flux"]
+      },
+      {
+        name: "ana",
+        languageAbilities: ["Stack Push", "Stack Pop"]
       }
      ]);
 
@@ -471,6 +513,11 @@ const seedData = async () => {
       {
         name: "Zieba",
         codemon: "csharp"
+      },
+      // Ana trainers
+      {
+        name: "Nuc",
+        codemon: "ana"
       }
     ]);
 

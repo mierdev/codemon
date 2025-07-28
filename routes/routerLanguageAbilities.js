@@ -48,7 +48,8 @@ router.get("/game-data", async (req, res) => {
         'Rust': 'rust',
         'OCaml': 'ocaml',
         'C#': 'csharp',
-        'JavaScript & TypeScript': 'javascript'
+        'JavaScript & TypeScript': 'javascript',
+        'Ana': 'ana'
       };
       
       const languageAbilityName = nameMapping[language.name];
@@ -79,7 +80,8 @@ router.get("/game-data", async (req, res) => {
         'rust': 'rust',
         'ocaml': 'ocaml',
         'csharp': 'csharp',
-        'javascript': 'javascript'
+        'javascript': 'javascript',
+        'ana': 'ana'
       };
       
       const languageId = languageIdMap[languageAbilityName] || languageAbilityName;

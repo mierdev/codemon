@@ -321,18 +321,16 @@ class EndScene extends Phaser.Scene {
 	 * Gets display name for programming language
 	 */
 	getLanguageDisplayName(languageId) {
-		const names = {
+		const languageMap = {
 			python: "Python",
 			go: "Go",
 			rust: "Rust",
 			ocaml: "OCaml",
 			csharp: "C#",
 			javascript: "JavaScript & TypeScript",
+			ana: "Ana"
 		};
-		if (!names[languageId]) {
-			console.log("Something cursed happend in the language id lookup ");
-		}
-		return names[languageId];
+		return languageMap[languageId] || languageId;
 	}
 
 	/**

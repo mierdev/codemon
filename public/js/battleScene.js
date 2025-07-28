@@ -150,8 +150,9 @@ class BattleScene extends Phaser.Scene {
 		const backdrop = this.add.image(480, 360, "grasslands");
 		backdrop.setDisplaySize(960, 720);
 
-		const pokemon1SpriteKey = this.getLanguageSprite(this.pokemon1.name);
-		const pokemon2SpriteKey = this.getLanguageSprite(this.pokemon2.name);
+		// Create Pokemon sprites
+		const pokemon1SpriteKey = this.getLanguageSprite(this.pokemon1?.name);
+		const pokemon2SpriteKey = this.getLanguageSprite(this.pokemon2?.name);
 
 		// Assign sprites
 		this.pokemon1Sprite = this.add.image(240, 220, pokemon1SpriteKey);
@@ -184,11 +185,11 @@ class BattleScene extends Phaser.Scene {
 
 		this.add.image(470, 470, "sword").setOrigin(0.5);
 		this.turnText = this.add
-			.text(480, 500, `Turn: ${this.pokemon1.name}`, {
-				fontSize: "18px",
+			.text(480, 500, `Turn: ${this.pokemon1?.name}`, {
+				fontSize: "16px",
 				fill: "#fff",
 				stroke: "#000",
-				strokeThickness: 3,
+				strokeThickness: 2,
 			})
 			.setOrigin(0.5);
 
@@ -231,14 +232,15 @@ class BattleScene extends Phaser.Scene {
 	 */
 	getLanguageSprite(languageName) {
 		const spriteMap = {
-			Python: "snake",
-			Go: "gopher",
-			Rust: "crab",
-			OCaml: "camel",
+			"Python": "snake",
+			"Go": "gopher",
+			"Rust": "crab",
+			"OCaml": "camel",
 			"C#": "windows_logo",
 			"JavaScript & TypeScript": "birb",
+			"Ana": "fox"
 		};
-		return spriteMap[languageName] || "fox";
+		return spriteMap[languageName] || "snake";
 	}
 	/**
 	 * Fetches trainer data for a specific language from the database
@@ -270,9 +272,18 @@ class BattleScene extends Phaser.Scene {
 	 */
 	async fetchAndCreateLanguageBanners() {
 		try {
+			// Debug logging
+			console.log('fetchAndCreateLanguageBanners - pokemon1:', this.pokemon1);
+			console.log('fetchAndCreateLanguageBanners - pokemon2:', this.pokemon2);
+			console.log('fetchAndCreateLanguageBanners - pokemon1.name:', this.pokemon1?.name);
+			console.log('fetchAndCreateLanguageBanners - pokemon2.name:', this.pokemon2?.name);
+			
 			// Get language IDs for both Pokemon
-			const pokemon1LanguageId = this.getLanguageId(this.pokemon1.name);
-			const pokemon2LanguageId = this.getLanguageId(this.pokemon2.name);
+			const pokemon1LanguageId = this.getLanguageId(this.pokemon1?.name);
+			const pokemon2LanguageId = this.getLanguageId(this.pokemon2?.name);
+			
+			console.log('fetchAndCreateLanguageBanners - pokemon1LanguageId:', pokemon1LanguageId);
+			console.log('fetchAndCreateLanguageBanners - pokemon2LanguageId:', pokemon2LanguageId);
 
 			// Fetch trainer data for both languages
 			const [trainer1, trainer2] = await Promise.all([
@@ -309,8 +320,8 @@ class BattleScene extends Phaser.Scene {
 			this.dialogueData.pokemon2 = dialogue2;
 
 			// Create language banners with trainer data
-			this.createLanguageBanner(this.pokemon1.name, 240, 94, trainer1);
-			this.createLanguageBanner(this.pokemon2.name, 720, 94, trainer2);
+			this.createLanguageBanner(this.pokemon1?.name, 240, 94, trainer1);
+			this.createLanguageBanner(this.pokemon2?.name, 720, 94, trainer2);
 
 			// Show start dialogue for AI trainer
 			if (dialogue2 && dialogue2.startDialogue && dialogue2.startDialogue.trim() !== "") {
@@ -327,8 +338,8 @@ class BattleScene extends Phaser.Scene {
 		} catch (error) {
 			console.error('Error fetching trainer data:', error);
 			// Fallback to creating banners without trainer data
-			this.createLanguageBanner(this.pokemon1.name, 240, 94);
-			this.createLanguageBanner(this.pokemon2.name, 720, 94);
+			this.createLanguageBanner(this.pokemon1?.name, 240, 94);
+			this.createLanguageBanner(this.pokemon2?.name, 720, 94);
 			// Show ability buttons immediately
 			this.showAbilityButtons();
 		}
@@ -340,13 +351,20 @@ class BattleScene extends Phaser.Scene {
 	 * @returns {string} The database language ID
 	 */
 	getLanguageId(languageName) {
+		// Safety check for undefined or null languageName
+		if (!languageName) {
+			console.warn('getLanguageId called with undefined or null languageName');
+			return 'unknown';
+		}
+		
 		const languageMap = {
 			'Python': 'python',
 			'Go': 'go',
 			'Rust': 'rust',
 			'OCaml': 'ocaml',
 			'C#': 'csharp',
-			'JavaScript & TypeScript': 'javascript'
+			'JavaScript & TypeScript': 'javascript',
+			'Ana': 'ana'
 		};
 		return languageMap[languageName] || languageName.toLowerCase();
 	}
@@ -620,10 +638,10 @@ class BattleScene extends Phaser.Scene {
 	showAbilityMessage(pokemonName, message, duration = 2000) {
 		let messageBox, messageText;
 
-		if (pokemonName === this.pokemon1.name) {
+		if (pokemonName === this.pokemon1?.name) {
 			messageBox = this.messageBox1;
 			messageText = this.messageText1;
-		} else if (pokemonName === this.pokemon2.name) {
+		} else if (pokemonName === this.pokemon2?.name) {
 			messageBox = this.messageBox2;
 			messageText = this.messageText2;
 		} else {
@@ -1044,7 +1062,7 @@ class BattleScene extends Phaser.Scene {
 				console.log("Getting next opponent: ", nextOpponent);
 				this.nextOpponent = nextOpponent;
 				this.battleText.setText(
-					`${this.pokemon2.name} fainted! ${this.pokemon1.name} wins`
+					`${this.pokemon2?.name} fainted! ${this.pokemon1?.name} wins!`
 				);
 				this.turnText.setText("Press SPACE for next battle");
 			}
@@ -1052,7 +1070,7 @@ class BattleScene extends Phaser.Scene {
 			// Return single battle
 			console.log("Handling player win as SINGLE battle");
 			this.battleText.setText(
-				`${this.pokemon2.name} fainted! ${this.pokemon1.name} wins`
+				`${this.pokemon2?.name} fainted! ${this.pokemon1?.name} wins!`
 			);
 			console.log("Single battle triggered");
 			this.turnText.setText("Press SPACE or R to restart");
@@ -1090,7 +1108,7 @@ class BattleScene extends Phaser.Scene {
 			} else if (result && !result.completed) {
 				this.nextOpponent = result.nextOpponent;
 				this.battleText.setText(
-					`${this.pokemon1.name} fainted! ${this.pokemon2.name} wins!`
+					`${this.pokemon1?.name} fainted! ${this.pokemon2?.name} wins!`
 				);
 				this.turnText.setText("Press SPACE for next battle");
 			} else {
@@ -1102,7 +1120,7 @@ class BattleScene extends Phaser.Scene {
 		} else {
 			console.log("Handling AI win as SINGLE battle");
 			this.battleText.setText(
-				`${this.pokemon1.name} fainted! ${this.pokemon2.name} wins!`
+				`${this.pokemon1?.name} fainted! ${this.pokemon2?.name} wins!`
 			);
 			this.turnText.setText("Press SPACE or R to restart");
 		}
@@ -1139,7 +1157,7 @@ class BattleScene extends Phaser.Scene {
 			console.log("Tournament continues - next opponent: ", result.nextOpponent);
 			this.nextOpponent = result.nextOpponent;
 			this.battleText.setText(
-				`${this.pokemon2.name} fainted! ${this.pokemon1.name} wins!`
+				`${this.pokemon2?.name} fainted! ${this.pokemon1?.name} wins!`
 			);
 			this.turnText.setText("Press SPACE for next battle");
 		}
@@ -1176,7 +1194,7 @@ class BattleScene extends Phaser.Scene {
 			console.log("Tournament continues - next opponent: ", result.nextOpponent);
 			this.nextOpponent = result.nextOpponent;
 			this.battleText.setText(
-				`${this.pokemon1.name} fainted! ${this.pokemon2.name} wins!`
+				`${this.pokemon1?.name} fainted! ${this.pokemon2?.name} wins!`
 			);
 			this.turnText.setText("Press SPACE for next battle");
 		}
@@ -1188,8 +1206,8 @@ class BattleScene extends Phaser.Scene {
 	 */
 	startAITurn() {
 		this.battleState = "aiTurn";
-		this.turnText.setText(`Turn ${this.currentTurn}: ${this.pokemon2.name}`);
-		this.battleText.setText(`${this.pokemon2.name} is thinking...`);
+		this.turnText.setText(`Turn ${this.currentTurn}: ${this.pokemon2?.name}`);
+		this.battleText.setText(`${this.pokemon2?.name} is thinking...`);
 
 		const aiAbilityIndex = Math.floor(
 			Math.random() * this.pokemon2.abilities.length
