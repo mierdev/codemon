@@ -449,7 +449,14 @@ class BattleScene extends Phaser.Scene {
 	 * @param {string} trainerName - The name of the AI trainer
 	 */
 	showRandomBattleDialogue(trainerName) {
-		const dialogue = this.dialogueData.pokemon2;
+		// Find the dialogue data for the specific trainer
+		let dialogue = null;
+		if (this.trainerData.pokemon1 && this.trainerData.pokemon1.name === trainerName) {
+			dialogue = this.dialogueData.pokemon1;
+		} else if (this.trainerData.pokemon2 && this.trainerData.pokemon2.name === trainerName) {
+			dialogue = this.dialogueData.pokemon2;
+		}
+		
 		if (dialogue && dialogue.battleDialogue && dialogue.battleDialogue.length > 0) {
 			const randomIndex = Math.floor(Math.random() * dialogue.battleDialogue.length);
 			const randomDialogue = dialogue.battleDialogue[randomIndex];
