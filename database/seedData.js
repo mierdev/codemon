@@ -322,59 +322,59 @@ const seedData = async () => {
       },
       {
         name: "Ipê",
-        startDialogue: "",
-        battleDialogue: ["", "", ""],
-        winDialogue: "",
-        loseDialogue: ""
+        startDialogue: "Welcome to the first floor!",
+        battleDialogue: ["Btw their intro is incredibly sus.", "Yes, its not a very good idea.", "At least the code is not in russian."],
+        winDialogue: "I'm not sure what to make of this.",
+        loseDialogue: "I would ban but i dont wanna step on anybody's icey toes."
       },
       {
         name: "Nallo",
-        startDialogue: "Hello there!",
-        battleDialogue: ["Let's fight!", "Time to battle!", "Show me your best!"],
-        winDialogue: "Great job!",
-        loseDialogue: "Crab! I'm cooked..."
+        startDialogue: "Rust error handling is just peak.",
+        battleDialogue: ["Rapier is Rust based right? :bootspog:", "All paths lead to rust", "Woah rust devs are not furries."],
+        winDialogue: "And we know how rust feels about pointers...",
+        loseDialogue: "Rust is dead! Long live Visual Basic!"
       },
       {
         name: "birbNallo",
-        startDialogue: "Hello there!",
-        battleDialogue: ["Let's fight!", "Time to battle!", "Show me your best!"],
-        winDialogue: "Great job!",
-        loseDialogue: "Don't give up!"
+        startDialogue: "It’s got types in so I assume it’s typescript.",
+        battleDialogue: ["TypeScript has enums.", "Birb starting strong today.", "Why is that cat about to eat the birb?"],
+        winDialogue: "Is this how Java gives birth to Javascript?",
+        loseDialogue: "We live in a world of OOP between C, C++, JavaScript, Python."
       },
       {
         name: "Zillhar",
-        startDialogue: "Ready to fight?",
-        battleDialogue: ["Let's go!", "Time to test!", "Show me your skills!"],
-        winDialogue: "Well played!",
-        loseDialogue: "Keep trying!"
+        startDialogue: "Sometimes you just have to play along to get along.",
+        battleDialogue: ["I suggest you take it.", "Get em!", "Yea do what you want."],
+        winDialogue: "My son is an Archwizzer after all.",
+        loseDialogue: "Time to reverse some of the glaze with some haze."
       },
       {
-        name: "Wasseem",
-        startDialogue: "Hello!",
-        battleDialogue: ["Let's battle!", "Time to fight!", "Show me your moves!"],
-        winDialogue: "Excellent!",
-        loseDialogue: "Keep learning!"
+        name: "Waseem",
+        startDialogue: "The rule of thumb is that if something is there people are gonna use it.",
+        battleDialogue: ["We are so FPing.", "Gotta love regex (not)", "That definitely works."],
+        winDialogue: "True and true.",
+        loseDialogue: "Then it's not completely fixed yet, I'll get back on it."
       },
       {
         name: "Ryan",
-        startDialogue: "Ready to code?",
-        battleDialogue: ["Let's do this!", "Time to battle!", "Show me your best!"],
-        winDialogue: "Great work!",
-        loseDialogue: "Don't stop trying!"
+        startDialogue: "Oh hi there :bootspog:",
+        battleDialogue: ["Unfortunately :bootssad:", "Sounds really nice! ", "Gl hf"],
+        winDialogue: "THE CAML STRIKES AGAIN",
+        loseDialogue: "Never tried gleam but heard great things about it."
       },
       {
         name: "Zieba",
-        startDialogue: "Hello there!",
-        battleDialogue: ["Let's fight!", "Time to test!", "Show me your skills!"],
-        winDialogue: "Well done!",
-        loseDialogue: "Keep improving!"
+        startDialogue: "Blazor is the shit.",
+        battleDialogue: ["They are all good.", "Bro.", "Salesforce is a menace."],
+        winDialogue: "My theory is that because I told it to be a teenager, it is mocking me.",
+        loseDialogue: "RIP coding."
       },
       {
         name: "Nuc",
-        startDialogue: "ANA is abandoned!",
-        battleDialogue: ["Let's battle!", "Time to fight!", "Show me your moves!"],
-        winDialogue: "Great job!",
-        loseDialogue: "I'm surrounded by old people."
+        startDialogue: "I abandoned ANA.",
+        battleDialogue: ["I see.", "Oh dear.", "I... don't know"],
+        winDialogue: "Also, I was bored.",
+        loseDialogue: "I love the language and its ecosystem, I just don’t like the language server."
       }
     ]);
 
@@ -464,7 +464,7 @@ const seedData = async () => {
         codemon: "ocaml"
       },
       {
-        name: "Wasseem",
+        name: "Waseem",
         codemon: "ocaml"
       },
       // C# trainers
