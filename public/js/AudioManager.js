@@ -7,11 +7,17 @@ export class AudioManager {
 		this.scene = scene;
 		this.currentMusic = null;
 		this.soundPool = new Map(); // Cache for sound effects
+		this.currentSoundEffect = null; // Track currently playing sound effect
 	}
 	
 	playSoundEffect(key) {
 		// If sound is not enabled return
 		if (!this.audioIsEnabled) return;
+		
+		// Stop any currently playing sound effect
+		if (this.currentSoundEffect && this.currentSoundEffect.isPlaying) {
+			this.currentSoundEffect.stop();
+		}
 		
 		// Check if we already have this sound in our pool
 		let soundEffect = this.soundPool.get(key);
@@ -22,13 +28,16 @@ export class AudioManager {
 			this.soundPool.set(key, soundEffect);
 		}
 		
-		// Stop the sound if it's currently playing to prevent overlap
-		if (soundEffect.isPlaying) {
-			soundEffect.stop();
-		}
-		
-		// Play the sound
+		// Set as current sound effect and play
+		this.currentSoundEffect = soundEffect;
 		soundEffect.play();
+		
+		// Clear current sound effect when it completes
+		soundEffect.once("complete", () => {
+			if (this.currentSoundEffect === soundEffect) {
+				this.currentSoundEffect = null;
+			}
+		});
 	}
 	
 	playMusic(key, options = {}) {
@@ -76,8 +85,9 @@ export class AudioManager {
 	// Trying to stop all audio
 	stopAll() {
 		this.scene.sound.stopAll();
-		// Clear the sound pool
+		// Clear the sound pool and current sound effect
 		this.soundPool.clear();
+		this.currentSoundEffect = null;
 	}
 
 	toggleSoundEffect() {

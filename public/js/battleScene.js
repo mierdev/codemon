@@ -127,10 +127,17 @@ class BattleScene extends Phaser.Scene {
 		// Initialize AudioManager and play background music
 		if (window.AudioManager) {
 			this.audioManager = new window.AudioManager(this);
-			// Play cider track
-			console.log("About to play cider music...");
-			this.audioManager.playMusic("cider", { loop: true, volume: 0.4 });
-			console.log("Cider music should be playing");
+			// Only play music if no music is currently playing globally
+			if (!window.currentMusic || !window.currentMusic.isPlaying) {
+				console.log("About to play cider music...");
+				this.audioManager.playMusic("cider", { loop: true, volume: 0.4 });
+				window.currentMusic = this.audioManager.currentMusic;
+				console.log("Cider music should be playing");
+			} else {
+				console.log("Music already playing, not restarting");
+				// Use the existing music reference
+				this.audioManager.currentMusic = window.currentMusic;
+			}
 		} else {
 			console.log("Oops... something cursed happened to the audio manager");
 		}
@@ -147,8 +154,9 @@ class BattleScene extends Phaser.Scene {
 		this.pokemon1Sprite.setScale(0.3);
 
 		this.pokemon2Sprite = this.add.image(720, 220, pokemon2SpriteKey);
+		// C# sprite is 3 times smaller due to larger source image
 		if (pokemon2SpriteKey === "windows_logo") {
-			this.pokemon2Sprite.setScale(0.8);
+			this.pokemon2Sprite.setScale(0.1);
 		} else {
 			this.pokemon2Sprite.setScale(0.3);
 		}
@@ -183,8 +191,8 @@ class BattleScene extends Phaser.Scene {
 				"Your turn! Click an ability or use arrow keys + SPACE!",
 				{
 					fontSize: "12px",
-					fill: "#fff",
-					stroke: "#000",
+					fill: "#000",
+					stroke: "#fff",
 					strokeThickness: 1,
 				}
 			)
@@ -389,34 +397,34 @@ class BattleScene extends Phaser.Scene {
 	 * These boxes will show when abilities are used and their effects.
 	 */
 	createAbilityMessageBoxes() {
-		// Message box for Pokemon 1 (left side) - moved higher up
+		// Message box for Pokemon 1 (left side) - aligned with sprite center
 		// this.messageBox1 = this.add.rectangle(240, 80, 200, 60, 0x000000, 0.8);
 		// this.messageBox1.setStrokeStyle(2, 0xffffff);
-		this.messageBox1 = this.add.image(240, 80, "greyPressed");
+		this.messageBox1 = this.add.image(240, 220, "greyPressed");
 		this.messageBox1.setDisplaySize(200, 60);
 		this.messageBox1.setAlpha(0.9);
 
 		this.messageText1 = this.add
-			.text(240, 80, "", {
+			.text(240, 220, "", {
 				fontSize: "12px",
-				fill: "#FFFFFF",
+				fill: "#000000",
 				wordWrap: { width: 180 },
 			})
 			.setOrigin(0.5);
 		this.messageBox1.setVisible(false);
 		this.messageText1.setVisible(false);
 
-		// Message box for Pokemon 2 (right side) - moved higher up
+		// Message box for Pokemon 2 (right side) - aligned with sprite center
 		// this.messageBox2 = this.add.rectangle(720, 80, 200, 60, 0x000000, 0.8);
 		// this.messageBox2.setStrokeStyle(2, 0xffffff);
-		this.messageBox2 = this.add.image(720, 80, "greyPressed");
+		this.messageBox2 = this.add.image(720, 220, "greyPressed");
 		this.messageBox2.setDisplaySize(200, 60);
 		this.messageBox2.setAlpha(0.9);
 
 		this.messageText2 = this.add
-			.text(720, 80, "", {
+			.text(720, 220, "", {
 				fontSize: "12px",
-				fill: "#FFFFFF",
+				fill: "#000000",
 				wordWrap: { width: 180 },
 			})
 			.setOrigin(0.5);

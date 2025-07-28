@@ -71,10 +71,11 @@ class BootScene extends Phaser.Scene {
 
 
 		console.log("About to play cider");
-		if (this.audioManager && !this.audioManager.currentMusic) {
+		if (this.audioManager && (!window.currentMusic || !window.currentMusic.isPlaying)) {
 			this.audioManager.playMusic("cider", { loop: true, volume: 0.4 });
+			window.currentMusic = this.audioManager.currentMusic;
 		}
-		console.log("Shouuld be playing cider");
+		console.log("Should be playing cider");
 
 		// Simple background
 		// this.add.rectangle(0, 0, 960, 720, 0x2c3e50).setOrigin(0, 0);
@@ -97,9 +98,9 @@ class BootScene extends Phaser.Scene {
 			.text(480, 335, "Choose language: ", { fontSize: "24px", fill: "#fff" })
 			.setOrigin(0.5);
 
-		this.createLanguageButton("python", "Python", 320, 400);
+		this.createLanguageButton("python", "Python", 280, 400);
 		this.createLanguageButton("go", "Go", 480, 400);
-		this.createLanguageButton("javascript", "JavaScript", 640, 400);
+		this.createLanguageButton("javascript", "JavaScript", 680, 400);
 
 		// Start button
 		const startButton = this.add.image(480, 500, "greyUnpressed");

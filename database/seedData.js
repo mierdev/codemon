@@ -1,11 +1,25 @@
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 import Ability from '../models/modelAbilities.js';
 import Codemon from '../models/modelCodemon.js';
 import Dialogue from '../models/modelDialogue.js';
 import LanguageAbilities from '../models/modelLanguageAbilities.js';
 import Trainer from '../models/modelTrainers.js';
 
+// Load environment variables
+dotenv.config();
+
 const seedData = async () => {
   try {
+    // Connect to MongoDB
+    if (!process.env.MONGODB_URI) {
+      console.error('MONGODB_URI not found in environment variables');
+      process.exit(1);
+    }
+    
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('Connected to MongoDB for seeding...');
+
     // Clear existing data
     await Ability.deleteMany({});
     await Codemon.deleteMany({});
@@ -309,8 +323,17 @@ const seedData = async () => {
     console.log(`Added ${languageAbilities.length} language abilities`);
     console.log(`Added ${trainers.length} trainers`);
 
+    // Close the database connection
+    await mongoose.connection.close();
+    console.log('Database connection closed.');
+
   } catch (error) {
     console.error('Error seeding database:', error);
+    // Close the database connection even on error
+    if (mongoose.connection.readyState === 1) {
+      await mongoose.connection.close();
+      console.log('Database connection closed after error.');
+    }
   }
 };
 
