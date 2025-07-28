@@ -2,13 +2,24 @@
 
 # A JRPG battle game with a coding theme
 
-Compete in pokémon inspired battles to find out which is the strongest programming language. Enter one of the competitions to earn a shiny coin. There is also a special competition to settle a fierce rivalry once and for all!
+Compete in pokémon inspired battles to find out which is the strongest programming language. Enter one of the competitions to earn a shiny coin.
 
 > PS if you hang around the Boot.dev Discord server, you might recognize a lot of the opponents 👀
 
 ## The game is live hosted! 
 
 **<a href="https://codemon-rho.vercel.app/" target="_blank">Play it in your browser</a>**
+
+## Features
+
+- **Turn-based battles** between programming languages
+- **7 unique languages** with distinct abilities and stats
+- **Tournament mode** with 3, 5, or 7 match competitions
+- **Dynamic dialogue system** with trainer personalities
+- **Animated fire effects** and smooth transitions
+- **Audio system** with background music and sound effects
+- **Database integration** for persistent game data
+- **Responsive UI** with modern game aesthetics
 
 ## In-game sreenshots
 
@@ -50,7 +61,16 @@ npm install
 
 **On Mac**
 
-(insert installation instructions)
+Using Homebrew:
+```bash
+brew tap mongodb/brew
+brew install mongodb-community
+```
+
+Or download from the official website:
+- Visit [MongoDB Download Center](https://www.mongodb.com/try/download/community)
+- Download the macOS version
+- Follow the installation instructions
 
 **On WSL2/Ubuntu (Windows)**
 
@@ -98,7 +118,6 @@ code .env
 MONGODB_URI=mongodb+srv://mongouser:mongoischaos@gamecluster.8wtssss.mongodb.net/?retryWrites=true&w=majority&appName=GameCluster
 MONGODB_DB=codemon
 ```
-*We are aware that this is an unsafe approach. We will only keep the keys here during the hackathon event. Once the winners are announced, we will change are project to be completely local again.*
 
 ## Usage
 
@@ -106,7 +125,15 @@ MONGODB_DB=codemon
 
 **On Mac**
 
-Do something.
+Using Homebrew:
+```bash
+brew services start mongodb-community
+```
+
+Or manually:
+```bash
+mongod --config /usr/local/etc/mongod.conf
+```
 
 **On WSL2/Ubuntu (Windows)**
 
@@ -131,7 +158,7 @@ Then run the start command above again.
 npm run seed
 ```
 
-2. Start the server:
+3. Start the server:
 ```bash
 npm run devStart
 ```
@@ -149,10 +176,6 @@ npm run devStart
 - TypeScript
 - JavaScript
 - HTML/CSS
-
-## Features
-
-- A lot of cool stuff.
 
 ## Architecture
 

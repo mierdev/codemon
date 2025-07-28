@@ -269,16 +269,6 @@ class BootScene extends Phaser.Scene {
 	}
 
 	async startTournament() {
-		console.log(
-			`Starting tournament: ${this.selectedTournament} match as ${this.selectedLanguage}`
-		);
-
-		// Check if game data is loaded
-		if (!window.gameManager.isGameDataLoaded()) {
-			console.error('Game data not loaded yet, cannot start tournament');
-			return;
-		}
-
 		const tournamentSetup = await window.gameManager.startTournament(
 			this.selectedTournament,
 			this.selectedLanguage
@@ -288,7 +278,7 @@ class BootScene extends Phaser.Scene {
 
 		const battleData = window.gameManager.startTournamentBattle(
 			this.selectedLanguage,
-		initialOpponent.codemon
+			initialOpponent.codemon
 		);
 		if (this.audioManager) {
 			this.audioManager.stopMusic();
@@ -297,7 +287,6 @@ class BootScene extends Phaser.Scene {
 			battleData.tournamentInfo = tournamentSetup;
 			battleData.playerLanguage = this.selectedLanguage;
 			
-			// Use transition manager if available, otherwise fall back to direct scene change
 			if (window.transitionManager) {
 				window.transitionManager.startTransition(this, 'BootScene', 'BattleScene', battleData);
 			} else {

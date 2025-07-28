@@ -23,27 +23,8 @@ class IntroScene extends Phaser.Scene {
      * Preloads all intro movie frames and sets up loading callbacks
      */
     preload() {
-        const loadingText = this.add.text(400, 300, 'Loading...', {
-            fontSize: '32px',
-            color: '#ffffff'
-        }).setOrigin(0.5);
-
-        for (let i = 1; i <= this.totalFrames; i++) {
-            const frameNumber = i.toString().padStart(4, '0');
-            this.load.image(`frame_${frameNumber}`, `assets/intro_images/output_${frameNumber}.png`);
-        }
-        
-        // Load fire sound effect
-        this.load.audio('fire', 'assets/audio/backgrounds/fire.mp3');
-        
-        this.load.on('complete', () => {
-            console.log('All images loaded successfully!');
-            loadingText.destroy();
-        });
-        
-        this.load.on('loaderror', (file) => {
-            console.error('Failed to load:', file.src);
-        });
+        this.load.image("chaos", ["assets/intro/chaos.png"]);
+        this.load.audio("fire", ["assets/audio/backgrounds/fire.mp3"]);
     }
 
     /**
@@ -51,110 +32,22 @@ class IntroScene extends Phaser.Scene {
      * Sets up the complete intro sequence with timing for transitions
      */
     create() {
-        console.log('Creating intro scene...');
-        
-        // Reset transition state to ensure clean transitions
-        if (window.transitionManager) {
-            window.transitionManager.resetTransitionState();
-        }
-        
-        this.cameras.main.setBackgroundColor('#000000');
-        
-        this.movieSprite = this.add.sprite(480, 360, 'frame_0001');
-        this.movieSprite.setScale(0.8);
-        
-        this.titleText = this.add.text(480, 80, 'LITTLE SHOP OF', {
-            fontSize: '48px',
-            fontFamily: 'Arial',
-            color: '#ffffff',
-            fontStyle: 'bold',
-            stroke: '#000000',
-            strokeThickness: 4,
-            shadow: {
-                offsetX: 2,
-                offsetY: 2,
-                color: '#000000',
-                blur: 4,
-                fill: true
-            }
-        }).setOrigin(0.5).setAlpha(0);
-        
-        this.chaosText = this.add.text(480, 140, 'CHAOS', {
-            fontSize: '72px',
-            fontFamily: 'Arial',
-            color: '#ff4400',
-            fontStyle: 'bold',
-            stroke: '#000000',
-            strokeThickness: 4,
-            shadow: {
-                offsetX: 2,
-                offsetY: 2,
-                color: '#000000',
-                blur: 4,
-                fill: true
-            }
-        }).setOrigin(0.5).setAlpha(0);
-        
-        this.startMoviePlayback();
-        
-        this.time.delayedCall(2000, () => {
-            this.fadeInText();
-        });
-        
-        // Create fire effect after text fades in
-        this.time.delayedCall(3000, () => {
-            this.createFireEffect();
-        });
-        
-        this.time.delayedCall(8000, () => {
-            console.log('Intro complete, transitioning to BootScene...');
-            console.log('Transition manager available:', !!window.transitionManager);
-            console.log('Current scene:', this.scene.key);
-            
-            // Stop fire effect before transitioning
-            this.stopFireEffect();
-            
-            // Use transition manager if available, otherwise fall back to direct scene change
-            if (window.transitionManager) {
-                console.log('Using transition manager for transition');
-                window.transitionManager.startTransition(this, 'IntroScene', 'BootScene');
-            } else {
-                console.log('Using direct scene change');
-                this.scene.start('BootScene');
-            }
-        });
-        
-        console.log('Intro scene created successfully');
+        this.createIntroScene();
     }
 
     /**
-     * Creates animated fire sprites around the screen edges
-     * Generates multiple fire particles with random positioning and animation
+     * Creates the intro scene with movie sprite, text elements, and fire effects
+     * Sets up the complete intro sequence with timing for transitions
      */
-    createFireEffect() {
-        console.log('Creating fire effect...');
-        
-        this.fireSprites = []; // Reset array
-        this.fireActive = true; // Flag to control particle creation
-        
-        // Position fire particles at the base of the CHAOS text
-        const chaosTextX = 480; // Center X of CHAOS text
-        const chaosTextY = 140; // Y position of CHAOS text
-        const fireBaseY = chaosTextY + 25; // Base of the fire (below the text)
-        const fireWidth = 200; // Increased from 100 to 200 (100% wider)
-        
-        // Store fire parameters for particle creation
-        this.fireParams = {
-            chaosTextX: chaosTextX,
-            fireBaseY: fireBaseY,
-            fireWidth: fireWidth,
-            colors: [0xff4400, 0xff6600, 0xff8800, 0xffaa00, 0xffcc00]
-        };
-        
-        // Start creating particles over time instead of all at once
-        this.startParticleCreation();
-        
-        console.log(`Starting fire effect with ${fireWidth}px width`);
+    createIntroScene() {
+        this.movieSprite = this.add.image(480, 360, "chaos");
+        this.movieSprite.setScale(0.8);
+
+        this.currentFrame = 0;
+        this.totalFrames = 100;
+        this.frameRate = 24;
+
+        this.startMoviePlayback();
     }
 
     /**
@@ -162,17 +55,17 @@ class IntroScene extends Phaser.Scene {
      * Begins playing the intro movie frames at the specified frame rate
      */
     startMoviePlayback() {
-        console.log('Starting movie playback...');
-        console.log('start playing fire');
-        
-        // Play fire sound effect
         this.sound.play('fire');
         
         this.time.addEvent({
             delay: 1000 / this.frameRate,
-            callback: this.updateFrame,
-            callbackScope: this,
-            loop: true
+            repeat: this.totalFrames - 1,
+            callback: () => {
+                this.currentFrame++;
+                if (this.currentFrame >= this.totalFrames) {
+                    this.introComplete();
+                }
+            }
         });
     }
 
@@ -274,25 +167,15 @@ class IntroScene extends Phaser.Scene {
      * Called when transitioning to clean up the fire effect
      */
     stopFireEffect() {
-        console.log('Stopping fire effect...');
-        
-        // Stop fire sound
-        this.sound.stopAll();
-        
-        // Stop creating new particles
-        this.fireActive = false;
-        
-        // Stop all particle creation events
-        this.time.removeAllEvents();
-        
+        if (this.fireParticleTimer) {
+            this.fireParticleTimer.destroy();
+            this.fireParticleTimer = null;
+        }
+
         this.fireSprites.forEach(sprite => {
-            // Stop all tweens on this sprite
-            this.tweens.killTweensOf(sprite);
-            // Destroy the sprite
             sprite.destroy();
         });
         this.fireSprites = [];
-        console.log('Fire effect stopped and cleaned up');
     }
 
     /**
@@ -300,12 +183,12 @@ class IntroScene extends Phaser.Scene {
      * Creates a more natural fire effect with particles appearing randomly
      */
     startParticleCreation() {
-        // Create a new particle every 25-75ms (4x faster than before)
-        this.time.addEvent({
+        this.fireParticleTimer = this.time.addEvent({
             delay: 25 + Math.random() * 50,
-            callback: this.createFireParticle,
-            callbackScope: this,
-            loop: true
+            repeat: -1,
+            callback: () => {
+                this.createFireParticle();
+            }
         });
     }
 
@@ -313,37 +196,22 @@ class IntroScene extends Phaser.Scene {
      * Creates a single fire particle at a random position along the base
      */
     createFireParticle() {
-        if (!this.fireActive) return; // Stop creating particles if fire is stopped
-        
-        const params = this.fireParams;
-        
-        // Random position along the base of the fire
-        const x = params.chaosTextX + (Math.random() - 0.5) * params.fireWidth;
-        const y = params.fireBaseY + Math.random() * 10;
-        
-        const color = params.colors[Math.floor(Math.random() * params.colors.length)];
-        const size = Math.random() * 4 + 2;
-        
-        const fireSprite = this.add.circle(x, y, size, color);
-        fireSprite.setAlpha(0.8);
-        fireSprite.setDepth(10);
-        
-        // Store initial position for animation
-        fireSprite.startX = x;
-        fireSprite.startY = y;
-        fireSprite.maxHeight = 40 + Math.random() * 20;
-        
-        this.fireSprites.push(fireSprite);
-        
-        // Start animating this particle
-        this.animateFireSprite(fireSprite);
-        
-        // Limit total particles to prevent performance issues
-        if (this.fireSprites.length > 120) {
+        if (this.fireSprites.length >= 120) {
             const oldestSprite = this.fireSprites.shift();
-            this.tweens.killTweensOf(oldestSprite);
-            oldestSprite.destroy();
+            if (oldestSprite) {
+                oldestSprite.destroy();
+            }
         }
+
+        const x = 480 + (Math.random() - 0.5) * 200;
+        const y = 670;
+        const size = 2 + Math.random() * 4;
+
+        const particle = this.add.circle(x, y, size, 0xff4400);
+        particle.setDepth(10);
+
+        this.fireSprites.push(particle);
+        this.animateFireSprite(particle);
     }
 
     /**
@@ -351,5 +219,13 @@ class IntroScene extends Phaser.Scene {
      * Currently empty but available for future frame-specific logic
      */
     update() {
+    }
+
+    introComplete() {
+        if (window.transitionManager) {
+            window.transitionManager.startTransition(this, 'IntroScene', 'BootScene');
+        } else {
+            this.scene.start("BootScene");
+        }
     }
 } 
