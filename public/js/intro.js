@@ -33,6 +33,9 @@ class IntroScene extends Phaser.Scene {
             this.load.image(`frame_${frameNumber}`, `assets/intro_images/output_${frameNumber}.png`);
         }
         
+        // Load fire sound
+        this.load.audio("fire", ["assets/audio/backgrounds/fire.mp3"]);
+        
         this.load.on('complete', () => {
             console.log('All images loaded successfully!');
             loadingText.destroy();
@@ -162,8 +165,8 @@ class IntroScene extends Phaser.Scene {
         console.log('Starting movie playback...');
         console.log('start playing fire');
         
-        // Note: Fire sound effect removed as it's not available in the audio assets
-        // The visual fire effects will still play without audio
+        // Play fire sound effect
+        this.sound.play('fire');
         
         this.time.addEvent({
             delay: 1000 / this.frameRate,
