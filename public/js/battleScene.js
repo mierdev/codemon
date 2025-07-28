@@ -57,9 +57,9 @@ class BattleScene extends Phaser.Scene {
 	 */
 	preload() {
 		// Backdrops
-		this.load.image("cave", ["assets/backgrounds/cave"]);
-		this.load.image("desert", ["assets/backgrounds/desert"]);
-		this.load.image("grasslands", ["assets/backgrounds/grasslands"]);
+		this.load.image("cave", ["assets/backgrounds/cave.png"]);
+		this.load.image("desert", ["assets/backgrounds/desert.png"]);
+		this.load.image("grasslands", ["assets/backgrounds/grasslands.png"]);
 		// Sprites
 		this.load.image("birb", ["assets/codemon/birb.png"]);
 		this.load.image("camel", ["assets/codemon/camel.png"]);
@@ -86,7 +86,7 @@ class BattleScene extends Phaser.Scene {
 		this.load.audio("cider", ["assets/audio/backgrounds/apple_cider.wav"]);
 		// UI components
 		// Arrows
-		this.load.image("blueArrow", ["assets/UI/components/arrowBlue_right.png"]);
+		// this.load.image("blueArrow", ["assets/UI/components/arrowBlue_right.png"]);
 		// Sword
 		this.load.image("sword", ["assets/UI/components/sword.png"]);
 		// Language banner
@@ -104,7 +104,7 @@ class BattleScene extends Phaser.Scene {
 		this.load.image("enterButton", ["assets/UI/components/enterButton.png"]);
 		this.load.image("enterPressed", ["assets/UI/components/enterPressed.png"]);
 		// Effect Info
-		this.load.image("greyPressed", ["assets/UI/components/greyPressed.png"]);
+		this.load.image("greyPressed", ["assets/UI/components/goldPressed.png"]);
 	}
 
 	/**
@@ -136,16 +136,9 @@ class BattleScene extends Phaser.Scene {
 		}
 
 		// Adding grasslands backdrop as default
-		const backdrop = this.add.image(480, 360, "cave");
+		const backdrop = this.add.image(480, 360, "grasslands");
 		backdrop.setDisplaySize(960, 720);
-		// this.add.rectangle(0, 0, 960, 720, 0x87ceeb).setOrigin(0, 0);
 
-		// Battle area default placeholder
-		// this.add.rectangle(480, 360, 840, 600, 0x228b22).setOrigin(0.5);
-		// this.add.rectangle(480, 360, 820, 580, 0x32cd32).setOrigin(0.5);
-
-		// this.pokemon1Sprite = this.add.rectangle(240, 240, 80, 80, 0xff6b35);
-		// this.pokemon2Sprite = this.add.rectangle(720, 240, 80, 80, 0x4169e1);
 		const pokemon1SpriteKey = this.getLanguageSprite(this.pokemon1.name);
 		const pokemon2SpriteKey = this.getLanguageSprite(this.pokemon2.name);
 
@@ -172,14 +165,17 @@ class BattleScene extends Phaser.Scene {
 		this.add.image(470, 470, "sword").setOrigin(0.5);
 		this.turnText = this.add
 			.text(480, 500, `Turn: ${this.pokemon1.name}`, {
-				fontSize: "16px",
+				fontSize: "18px",
 				fill: "#fff",
 				stroke: "#000",
-				strokeThickness: 2,
+				strokeThickness: 3,
 			})
 			.setOrigin(0.5);
 
-		this.statusBar = this.add.rectangle(480, 696, 840, 48, 0x333333);
+		// this.statusBar = this.add.rectangle(480, 696, 840, 48, 0x333333);
+		this.statusBar = this.add.image(480, 696, "greyPressed");
+		this.statusBar.setDisplaySize(840, 48);
+
 		this.battleText = this.add
 			.text(
 				480,
@@ -253,12 +249,12 @@ class BattleScene extends Phaser.Scene {
 	 * storing references in the hpBars array for later updates.
 	 */
 	createHPBars() {
-		const hpBar1Bg = this.add.rectangle(240, 180, 120, 20, 0x666666);
-		const hpBar1 = this.add.rectangle(240, 180, 120, 20, 0x00ff00);
+		const hpBar1Bg = this.add.rectangle(240, 55, 120, 20, 0x666666);
+		const hpBar1 = this.add.rectangle(240, 55, 120, 20, 0x00ff00);
 		this.hpBars.push({ bg: hpBar1Bg, bar: hpBar1, pokemon: this.pokemon1 });
 
-		const hpBar2Bg = this.add.rectangle(720, 180, 120, 20, 0x666666);
-		const hpBar2 = this.add.rectangle(720, 180, 120, 20, 0x00ff00);
+		const hpBar2Bg = this.add.rectangle(720, 55, 120, 20, 0x666666);
+		const hpBar2 = this.add.rectangle(720, 55, 120, 20, 0x00ff00);
 		this.hpBars.push({ bg: hpBar2Bg, bar: hpBar2, pokemon: this.pokemon2 });
 	}
 
@@ -286,15 +282,17 @@ class BattleScene extends Phaser.Scene {
 		const boxHeight = 120;
 		const boxY = y + 160; // Double the distance down
 
-		const backgroundBox = this.add.rectangle(
-			x,
-			boxY,
-			boxWidth,
-			boxHeight,
-			0x000000,
-			0.7
-		);
-		backgroundBox.setStrokeStyle(2, 0xffffff);
+		// const backgroundBox = this.add.rectangle(
+		// 	x,
+		// 	boxY,
+		// 	boxWidth,
+		// 	boxHeight,
+		// 	0x000000,
+		// 	0.7
+		// );
+		// backgroundBox.setStrokeStyle(2, 0xffffff);
+		const backgroundBox = this.add.image(x, boxY, "statusEffects");
+		backgroundBox.setDisplaySize(boxWidth, boxHeight);
 
 		const ui = {
 			backgroundBox: backgroundBox,
@@ -394,8 +392,12 @@ class BattleScene extends Phaser.Scene {
 	 */
 	createAbilityMessageBoxes() {
 		// Message box for Pokemon 1 (left side) - moved higher up
-		this.messageBox1 = this.add.rectangle(240, 80, 200, 60, 0x000000, 0.8);
-		this.messageBox1.setStrokeStyle(2, 0xffffff);
+		// this.messageBox1 = this.add.rectangle(240, 80, 200, 60, 0x000000, 0.8);
+		// this.messageBox1.setStrokeStyle(2, 0xffffff);
+		this.messageBox1 = this.add.image(240, 80, "greyPressed");
+		this.messageBox1.setDisplaySize(200, 60);
+		this.messageBox1.setAlpha(0.9);
+
 		this.messageText1 = this.add
 			.text(240, 80, "", {
 				fontSize: "12px",
@@ -407,8 +409,12 @@ class BattleScene extends Phaser.Scene {
 		this.messageText1.setVisible(false);
 
 		// Message box for Pokemon 2 (right side) - moved higher up
-		this.messageBox2 = this.add.rectangle(720, 80, 200, 60, 0x000000, 0.8);
-		this.messageBox2.setStrokeStyle(2, 0xffffff);
+		// this.messageBox2 = this.add.rectangle(720, 80, 200, 60, 0x000000, 0.8);
+		// this.messageBox2.setStrokeStyle(2, 0xffffff);
+		this.messageBox2 = this.add.image(720, 80, "greyPressed");
+		this.messageBox2.setDisplaySize(200, 60);
+		this.messageBox2.setAlpha(0.9);
+
 		this.messageText2 = this.add
 			.text(720, 80, "", {
 				fontSize: "12px",
@@ -426,8 +432,10 @@ class BattleScene extends Phaser.Scene {
 	 */
 	createBattleLog() {
 		// Background for battle log
-		this.battleLogBg = this.add.rectangle(720, 600, 300, 120, 0x000000, 0.8);
-		this.battleLogBg.setStrokeStyle(2, 0xffffff);
+		// this.battleLogBg = this.add.rectangle(720, 600, 300, 120, 0x000000, 0.8);
+		// this.battleLogBg.setStrokeStyle(2, 0xffffff);
+		this.battleLogBg = this.add.image(720, 600, "battleLog");
+		this.battleLogBg.setDisplaySize(300, 120);
 
 		// Title for battle log
 		this.battleLogTitle = this.add
@@ -578,6 +586,17 @@ class BattleScene extends Phaser.Scene {
 	 * Buttons are arranged in a 3-column grid and display ability information on hover.
 	 */
 	createAbilityUI() {
+		// clearing old buttons
+		this.abilityButtons.forEach((buttonData) => {
+			if (buttonData.button && buttonData.button.destroy) {
+				buttonData.button.destroy();
+			}
+			if (buttonData.text && buttonData.button.destroy) {
+				buttonData.text.destroy();
+			}
+		});
+		this.abilityButtons = [];
+
 		const abilities = this.pokemon1.abilities;
 		const startX = 120;
 		const startY = 580;
@@ -589,13 +608,16 @@ class BattleScene extends Phaser.Scene {
 			const x = startX + (index % 3) * (buttonWidth + spacing);
 			const y = startY + Math.floor(index / 3) * (buttonHeight + spacing);
 
-			const button = this.add.rectangle(
-				x,
-				y,
-				buttonWidth,
-				buttonHeight,
-				0x444444
-			);
+			// const button = this.add.rectangle(
+			// 	x,
+			// 	y,
+			// 	buttonWidth,
+			// 	buttonHeight,
+			// 	0x444444
+			// );
+			const button = this.add.image(x, y, "enterButton");
+			button.setDisplaySize(buttonWidth, buttonHeight);
+
 			const text = this.add
 				.text(x, y, ability.name, {
 					fontSize: "12px",
@@ -613,13 +635,15 @@ class BattleScene extends Phaser.Scene {
 				}
 			});
 			button.on("pointerover", () => {
-				button.setFillStyle(0x666666);
+				// button.setFillStyle(0x666666);
+				button.setTexture("enterPressed");
 				this.battleText.setText(
 					`${ability.name} - ${ability.description} (Power: ${ability.power}, Accuracy: ${ability.accuracy}%)`
 				);
 			});
 			button.on("pointerout", () => {
-				button.setFillStyle(0x444444);
+				// button.setFillStyle(0x444444);
+				button.setTexture("enterButton");
 				if (this.battleState === "playerTurn") {
 					this.battleText.setText(
 						"Your turn! Click an ability or use arrow keys + SPACE!"
@@ -703,11 +727,16 @@ class BattleScene extends Phaser.Scene {
 	 * Highlights the currently selected ability and updates the status bar with ability details.
 	 */
 	updateAbilitySelection() {
+		if (this.battleState === "gameOver") {
+			return;
+		}
 		this.abilityButtons.forEach((buttonData, index) => {
 			if (index === this.selectedAbility) {
-				buttonData.button.setFillStyle(0x888888);
+				// buttonData.button.setFillStyle(0x888888);
+				buttonData.button.setTexture("enterPressed");
 			} else {
-				buttonData.button.setFillStyle(0x444444);
+				// buttonData.button.setFillStyle(0x444444);
+				buttonData.button.setTexture("enterButton");
 			}
 		});
 
@@ -731,7 +760,8 @@ class BattleScene extends Phaser.Scene {
 		this.battleText.setText(`${attacker.name} used ${ability.name}!`);
 
 		this.abilityButtons.forEach((buttonData) => {
-			buttonData.button.setFillStyle(0x222222);
+			// buttonData.button.setFillStyle(0x222222);
+			buttonData.button.setTexture("enterButton");
 		});
 
 		const accuracy = Math.random() * 100;
@@ -1011,7 +1041,8 @@ class BattleScene extends Phaser.Scene {
 		this.clearRoundCooldowns();
 
 		this.abilityButtons.forEach((buttonData) => {
-			buttonData.button.setFillStyle(0x444444);
+			// buttonData.button.setFillStyle(0x444444);
+			buttonData.button.setTexture("enterButton");
 		});
 	}
 
@@ -1044,6 +1075,11 @@ class BattleScene extends Phaser.Scene {
 		console.log("update UI called for: ", this.pokemon1?.name);
 		console.log("Pokemon abilities in update: ", this.pokemon1?.abilities);
 		console.log("ability buttons length: ", this.abilityButtons?.length);
+
+		// skip updating UI if game over
+		if (this.battleState === "gameOver") {
+			return;
+		}
 
 		this.abilityButtons.forEach((buttonData, index) => {
 			const abilities = this.pokemon1.abilities;
@@ -1473,10 +1509,12 @@ class BattleScene extends Phaser.Scene {
 		// Store original position and color
 		const originalX = sprite.x;
 		const originalY = sprite.y;
-		const originalColor = sprite.fillColor;
+		// const originalColor = sprite.fillColor;
+		const originalTint = sprite.tint;
 
 		// Flash white effect
-		sprite.setFillStyle(0xffffff);
+		// sprite.setFillStyle(0xffffff);
+		sprite.setTint(0xffffff);
 
 		// Create shake animation
 		const shakeIntensity = 8;
@@ -1500,7 +1538,8 @@ class BattleScene extends Phaser.Scene {
 				} else {
 					// Return to original position and color
 					sprite.setPosition(originalX, originalY);
-					sprite.setFillStyle(originalColor);
+					// sprite.setFillStyle(originalColor);
+					sprite.setTint(originalTint);
 				}
 			},
 		});
@@ -1508,7 +1547,8 @@ class BattleScene extends Phaser.Scene {
 		// Also flash back to original color after a short delay
 		this.time.delayedCall(200, () => {
 			if (currentStep >= shakeSteps) {
-				sprite.setFillStyle(originalColor);
+				// sprite.setFillStyle(originalColor);
+				sprite.setTint(originalTint);
 			}
 		});
 	}
