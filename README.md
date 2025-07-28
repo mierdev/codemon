@@ -98,7 +98,7 @@ code .env
 MONGODB_URI=mongodb+srv://mongouser:mongoischaos@gamecluster.8wtssss.mongodb.net/?retryWrites=true&w=majority&appName=GameCluster
 MONGODB_DB=codemon
 ```
-*We are aware that this is an unsafe approach. We will only keep the keys here during the hackathon event. Once the winners are announcent, we will change are project to be completely local again.*
+*We are aware that this is an unsafe approach. We will only keep the keys here during the hackathon event. Once the winners are announced, we will change are project to be completely local again.*
 
 ## Usage
 

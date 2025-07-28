@@ -10,7 +10,15 @@ router.post("/", async (req, res) => {
   const codemon = new Codemon({
     name: req.body.name,
     type: req.body.type,
-    image: req.body.image,
+		description: req.body.description,
+		power: req.body.power,
+		accuracy: req.body.accuracy,
+		statusEffectAttack: req.body.statusEffectAttack,
+		statusEffectSpecialAttack: req.body.statusEffectSpecialAttack,
+		statusEffectDefense: req.body.statusEffectDefense,
+		statusEffectSpecialDefense: req.body.statusEffectSpecialDefense,
+		statusEffectSpeed: req.body.statusEffectSpeed,
+    imagePath: req.body.imagePath,
     area: req.body.area,
     abilities: req.body.abilities
   });
@@ -47,8 +55,32 @@ router
   if (req.body.type !== null) {
     res.codemon.type = req.body.type;
   };
-  if (req.body.image !== null) {
-    res.codemon.image = req.body.image;
+  if (req.body.description !== null) {
+		res.codemon.description = req.body.description;
+	};
+	if (req.body.power !== null) {
+		res.codemon.power = req.body.power;
+	};
+	if (req.body.accuracy !== null) {
+		res.codemon.accuracy = req.body.accuracy;
+	};
+	if (req.body.statusEffectAttack !== null) {
+		res.codemon.statusEffectAttack = req.body.statusEffectAttack;
+	};
+	if (req.body.statusEffectSpecialAttack !== null) {
+		res.codemon.statusEffectSpecialAttack = req.body.statusEffectSpecialAttack;
+	};
+	if (req.body.statusEffectDefense !== null) {
+		res.codemon.statusEffectDefense = req.body.statusEffectDefense;
+	};
+	if (req.body.statusEffectSpecialDefense !== null) {
+		res.codemon.statusEffectSpecialDefense = req.body.statusEffectSpecialDefense;
+	};
+	if (req.body.statusEffectSpeed !== null) {
+		res.codemon.statusEffectSpeed = req.body.statusEffectSpeed;
+	};
+  if (req.body.imagePath !== null) {
+    res.codemon.imagePath = req.body.imagePath;
   };
   if (req.body.area !== null) {
     res.codemon.area = req.body.area;

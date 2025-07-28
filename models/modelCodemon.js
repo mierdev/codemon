@@ -11,19 +11,43 @@ const codemonSchema = new mongoose.Schema({
     type: String,
     required: true, 
   },
-  image: {
+  description: {
+    type: String,
+    required: true
+  },
+  statusEffectAttack: {
+    type: Number,
+    required: true,
+    default: "0"
+  },
+  statusEffectSpecialAttack: {
+    type: Number,
+    required: true,
+    default: "0"
+  },
+  statusEffectDefense: {
+    type: Number,
+    required: true,
+    default: "0"
+  },
+  statusEffectSpecialDefense: {
+    type: Number,
+    required: true,
+    default: "0"
+  },
+  statusEffectSpeed: {
+    type: Number,
+    required: true,
+    default: "0"
+  },
+  imagePath: {
     type: String,
     required: true,
-
   },
   area: {
     type: String,
     required: true,
 
-  },
-  abilities: {
-    type: Object,
-    required: true
   }
 });
 
