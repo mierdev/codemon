@@ -12,6 +12,28 @@ class BootScene extends Phaser.Scene {
 		this.selectedTournament = 3;
 		this.selectedLanguage = "python";
 	}
+	/**
+	 * Preloads assets
+	 */
+	preload() {
+		this.load.image("danLaneStandoff", [
+			"assets/backgrounds/dan-lane-standoff.png",
+		]);
+		this.load.image("brownPressed", ["assets/UI/components/brownPressed.png"]);
+		this.load.image("brownUnpressed", [
+			"assets/UI/components/brownUnpressed.png",
+		]);
+		this.load.image("enterButton", ["assets/UI/components/enterButton.png"]);
+		this.load.image("enterPressed", ["assets/UI/components/enterPressed.png"]);
+		this.load.image("goldPressed", ["assets/UI/components/goldPressed.png"]);
+		this.load.image("goldUnpressed", [
+			"assets/UI/components/goldUnpressed.png",
+		]);
+		this.load.image("greyPressed", ["assets/UI/components/greyPressed.png"]);
+		this.load.image("greyUnpressed", [
+			"assets/UI/components/greyUnpressed.png",
+		]);
+	}
 
 	/**
 	 * Creates the boot scene and initializes the game.
@@ -22,38 +44,26 @@ class BootScene extends Phaser.Scene {
 	create() {
 		window.gameManager = new GameManager();
 
-		// Get all available language IDs
-		// const availableLanguages = ['python', 'go', 'rust', 'ocaml', 'cpp', 'javascript'];
-
-		// // Randomly select 2 different languages
-		// const shuffled = availableLanguages.sort(() => 0.5 - Math.random());
-		// const language1 = shuffled[0];
-		// const language2 = shuffled[1];
-
-		// console.log(`Starting battle: ${language1} vs ${language2}`);
-
-		// const battleData = window.gameManager.startBattle(language1, language2);
-
-		// if (battleData) {
-		//     this.scene.start('BattleScene', battleData);
-		// } else {
-		//     console.error('Failed to start battle');
-		// }
-
 		// Simple background
-		this.add.rectangle(0, 0, 960, 720, 0x2c3e50).setOrigin(0, 0);
+		// this.add.rectangle(0, 0, 960, 720, 0x2c3e50).setOrigin(0, 0);
+		const backdrop = this.add.image(480, 360, "danLaneStandoff");
+		backdrop.setDisplaySize(960, 720);
 
 		// Title
+		// TODO:
+		// Make this a banner
 		this.add
 			.text(480, 100, "CODEMON", {
-				fontSize: "36px",
+				fontSize: "46px",
 				fill: "#fff",
+				stroke: "#4A90E2",
+				strokeThickness: 3,
 			})
 			.setOrigin(0.5);
 
 		// Tournament buttons
 		this.add
-			.text(480, 200, "Choose Tournament: ", { fontSize: "24px", fill: "#fff" })
+			.text(480, 180, "Choose Tournament: ", { fontSize: "24px", fill: "#fff" })
 			.setOrigin(0.5);
 
 		this.createTournamentButton(3, "3 Matches (Bronze)", 280, 250);
@@ -70,12 +80,28 @@ class BootScene extends Phaser.Scene {
 		this.createLanguageButton("javascript", "JavaScript", 680, 400);
 
 		// Start button
-		const startButton = this.add.rectangle(480, 500, 200, 60, 0x27ae60);
-		this.add
-			.text(480, 500, "COMPILE BATTLE", { fontSize: "24px", fill: "#fff" })
-			.setOrigin(0.5);
+		const startButton = this.add.image(480, 500, "greyUnpressed");
+
 		startButton.setInteractive();
-		startButton.on("pointerdown", () => this.startTournament());
+
+		this.add
+			.text(480, 500, "COMPILE", { fontSize: "18px", fill: "#00000" })
+			.setOrigin(0.5);
+
+		startButton.on("pointerdown", () => {
+			this.time.delayedCall(150, () => {
+				startButton.setTexture("greyPressed");
+				this.startTournament();
+			});
+		});
+
+		startButton.on("pointerover", () => {
+			startButton.setTint(0xdddddd);
+		});
+
+		startButton.on("pointerout", () => {
+			startButton.clearTint();
+		});
 
 		// Show current selection
 		this.selectionText = this.add
@@ -89,19 +115,36 @@ class BootScene extends Phaser.Scene {
 	}
 
 	createTournamentButton(matches, text, x, y) {
-		const button = this.add.rectangle(
+		const isSelected = this.selectedTournament === matches;
+		const tournamentButton = this.add.image(
 			x,
 			y,
-			180,
-			50,
-			this.selectedTournament === matches ? 0x3498db : 0x34495e
+			isSelected ? "goldPressed" : "goldUnpressed"
 		);
+
 		this.add
 			.text(x, y, text, { fontSize: "14px", fill: "#fff" })
 			.setOrigin(0.5);
 
-		button.setInteractive();
-		button.on("pointerdown", () => {
+		// Tinting for extra visual feedback
+		if (isSelected) {
+			tournamentButton.setTint(0xffd700);
+		}
+		tournamentButton.setInteractive();
+
+		tournamentButton.on("pointerover", () => {
+			if (!isSelected) {
+				tournamentButton.setTint(0xdddddd);
+			}
+		});
+
+		tournamentButton.on("pointerout", () => {
+			if (!isSelected) {
+				tournamentButton.clearTint();
+			}
+		});
+
+		tournamentButton.on("pointerdown", () => {
 			this.selectedTournament = matches;
 			// UI Update
 			this.scene.restart();
@@ -109,19 +152,36 @@ class BootScene extends Phaser.Scene {
 	}
 
 	createLanguageButton(id, name, x, y) {
-		const button = this.add.rectangle(
+		const isSelected = this.selectedLanguage === id;
+		const languageButton = this.add.image(
 			x,
 			y,
-			120,
-			50,
-			this.selectedLanguage === id ? 0xe74c3c : 0x34495e
+			isSelected ? "enterPressed" : "enterButton"
 		);
+
+		if (isSelected) {
+			languageButton.setTint(0x87ceeb);
+		}
+
 		this.add
 			.text(x, y, name, { fontSize: "14px", fill: "#fff" })
 			.setOrigin(0.5);
 
-		button.setInteractive();
-		button.on("pointerdown", () => {
+		languageButton.setInteractive();
+
+		languageButton.on("pointerover", () => {
+			if (!isSelected) {
+				languageButton.setTint(0xdddddd);
+			}
+		});
+
+		languageButton.on("pointerout", () => {
+			if (!isSelected) {
+				languageButton.clearTint();
+			}
+		});
+
+		languageButton.on("pointerdown", () => {
 			this.selectedLanguage = id;
 			// UI update
 			this.scene.restart();

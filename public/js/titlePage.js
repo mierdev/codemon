@@ -11,12 +11,6 @@ class TitlePage extends Phaser.Scene {
 		// Backdrop, button, and cursor images
 		this.load.image("bootsSky", ["assets/boots_screens/bootsandsky.png"]);
 		this.load.image("enterButton", ["assets/UI/components/enterButton.png"]);
-		// this.load.image("bootsPaw", ["assets/UI/components/bootsPaw.png"]);
-
-		// this.load.once("complete", () => {
-		// 	const canvas = this.sys.game.canvas;
-		// 	canvas.style.cursor = "assets/UI/components/bootsPaw.png";
-		// });
 	}
 	create() {
 		// Backdrop
