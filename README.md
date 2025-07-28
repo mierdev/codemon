@@ -2,7 +2,7 @@
 
 # A JRPG battle game with a coding theme
 
-Compete in pokémon inspired battles to find out which is the strongest programming language. Compete in one of the competitions to earn a shiny coin. There is also a special competition to settle a fierce rivalry once and for all!
+Compete in pokémon inspired battles to find out which is the strongest programming language. Enter one of the competitions to earn a shiny coin. There is also a special competition to settle a fierce rivalry once and for all!
 
 > PS if you hang around the Boot.dev Discord server, you might recognize a lot of the opponents 👀
 
