@@ -138,4 +138,4 @@ npm run devStart
 
 ## Structure
 
-A bit about our architecture.
+<img src="https://raw.githubusercontent.com/mierdev/codemon/refs/heads/main/public/assets/readme/architecture.png" width="800px" alt="Codemon architecture">
