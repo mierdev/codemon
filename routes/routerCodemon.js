@@ -5,7 +5,21 @@ import { error } from "console";
 const router = express.Router();
 
 /**
- * Creates a new codemon in the database
+ * Retrieves all codemon data from the database
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
+router.get("/", async (req, res) => {
+  try {
+    const codemon = await Codemon.find();
+    res.json(codemon);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+/**
+ * Creates a new codemon entry in the database
  * @param {Object} req - Express request object containing codemon data
  * @param {Object} res - Express response object
  */
@@ -13,17 +27,14 @@ router.post("/", async (req, res) => {
   const codemon = new Codemon({
     name: req.body.name,
     type: req.body.type,
-		description: req.body.description,
-		power: req.body.power,
-		accuracy: req.body.accuracy,
-		statusEffectAttack: req.body.statusEffectAttack,
-		statusEffectSpecialAttack: req.body.statusEffectSpecialAttack,
-		statusEffectDefense: req.body.statusEffectDefense,
-		statusEffectSpecialDefense: req.body.statusEffectSpecialDefense,
-		statusEffectSpeed: req.body.statusEffectSpeed,
+    description: req.body.description,
+    statusEffectAttack: req.body.statusEffectAttack,
+    statusEffectSpecialAttack: req.body.statusEffectSpecialAttack,
+    statusEffectDefense: req.body.statusEffectDefense,
+    statusEffectSpecialDefense: req.body.statusEffectSpecialDefense,
+    statusEffectSpeed: req.body.statusEffectSpeed,
     imagePath: req.body.imagePath,
-    area: req.body.area,
-    abilities: req.body.abilities
+    area: req.body.area
   });
 
   try {
@@ -31,20 +42,6 @@ router.post("/", async (req, res) => {
     res.status(201).json(newCodemon);
   } catch (err) {
     res.status(400).json({ message: err.message });
-  }
-});
-
-/**
- * Retrieves all codemon from the database
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- */
-router.get("/", async (_, res) => {
-  try {
-    const codemon = await Codemon.find();
-    res.json(codemon);
-  } catch (err) {
-    res.status(500).json({ message: error.message });
   }
 });
 

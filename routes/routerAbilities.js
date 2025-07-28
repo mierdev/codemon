@@ -5,7 +5,21 @@ import { error } from "console";
 const router = express.Router();
 
 /**
- * Creates a new ability in the database
+ * Retrieves all abilities data from the database
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
+router.get("/", async (req, res) => {
+	try {
+		const abilities = await Ability.find();
+		res.json(abilities);
+	} catch (err) {
+		res.status(500).json({ message: err.message });
+	}
+});
+
+/**
+ * Creates a new ability entry in the database
  * @param {Object} req - Express request object containing ability data
  * @param {Object} res - Express response object
  */
@@ -28,20 +42,6 @@ router.post("/", async (req, res) => {
 		res.status(201).json(newAbility);
 	} catch (err) {
 		res.status(400).json({ message: err.message });
-	}
-});
-
-/**
- * Retrieves all abilities from the database
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- */
-router.get("/", async (_, res) => {
-	try {
-		const abilities = await Ability.find();
-		res.json(abilities);
-	} catch (err) {
-		res.status(500).json({ message: error.message });
 	}
 });
 

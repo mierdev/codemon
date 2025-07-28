@@ -7,7 +7,7 @@ class TitlePage extends Phaser.Scene {
 	 * Initializes the TitlePage scene with interactive elements
 	 */
 	constructor() {
-		super({ key: "ClickThroughScene" });
+		super({ key: "TitlePage" });
 		this.enterButton = null;
 		this.titleText = null;
 	}
@@ -52,7 +52,7 @@ class TitlePage extends Phaser.Scene {
 		this.enterButton.on("pointerdown", () => {
 			// Use transition manager if available, otherwise fall back to direct scene change
 			if (window.transitionManager) {
-				window.transitionManager.startTransition(this, 'ClickThroughScene', 'IntroScene');
+				window.transitionManager.startTransition(this, 'TitlePage', 'IntroScene');
 			} else {
 				this.scene.start("IntroScene");
 			}
@@ -61,7 +61,7 @@ class TitlePage extends Phaser.Scene {
 		this.titleText.on("pointerdown", () => {
 			// Use transition manager if available, otherwise fall back to direct scene change
 			if (window.transitionManager) {
-				window.transitionManager.startTransition(this, 'ClickThroughScene', 'IntroScene');
+				window.transitionManager.startTransition(this, 'TitlePage', 'IntroScene');
 			} else {
 				this.scene.start("IntroScene");
 			}

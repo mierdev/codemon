@@ -3,19 +3,65 @@
  * Handles Pokemon data storage, retrieval, and battle setup with fresh copies.
  */
 class GameManager {
-	/**
-	 * Initializes a new GameManager instance.
-	 * Creates a Map to store Pokemon data and initializes the default Pokemon.
-	 */
 	constructor() {
 		this.pokemonData = new Map();
-		this.initializePokemonData();
+		this.isDataLoaded = false;
+	}
+
+	/**
+	 * Fetches language and ability data from the database API
+	 * Loads all codemon data with their abilities and stats
+	 * @returns {Promise<void>} Resolves when data is loaded
+	 */
+	async loadGameData() {
+		try {
+			console.log('Attempting to fetch game data from database...');
+			const response = await fetch('/api/language-abilities/game-data');
+			console.log('Response status:', response.status);
+			console.log('Response ok:', response.ok);
+			
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+			
+			const gameData = await response.json();
+			console.log('Game data received:', gameData.length, 'languages');
+			
+			// Clear existing data
+			this.pokemonData.clear();
+			
+			// Load data into the map
+			gameData.forEach(language => {
+				this.pokemonData.set(language.id, {
+					name: language.name,
+					type: language.type,
+					hp: language.stats.hp,
+					maxHp: language.stats.maxHp,
+					attack: language.stats.attack,
+					specialAttack: language.stats.specialAttack,
+					defense: language.stats.defense,
+					specialDefense: language.stats.specialDefense,
+					speed: language.stats.speed,
+					abilities: language.abilities
+				});
+			});
+			
+			this.isDataLoaded = true;
+			console.log('Game data loaded from database:', this.pokemonData.size, 'languages');
+		} catch (error) {
+			console.error('Error loading game data:', error);
+			console.error('Error details:', error.message);
+			console.error('Error stack:', error.stack);
+			// Fallback to hardcoded data if database fails
+			this.initializePokemonData();
+		}
 	}
 
 	/**
 	 * Initializes the default language data with their stats and abilities.
 	 * Sets up programming languages as Pokemon with their respective abilities, powers, and accuracies.
 	 * Each language has 3 abilities with varying power levels and accuracy percentages.
+	 * This is used as a fallback when database loading fails.
 	 */
 	initializePokemonData() {
 		this.pokemonData.set("python", {
@@ -190,8 +236,7 @@ class GameManager {
 					type: "Special",
 					power: 48,
 					accuracy: 75,
-					description:
-						"Deals initial damage + 25 delayed damage. 25% chance of Callback Hell.",
+					description: "Deals initial damage + 25 delayed damage. 25% chance of Callback Hell.",
 					cooldown: 2,
 				},
 				{
@@ -199,12 +244,44 @@ class GameManager {
 					type: "Passive",
 					power: 38,
 					accuracy: 100,
-					description:
-						"40% chance each turn to gain +1 random stat. 10% chance to lose -1.",
+					description: "40% chance each turn to gain +1 random stat. 10% chance to lose -1.",
 					cooldown: 0,
 				},
 			],
 		});
+	}
+
+	/**
+	 * Gets a language's data by its ID
+	 * @param {string} languageId - The ID of the language to retrieve
+	 * @returns {Object|null} The language data or null if not found
+	 */
+	getLanguageData(languageId) {
+		return this.pokemonData.get(languageId) || null;
+	}
+
+	/**
+	 * Gets all available language IDs
+	 * @returns {Array<string>} Array of language IDs
+	 */
+	getAllLanguageIds() {
+		return Array.from(this.pokemonData.keys());
+	}
+
+	/**
+	 * Gets all language data
+	 * @returns {Map} Map of all language data
+	 */
+	getAllLanguageData() {
+		return this.pokemonData;
+	}
+
+	/**
+	 * Checks if game data has been loaded
+	 * @returns {boolean} True if data is loaded
+	 */
+	isGameDataLoaded() {
+		return this.isDataLoaded;
 	}
 
 	/**
@@ -304,123 +381,120 @@ class GameManager {
 			multiplier = 1 / (1 + Math.abs(netStages) * 0.5); // -33% per stage
 		}
 
-		const effectiveStat = Math.floor(baseStat * multiplier);
-
-		// console.log(
-		// 	`${
-		// 		pokemon.name
-		// 	} ${stat}: Base=${baseStat}, Buffs=+${buffStages}, Debuffs=-${debuffStages}, Net=${netStages}, Multiplier=${multiplier.toFixed(
-		// 		2
-		// 	)}, Effective=${effectiveStat}`
-		// );
-
-		return effectiveStat;
+		return Math.floor(baseStat * multiplier);
 	}
 
 	/**
 	 * Applies a buff to a Pokemon's stat.
 	 * @param {Object} pokemon - The Pokemon to buff
-	 * @param {string} stat - The stat to buff
-	 * @param {number} stages - Number of stages to increase (default 1)
-	 * @returns {string} Description of the buff applied
+	 * @param {string} stat - The stat to buff (attack, specialAttack, defense, specialDefense, speed)
+	 * @param {number} stages - Number of buff stages to apply (default: 1)
 	 */
 	applyBuff(pokemon, stat, stages = 1) {
-		const oldBuffs = pokemon.buffs[stat] || 0;
-		const oldValue = this.getEffectiveStat(pokemon, stat);
-
-		pokemon.buffs[stat] = Math.min(4, oldBuffs + stages);
-		const newValue = this.getEffectiveStat(pokemon, stat);
-
-		console.log(
-			`BUFF APPLIED: ${pokemon.name} ${stat} +${stages} stages (${oldBuffs} → ${pokemon.buffs[stat]})`
-		);
-		console.log(`   ${pokemon.name} ${stat}: ${oldValue} → ${newValue}`);
-
-		return `${pokemon.name}'s ${stat} rose! (${oldValue} → ${newValue})`;
+		const currentBuffs = pokemon.buffs[stat] || 0;
+		const newBuffs = Math.min(6, currentBuffs + stages); // Max +6 stages
+		pokemon.buffs[stat] = newBuffs;
+		console.log(`${pokemon.name}'s ${stat} buffed by ${stages} stage(s) to +${newBuffs}`);
 	}
 
 	/**
 	 * Applies a debuff to a Pokemon's stat.
 	 * @param {Object} pokemon - The Pokemon to debuff
-	 * @param {string} stat - The stat to debuff
-	 * @param {number} stages - Number of stages to decrease (default 1)
-	 * @returns {string} Description of the debuff applied
+	 * @param {string} stat - The stat to debuff (attack, specialAttack, defense, specialDefense, speed)
+	 * @param {number} stages - Number of debuff stages to apply (default: 1)
 	 */
 	applyDebuff(pokemon, stat, stages = 1) {
-		const oldDebuffs = pokemon.debuffs[stat] || 0;
-		const oldValue = this.getEffectiveStat(pokemon, stat);
-
-		pokemon.debuffs[stat] = Math.min(4, oldDebuffs + stages);
-		const newValue = this.getEffectiveStat(pokemon, stat);
-
-		console.log(
-			`DEBUFF APPLIED: ${pokemon.name} ${stat} -${stages} stages (${oldDebuffs} → ${pokemon.debuffs[stat]})`
-		);
-		console.log(`   ${pokemon.name} ${stat}: ${oldValue} → ${newValue}`);
-
-		return `${pokemon.name}'s ${stat} fell! (${oldValue} → ${newValue})`;
+		const currentDebuffs = pokemon.debuffs[stat] || 0;
+		const newDebuffs = Math.min(6, currentDebuffs + stages); // Max -6 stages
+		pokemon.debuffs[stat] = newDebuffs;
+		console.log(`${pokemon.name}'s ${stat} debuffed by ${stages} stage(s) to -${newDebuffs}`);
 	}
 
 	/**
-	 * Calculates damage using the proper damage formula with effective stats.
+	 * Calculates damage for an ability based on attacker and defender stats.
 	 * @param {Object} attacker - The attacking Pokemon
 	 * @param {Object} defender - The defending Pokemon
 	 * @param {Object} ability - The ability being used
 	 * @returns {number} The calculated damage
 	 */
 	calculateDamage(attacker, defender, ability) {
-		const basePower = ability.power;
-
-		// console.log(
-		// 	`DAMAGE CALCULATION: ${attacker.name} uses ${ability.name} (${ability.type}, ${basePower} BP) vs ${defender.name}`
-		// );
-
-		// Determine attack and defense stats based on ability type
+		// Determine which attack and defense stats to use based on ability type
 		let attackStat, defenseStat;
-		if (ability.type === "Physical") {
-			attackStat = this.getEffectiveStat(attacker, "attack");
-			defenseStat = this.getEffectiveStat(defender, "defense");
-			console.log(
-				`   Using Physical stats: Attack=${attackStat}, Defense=${defenseStat}`
-			);
-		} else {
+		
+		if (ability.type === "Special") {
 			attackStat = this.getEffectiveStat(attacker, "specialAttack");
 			defenseStat = this.getEffectiveStat(defender, "specialDefense");
-			console.log(
-				`   Using Special stats: SpAtk=${attackStat}, SpDef=${defenseStat}`
-			);
+		} else if (ability.type === "Physical") {
+			attackStat = this.getEffectiveStat(attacker, "attack");
+			defenseStat = this.getEffectiveStat(defender, "defense");
+		} else {
+			// For Passive, Defensive, Recovery, Utility - use attack/defense as default
+			attackStat = this.getEffectiveStat(attacker, "attack");
+			defenseStat = this.getEffectiveStat(defender, "defense");
 		}
 
-		// Damage formula: (Base Power * Attack / Defense) * Random Factor
-		const randomFactor = Math.random() * 0.3 + 0.85;
-		const damage = Math.floor(
-			((basePower * attackStat) / defenseStat) * randomFactor
-		);
-		const finalDamage = Math.max(1, damage); // Minimum 1 damage
+		// Debug logging
+		console.log(`Damage calculation for ${ability.name} (${ability.type}):`);
+		console.log(`  Attacker: ${attacker.name}, Attack: ${attackStat}, Type: ${attacker.type}`);
+		console.log(`  Defender: ${defender.name}, Defense: ${defenseStat}, Type: ${defender.type}`);
+		console.log(`  Ability Power: ${ability.power}`);
 
-		// console.log(
-		// 	`   Formula: (${basePower} × ${attackStat} ÷ ${defenseStat}) × ${randomFactor.toFixed(
-		// 		2
-		// 	)} = ${finalDamage} damage`
-		// );
-		// console.log(
-		// 	`   ${defender.name} HP: ${defender.hp} → ${defender.hp - finalDamage}`
-		// );
+		// Base damage calculation (simplified formula without level)
+		let damage = Math.floor((attackStat * ability.power) / (defenseStat * 2) + 10);
 
+		// Apply type effectiveness (simplified)
+		const typeEffectiveness = this.getTypeEffectiveness(attacker.type, defender.type);
+		damage = Math.floor(damage * typeEffectiveness);
+
+		// Apply random variation (85-100%)
+		const randomFactor = 0.85 + Math.random() * 0.15;
+		damage = Math.floor(damage * randomFactor);
+
+		// Ensure minimum damage of 1
+		const finalDamage = Math.max(1, damage);
+		console.log(`  Final Damage: ${finalDamage}`);
 		return finalDamage;
 	}
 
 	/**
+	 * Gets type effectiveness between two types.
+	 * @param {string} attackerType - The attacking Pokemon's type
+	 * @param {string} defenderType - The defending Pokemon's type
+	 * @returns {number} The type effectiveness multiplier
+	 */
+	getTypeEffectiveness(attackerType, defenderType) {
+		// Simplified type effectiveness chart
+		const effectiveness = {
+			"Script": { "Managed": 2.0, "Web": 2.0, "System": 0.5, "Concurrent": 0.5 },
+			"System": { "Script": 2.0, "Managed": 2.0, "Concurrent": 0.5, "Functional": 0.5 },
+			"Concurrent": { "System": 2.0, "Web": 2.0, "Functional": 0.5 },
+			"Functional": { "System": 2.0, "Concurrent": 2.0, "Managed": 0.5, "Web": 0.5 },
+			"Managed": { "Functional": 2.0, "Script": 0.5, "System": 0.5 },
+			"Web": { "Script": 0.5, "Concurrent": 0.5 }
+		};
+
+		const attackerEffectiveness = effectiveness[attackerType];
+		if (attackerEffectiveness && attackerEffectiveness[defenderType]) {
+			return attackerEffectiveness[defenderType];
+		}
+
+		return 1.0; // Normal effectiveness
+	}
+
+	/**
 	 * Updates Pokemon data from external API sources.
-	 * Allows dynamic updates to Pokemon data without restarting the game.
 	 * @param {string} pokemonId - The ID of the Pokemon to update
 	 * @param {Object} apiData - The new Pokemon data from the API
 	 */
 	updatePokemonFromAPI(pokemonId, apiData) {
 		this.pokemonData.set(pokemonId, apiData);
 	}
+
 	/**
-	 * Simple tournament management tracking wins and generating opponents
+	 * Starts a tournament with the specified number of matches.
+	 * @param {number} matchCount - Number of matches in the tournament (3, 5, or 7)
+	 * @param {string} playerLanguage - The player's selected language
+	 * @returns {Object} Tournament setup data
 	 */
 	startTournament(matchCount, playerLanguage) {
 		const winsNeeded = Math.ceil(matchCount / 2);
@@ -450,6 +524,10 @@ class GameManager {
 		return this.getNextOpponent();
 	}
 
+	/**
+	 * Gets the next opponent for the tournament.
+	 * @returns {Object|null} Next opponent data or null if tournament is complete
+	 */
 	getNextOpponent() {
 		if (!this.tournament || !this.tournament.isActive) {
 			console.log("No active tournament ");
@@ -472,6 +550,10 @@ class GameManager {
 		};
 	}
 
+	/**
+	 * Records a win in the current tournament.
+	 * @returns {Object|null} Tournament result or null if tournament continues
+	 */
 	recordWin() {
 		if (!this.tournament) return null;
 		this.tournament.wins++;
@@ -522,29 +604,24 @@ class GameManager {
 			winsNeeded: this.tournament.winsNeeded,
 			trophy: "No shiny - didn't get enough wins",
 		};
+
 		this.tournament = null;
 		return result;
 	}
 
+	/**
+	 * Records a loss in the current tournament.
+	 * @returns {Object|null} Tournament result or null if tournament continues
+	 */
 	recordLoss() {
 		if (!this.tournament) return null;
-
 		this.tournament.losses++;
 		this.tournament.matchesPlayed++;
-
 		console.log(
-			`Player lost a match: ${this.tournament.wins}-${this.tournament.losses}`
+			`In record loss, with: ${this.tournament.losses} total: ${this.tournament.type}`
 		);
 
-		const matchesLeft = this.tournament.type - this.tournament.matchesPlayed;
-		const maxPossibleWins = this.tournament.wins + matchesLeft;
-
-		console.log(
-			`Matches left ${matchesLeft} vs possible wins: ${maxPossibleWins}`
-		);
-
-		if (maxPossibleWins < this.tournament.winsNeeded) {
-			console.log("Max wins reached, no more wins possible");
+		if (this.tournament.losses >= this.tournament.winsNeeded) {
 			const result = {
 				completed: true,
 				won: false,
@@ -552,22 +629,26 @@ class GameManager {
 				losses: this.tournament.losses,
 				total: this.tournament.type,
 				winsNeeded: this.tournament.winsNeeded,
-				trophy: "No shiny coin for you this time... keep trying, you got this!",
+				trophy: "No shiny - didn't get enough wins",
 			};
+
 			this.tournament = null;
 			return result;
 		}
 
-		// Continue tournament if wins are still possible
-		if (this.tournament.matchesPlayed < this.tournament.type) {
+		// Continue tournaments
+		if (this.tournament.matchesPlayed <= this.tournament.type) {
+			console.log("Continuing tournament not enough losses yet...");
 			return {
 				completed: false,
-				won: false,
 				nextOpponent: this.getNextOpponent(),
 			};
 		}
 
-		// Reached max without enough wins - Tournament over
+		// Return next match hoping it doesn't get here...
+		console.log(
+			"Shouldn't have reached this point of Game Manager with recording losses..."
+		);
 		const result = {
 			completed: true,
 			won: false,
@@ -575,9 +656,10 @@ class GameManager {
 			losses: this.tournament.losses,
 			total: this.tournament.type,
 			winsNeeded: this.tournament.winsNeeded,
-			trophy: "No trophy - didn't get enough wins",
+			trophy: "No shiny - didn't get enough wins",
 		};
+
 		this.tournament = null;
 		return result;
 	}
-}
+} 

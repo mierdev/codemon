@@ -413,7 +413,9 @@ const seedData = async () => {
      ]);
 
     const trainers = await Trainer.insertMany([
+      // Python trainers
       {
+<<<<<<< Updated upstream
         name: "Gert",
         codemon: "python"
       },
@@ -426,6 +428,17 @@ const seedData = async () => {
         codemon: "javascript"
       },
       {
+=======
+        name: "Miranda",
+        codemon: "python"
+      },
+      {
+        name: "Gert",
+        codemon: "python"
+      },
+      // JavaScript & TypeScript trainers
+      {
+>>>>>>> Stashed changes
         name: "TokiLoshi",
         codemon: "javascript"
       },
@@ -437,6 +450,10 @@ const seedData = async () => {
         name: "Karma Glitch",
         codemon: "javascript"
       },
+<<<<<<< Updated upstream
+=======
+      // Go trainers
+>>>>>>> Stashed changes
       {
         name: "Lane",
         codemon: "go"
@@ -449,11 +466,16 @@ const seedData = async () => {
         name: "Ipê",
         codemon: "go"
       },
+<<<<<<< Updated upstream
+=======
+      // Rust trainers
+>>>>>>> Stashed changes
       {
         name: "Nallo",
         codemon: "rust"
       },
       {
+<<<<<<< Updated upstream
         name: "birbNallo",
         codemon: "javascript"
       },
@@ -465,11 +487,18 @@ const seedData = async () => {
         name: "Wasseem",
         codemon: "ocaml"
       },
+=======
+        name: "Zillhar",
+        codemon: "rust"
+      },
+      // OCaml trainers
+>>>>>>> Stashed changes
       {
         name: "Ryan",
         codemon: "ocaml"
       },
       {
+<<<<<<< Updated upstream
         name: "Zieba",
         codemon: "csharp"
       },
@@ -480,6 +509,15 @@ const seedData = async () => {
       {
         name: "Nuc",
         codemon: "ANA"
+=======
+        name: "Wasseem",
+        codemon: "ocaml"
+      },
+      // C# trainers
+      {
+        name: "Zieba",
+        codemon: "csharp"
+>>>>>>> Stashed changes
       }
     ]);
 

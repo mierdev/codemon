@@ -61,8 +61,6 @@ class BootScene extends Phaser.Scene {
 			window.transitionManager.resetTransitionState();
 		}
 
-		window.gameManager = new GameManager();
-
 		// Initialize transition manager
 		if (window.TransitionManager && !window.transitionManager) {
 			window.transitionManager = new window.TransitionManager();
@@ -75,11 +73,6 @@ class BootScene extends Phaser.Scene {
 		} else {
 			console.log("something went wrong with the audio manager!");
 		}
-
-		// Get all available language IDs
-		// const availableLanguages = ['python', 'go', 'rust', 'ocaml', 'csharp', 'javascript'];
-
-
 
 		console.log("About to play cider");
 		if (this.audioManager && (!window.currentMusic || !window.currentMusic.isPlaying)) {
@@ -100,34 +93,25 @@ class BootScene extends Phaser.Scene {
 			.text(480, 180, "Choose Tournament: ", { fontSize: "24px", fill: "#fff" })
 			.setOrigin(0.5);
 
-		this.createTournamentButton(3, "3 Matches (Bronze)", 280, 250);
-		this.createTournamentButton(5, "5 Matches (Silver)", 480, 250);
-		this.createTournamentButton(7, "7 Matches (Gold)", 680, 250);
+		this.createTournamentButton(3, "3 Matches", 280, 240);
+		this.createTournamentButton(5, "5 Matches", 480, 240);
+		this.createTournamentButton(7, "7 Matches", 680, 240);
 
-		// Language buttons
+		// Language selection
 		this.add
-			.text(480, 335, "Choose language: ", { fontSize: "24px", fill: "#fff" })
+			.text(480, 320, "Choose Your Language: ", { fontSize: "24px", fill: "#fff" })
 			.setOrigin(0.5);
 
-		this.createLanguageButton("python", "Python", 280, 400);
-		this.createLanguageButton("go", "Go", 480, 400);
-		this.createLanguageButton("javascript", "JavaScript", 680, 400);
+		// Create language buttons dynamically from database data
+		this.createLanguageButtons();
 
 		// Start button
-		const startButton = this.add.image(480, 500, "greyUnpressed");
-
+		const startButton = this.add.image(480, 520, "greyUnpressed");
 		startButton.setInteractive();
 
 		this.add
-			.text(480, 500, "COMPILE", { fontSize: "18px", fill: "#0f2b92ff" })
+			.text(480, 520, "COMPILE", { fontSize: "18px", fill: "#0066ff" })
 			.setOrigin(0.5);
-
-		startButton.on("pointerdown", () => {
-			startButton.setTexture("greyPressed");
-			this.time.delayedCall(150, () => {
-				this.startTournament();
-			});
-		});
 
 		startButton.on("pointerover", () => {
 			startButton.setTint(0xdddddd);
@@ -137,15 +121,43 @@ class BootScene extends Phaser.Scene {
 			startButton.clearTint();
 		});
 
-		// Show current selection
-		this.selectionText = this.add
-			.text(
-				480,
-				600,
-				`Selected: ${this.selectedTournament} matches as ${this.selectedLanguage}`,
-				{ fontSize: "18px", fill: "#fff" }
-			)
-			.setOrigin(0.5);
+		startButton.on("pointerdown", () => {
+			this.startTournament();
+		});
+	}
+
+	/**
+	 * Creates language buttons for only Python, Go, and JavaScript/TypeScript
+	 * Filters available languages to show only the three selectable options
+	 */
+	createLanguageButtons() {
+		// Define the three selectable languages
+		const selectableLanguages = [
+			{ id: "python", name: "Python" },
+			{ id: "go", name: "Go" },
+			{ id: "javascript", name: "JavaScript & TypeScript" }
+		];
+
+		if (!window.gameManager || typeof window.gameManager.isGameDataLoaded !== 'function' || !window.gameManager.isGameDataLoaded()) {
+			console.warn('Game data not loaded, using fallback language buttons');
+			// Fallback to hardcoded buttons for the three selectable languages
+			this.createLanguageButton("python", "Python", 280, 400);
+			this.createLanguageButton("go", "Go", 480, 400);
+			this.createLanguageButton("javascript", "JavaScript & TypeScript", 680, 400);
+			return;
+		}
+
+		// Create buttons for only the three selectable languages
+		selectableLanguages.forEach((language, index) => {
+			const languageData = window.gameManager.getLanguageData(language.id);
+			if (languageData) {
+				// Position the three buttons in a row
+				const x = 280 + (index * 200); // 280, 480, 680
+				const y = 400;
+				
+				this.createLanguageButton(language.id, languageData.name, x, y);
+			}
+		});
 	}
 
 	createCodemonBanner() {

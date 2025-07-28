@@ -45,6 +45,9 @@ app.use("/trainers", trainersRouter);
 import dialogueRouter from "./routes/routerDialogue.js";
 app.use("/dialogue", dialogueRouter);
 
+import languageAbilitiesRouter from "./routes/routerLanguageAbilities.js";
+app.use("/api/language-abilities", languageAbilitiesRouter);
+
 /**
  * Renders the main game page
  * @param {Object} req - Express request object

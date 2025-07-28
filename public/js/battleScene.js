@@ -37,6 +37,7 @@ class BattleScene extends Phaser.Scene {
 		this.battleState = "playerTurn";
 		this.selectedAbility = 0;
 		this.isPlayerTurn = true;
+		this.trainerData = { pokemon1: null, pokemon2: null };
 
 		// Store tournament info if it exists
 		if (data.tournamentInfo) {
@@ -161,9 +162,8 @@ class BattleScene extends Phaser.Scene {
 			this.pokemon2Sprite.setScale(0.3);
 		}
 
-		// Create langauge banners
-		this.createLanguageBanner(this.pokemon1.name, 240, 94);
-		this.createLanguageBanner(this.pokemon2.name, 720, 94);
+		// Fetch trainer data and create language banners
+		this.fetchAndCreateLanguageBanners();
 
 		this.createHPBars();
 		this.createBuffsDebuffsUI();
@@ -228,7 +228,80 @@ class BattleScene extends Phaser.Scene {
 		};
 		return spriteMap[languageName] || "fox";
 	}
-	createLanguageBanner(pokemonName, x, y) {
+	/**
+	 * Fetches trainer data for a specific language from the database
+	 * @param {string} languageId - The language ID to get trainers for
+	 * @returns {Promise<Object|null>} Random trainer data or null if none found
+	 */
+	async fetchTrainerForLanguage(languageId) {
+		try {
+			const response = await fetch(`/api/language-abilities/trainers/${languageId}`);
+			if (!response.ok) {
+				console.warn(`Failed to fetch trainers for ${languageId}`);
+				return null;
+			}
+			const trainers = await response.json();
+			if (trainers && trainers.length > 0) {
+				// Return a random trainer
+				const randomIndex = Math.floor(Math.random() * trainers.length);
+				return trainers[randomIndex];
+			}
+			return null;
+		} catch (error) {
+			console.error('Error fetching trainer data:', error);
+			return null;
+		}
+	}
+
+	/**
+	 * Fetches trainer data for both Pokemon and creates language banners
+	 */
+	async fetchAndCreateLanguageBanners() {
+		try {
+			// Get language IDs for both Pokemon
+			const pokemon1LanguageId = this.getLanguageId(this.pokemon1.name);
+			const pokemon2LanguageId = this.getLanguageId(this.pokemon2.name);
+
+			// Fetch trainer data for both languages
+			const [trainer1, trainer2] = await Promise.all([
+				this.fetchTrainerForLanguage(pokemon1LanguageId),
+				this.fetchTrainerForLanguage(pokemon2LanguageId)
+			]);
+
+			// Store trainer data
+			this.trainerData.pokemon1 = trainer1;
+			this.trainerData.pokemon2 = trainer2;
+
+			// Create language banners with trainer data
+			this.createLanguageBanner(this.pokemon1.name, 240, 94, trainer1);
+			this.createLanguageBanner(this.pokemon2.name, 720, 94, trainer2);
+
+		} catch (error) {
+			console.error('Error fetching trainer data:', error);
+			// Fallback to creating banners without trainer data
+			this.createLanguageBanner(this.pokemon1.name, 240, 94);
+			this.createLanguageBanner(this.pokemon2.name, 720, 94);
+		}
+	}
+
+	/**
+	 * Maps language names to their database IDs
+	 * @param {string} languageName - The language name to map
+	 * @returns {string} The database language ID
+	 */
+	getLanguageId(languageName) {
+		const languageMap = {
+			'Python': 'python',
+			'Go': 'go',
+			'Rust': 'rust',
+			'OCaml': 'ocaml',
+			'C#': 'csharp',
+			'JavaScript & TypeScript': 'javascript'
+		};
+		return languageMap[languageName] || languageName.toLowerCase();
+	}
+
+	createLanguageBanner(pokemonName, x, y, trainerData = null) {
 		// Banner pieces
 		const bannerLeft = this.add.image(x - 30, y, "langLeft");
 		bannerLeft.setScale(1.5);
@@ -237,14 +310,21 @@ class BattleScene extends Phaser.Scene {
 		const bannerRight = this.add.image(x + 30, y, "langRight");
 		bannerRight.setScale(1.5);
 
-		// Add pokemon name to banner
+		// Determine what text to display
+		let displayText = pokemonName;
+		if (trainerData && trainerData.name) {
+			displayText = `${trainerData.name}\n${pokemonName}`;
+		}
+
+		// Add text to banner
 		this.add
-			.text(x, y, pokemonName, {
-				fontSize: "18px",
+			.text(x, y, displayText, {
+				fontSize: "16px",
 				fill: "#fff",
 				fontStyle: "bold",
 				stroke: "#000",
 				strokeThickness: 2,
+				align: "center"
 			})
 			.setOrigin(0.5)
 			.setDepth(1);

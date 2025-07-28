@@ -2,64 +2,58 @@
  * Main game configuration and initialization.
  * Sets up the Phaser game instance with scene management and physics configuration.
  */
-function initializeGame() {
-	// Check if all required classes are available
-	if (typeof IntroScene === "undefined") {
-		console.error("IntroScene not found, retrying...");
+/**
+ * Initializes the game with database data loading
+ * Ensures all scenes are loaded and game data is fetched before creating the Phaser game instance
+ */
+async function initializeGame() {
+	// Check if all required scenes are available
+	if (typeof TitlePage === 'undefined' || typeof IntroScene === 'undefined' || typeof BootScene === 'undefined' || 
+		typeof BattleScene === 'undefined' || typeof EndScene === 'undefined') {
+		console.log('Waiting for scenes to load...');
 		setTimeout(initializeGame, 100);
 		return;
 	}
 
-	if (typeof BootScene === "undefined") {
-		console.error("BootScene not found, retrying...");
-		setTimeout(initializeGame, 100);
-		return;
+	// Initialize game manager and load data from database
+	window.gameManager = new GameManager();
+	
+	try {
+		console.log('Loading game data from database...');
+		// Add a small delay to ensure server is ready
+		await new Promise(resolve => setTimeout(resolve, 100));
+		await window.gameManager.loadGameData();
+		console.log('Game data loaded successfully');
+	} catch (error) {
+		console.error('Failed to load game data from database, using fallback data:', error);
 	}
 
-	if (typeof BattleScene === "undefined") {
-		console.error("BattleScene not found, retrying...");
-		setTimeout(initializeGame, 100);
-		return;
-	}
-
-	if (typeof EndScene === "undefined") {
-		console.error("EndScene not found, retrying...");
-		setTimeout(initializeGame, 100);
-		return;
-	}
-
-	console.log("All scenes loaded, initializing game...");
-
+	// Create the Phaser game instance
 	const config = {
 		type: Phaser.AUTO,
 		width: 960,
 		height: 720,
-		parent: "game-container",
+		parent: 'game-container',
 		backgroundColor: "#000000",
 		roundPixels: true,
 		pixelArt: true,
 		antialias: false,
 		scene: [TitlePage, IntroScene, BootScene, BattleScene, EndScene],
 		physics: {
-			default: "arcade",
+			default: 'arcade',
 			arcade: {
 				gravity: { y: 0 },
-				debug: false,
-			},
-		},
+				debug: false
+			}
+		}
 	};
 
-	/**
-	 * The main Phaser game instance.
-	 * Initializes the game with the specified configuration and manages scene transitions.
-	 */
 	window.game = new Phaser.Game(config);
-
-	// Initialize transition manager after game is created
-	if (window.TransitionManager) {
-		window.transitionManager = new window.TransitionManager();
-		console.log("Transition manager initialized in main.js");
-	}
+	
+	// Initialize transition manager
+	window.transitionManager = new window.TransitionManager();
+	
+	console.log('Game initialized successfully');
 }
 
 // Initialize game when DOM is ready
@@ -75,20 +69,18 @@ if (document.readyState === "loading") {
 window.transitionManager = null;
 
 /**
- * Starts a new battle between two Pokemon with transition effect.
- * Uses the global gameManager to create battle data and transitions to the BattleScene.
- * @param {string} pokemon1Id - The ID of the first Pokemon (player's Pokemon)
- * @param {string} pokemon2Id - The ID of the second Pokemon (AI's Pokemon)
+ * Starts a new battle with the selected languages
+ * @param {string} playerLanguage - The player's selected language
+ * @param {string} opponentLanguage - The opponent's language
  */
-function startNewBattle(pokemon1Id, pokemon2Id) {
-	if (window.gameManager && window.game) {
-		const battleData = window.gameManager.startBattle(pokemon1Id, pokemon2Id);
-		if (battleData && window.transitionManager) {
-			const currentScene = window.game.scene.getScene('BootScene');
-			window.transitionManager.startTransition(currentScene, 'BootScene', 'BattleScene', battleData);
-		} else if (battleData) {
-			window.game.scene.start("BattleScene", battleData);
-		}
+function startNewBattle(playerLanguage, opponentLanguage) {
+	if (window.game && window.gameManager) {
+		window.transitionManager.startTransition(window.game.scene.getScene('BootScene'), 'BootScene', 'BattleScene', {
+			playerLanguage: playerLanguage,
+			opponentLanguage: opponentLanguage
+		});
+	} else {
+		console.error('Game or GameManager not initialized');
 	}
 }
 
