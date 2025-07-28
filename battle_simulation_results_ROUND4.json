@@ -1,0 +1,2098 @@
+{
+  "metadata": {
+    "simulation_date": "2025-07-28T08:15:29.256489",
+    "total_battles": 1500,
+    "battles_per_matchup": 100,
+    "languages_simulated": 6,
+    "random_seed": null
+  },
+  "language_performance": {
+    "python": {
+      "total_battles": 500,
+      "wins": 30,
+      "losses": 470,
+      "win_rate": 0.06,
+      "avg_hp_remaining_when_winning": 14.260651782620398,
+      "avg_turns_when_winning": 5.466666666666667,
+      "avg_damage_dealt": 67.14,
+      "language_name": "Python"
+    },
+    "go": {
+      "total_battles": 500,
+      "wins": 285,
+      "losses": 215,
+      "win_rate": 0.57,
+      "avg_hp_remaining_when_winning": 25.744570447750384,
+      "avg_turns_when_winning": 4.003508771929824,
+      "avg_damage_dealt": 91.18948370814049,
+      "language_name": "Go"
+    },
+    "rust": {
+      "total_battles": 500,
+      "wins": 306,
+      "losses": 194,
+      "win_rate": 0.612,
+      "avg_hp_remaining_when_winning": 25.168165976301935,
+      "avg_turns_when_winning": 4,
+      "avg_damage_dealt": 90.3,
+      "language_name": "Rust"
+    },
+    "ocaml": {
+      "total_battles": 500,
+      "wins": 330,
+      "losses": 170,
+      "win_rate": 0.66,
+      "avg_hp_remaining_when_winning": 33.49284183136102,
+      "avg_turns_when_winning": 3.43030303030303,
+      "avg_damage_dealt": 103.21371781043194,
+      "language_name": "OCaml"
+    },
+    "csharp": {
+      "total_battles": 500,
+      "wins": 384,
+      "losses": 116,
+      "win_rate": 0.768,
+      "avg_hp_remaining_when_winning": 33.17131914431901,
+      "avg_turns_when_winning": 3.0859375,
+      "avg_damage_dealt": 99.7806444260076,
+      "language_name": "C#"
+    },
+    "javascript": {
+      "total_battles": 500,
+      "wins": 165,
+      "losses": 335,
+      "win_rate": 0.33,
+      "avg_hp_remaining_when_winning": 30.272704861623435,
+      "avg_turns_when_winning": 3.587878787878788,
+      "avg_damage_dealt": 90.08751279965324,
+      "language_name": "JavaScript & TypeScript"
+    }
+  },
+  "ability_performance": {
+    "python_0": {
+      "language_id": "python",
+      "language_name": "Python",
+      "ability_name": "Rapid Prototype",
+      "ability_index": 0,
+      "ability_type": "Passive",
+      "ability_power": 20,
+      "total_uses": 245,
+      "wins_with_ability": 23,
+      "losses_with_ability": 222,
+      "win_rate_with_ability": 0.09387755102040816,
+      "avg_damage_with_ability": 76.40816326530613
+    },
+    "python_1": {
+      "language_id": "python",
+      "language_name": "Python",
+      "ability_name": "Ecosystem Call",
+      "ability_index": 1,
+      "ability_type": "Utility",
+      "ability_power": 15,
+      "total_uses": 255,
+      "wins_with_ability": 7,
+      "losses_with_ability": 248,
+      "win_rate_with_ability": 0.027450980392156862,
+      "avg_damage_with_ability": 58.23529411764706
+    },
+    "go_0": {
+      "language_id": "go",
+      "language_name": "Go",
+      "ability_name": "Fast Compilation",
+      "ability_index": 0,
+      "ability_type": "Passive",
+      "ability_power": 25,
+      "total_uses": 249,
+      "wins_with_ability": 175,
+      "losses_with_ability": 74,
+      "win_rate_with_ability": 0.7028112449799196,
+      "avg_damage_with_ability": 92.570281124498
+    },
+    "go_1": {
+      "language_id": "go",
+      "language_name": "Go",
+      "ability_name": "Goroutine Swarm",
+      "ability_index": 1,
+      "ability_type": "Special",
+      "ability_power": 35,
+      "total_uses": 251,
+      "wins_with_ability": 110,
+      "losses_with_ability": 141,
+      "win_rate_with_ability": 0.43824701195219123,
+      "avg_damage_with_ability": 89.81968866163443
+    },
+    "rust_0": {
+      "language_id": "rust",
+      "language_name": "Rust",
+      "ability_name": "Borrow Checker",
+      "ability_index": 0,
+      "ability_type": "Passive",
+      "ability_power": 25,
+      "total_uses": 258,
+      "wins_with_ability": 160,
+      "losses_with_ability": 98,
+      "win_rate_with_ability": 0.6201550387596899,
+      "avg_damage_with_ability": 90.50387596899225
+    },
+    "rust_1": {
+      "language_id": "rust",
+      "language_name": "Rust",
+      "ability_name": "Zero-Cost Abstraction",
+      "ability_index": 1,
+      "ability_type": "Buff",
+      "ability_power": 25,
+      "total_uses": 242,
+      "wins_with_ability": 146,
+      "losses_with_ability": 96,
+      "win_rate_with_ability": 0.6033057851239669,
+      "avg_damage_with_ability": 90.08264462809917
+    },
+    "ocaml_0": {
+      "language_id": "ocaml",
+      "language_name": "OCaml",
+      "ability_name": "Type Inference",
+      "ability_index": 0,
+      "ability_type": "Passive",
+      "ability_power": 25,
+      "total_uses": 254,
+      "wins_with_ability": 130,
+      "losses_with_ability": 124,
+      "win_rate_with_ability": 0.5118110236220472,
+      "avg_damage_with_ability": 87.79527559055119
+    },
+    "ocaml_1": {
+      "language_id": "ocaml",
+      "language_name": "OCaml",
+      "ability_name": "Pattern Matching",
+      "ability_index": 1,
+      "ability_type": "Special",
+      "ability_power": 40,
+      "total_uses": 246,
+      "wins_with_ability": 200,
+      "losses_with_ability": 46,
+      "win_rate_with_ability": 0.8130081300813008,
+      "avg_damage_with_ability": 119.1335727854308
+    },
+    "csharp_0": {
+      "language_id": "csharp",
+      "language_name": "C#",
+      "ability_name": "Garbage Collection",
+      "ability_index": 0,
+      "ability_type": "Recovery",
+      "ability_power": 35,
+      "total_uses": 245,
+      "wins_with_ability": 223,
+      "losses_with_ability": 22,
+      "win_rate_with_ability": 0.9102040816326531,
+      "avg_damage_with_ability": 101.85714285714286
+    },
+    "csharp_1": {
+      "language_id": "csharp",
+      "language_name": "C#",
+      "ability_name": "LINQ Query",
+      "ability_index": 1,
+      "ability_type": "Special",
+      "ability_power": 35,
+      "total_uses": 255,
+      "wins_with_ability": 161,
+      "losses_with_ability": 94,
+      "win_rate_with_ability": 0.6313725490196078,
+      "avg_damage_with_ability": 97.78557730589725
+    },
+    "javascript_0": {
+      "language_id": "javascript",
+      "language_name": "JavaScript & TypeScript",
+      "ability_name": "Asynchronous Promise",
+      "ability_index": 0,
+      "ability_type": "Special",
+      "ability_power": 45,
+      "total_uses": 254,
+      "wins_with_ability": 98,
+      "losses_with_ability": 156,
+      "win_rate_with_ability": 0.3858267716535433,
+      "avg_damage_with_ability": 91.35337165286072
+    },
+    "javascript_1": {
+      "language_id": "javascript",
+      "language_name": "JavaScript & TypeScript",
+      "ability_name": "Framework Flux",
+      "ability_index": 1,
+      "ability_type": "Passive",
+      "ability_power": 30,
+      "total_uses": 246,
+      "wins_with_ability": 67,
+      "losses_with_ability": 179,
+      "win_rate_with_ability": 0.27235772357723576,
+      "avg_damage_with_ability": 88.78048780487805
+    }
+  },
+  "matchup_statistics": {
+    "python_vs_go": {
+      "language1": "python",
+      "language2": "go",
+      "language1_name": "Python",
+      "language2_name": "Go",
+      "total_battles": 100,
+      "language1_wins": 22,
+      "language2_wins": 78,
+      "language1_win_rate": 0.22,
+      "language2_win_rate": 0.78
+    },
+    "python_vs_rust": {
+      "language1": "python",
+      "language2": "rust",
+      "language1_name": "Python",
+      "language2_name": "Rust",
+      "total_battles": 100,
+      "language1_wins": 0,
+      "language2_wins": 100,
+      "language1_win_rate": 0.0,
+      "language2_win_rate": 1.0
+    },
+    "python_vs_ocaml": {
+      "language1": "python",
+      "language2": "ocaml",
+      "language1_name": "Python",
+      "language2_name": "OCaml",
+      "total_battles": 100,
+      "language1_wins": 2,
+      "language2_wins": 98,
+      "language1_win_rate": 0.02,
+      "language2_win_rate": 0.98
+    },
+    "python_vs_csharp": {
+      "language1": "python",
+      "language2": "csharp",
+      "language1_name": "Python",
+      "language2_name": "C#",
+      "total_battles": 100,
+      "language1_wins": 0,
+      "language2_wins": 100,
+      "language1_win_rate": 0.0,
+      "language2_win_rate": 1.0
+    },
+    "python_vs_javascript": {
+      "language1": "python",
+      "language2": "javascript",
+      "language1_name": "Python",
+      "language2_name": "JavaScript & TypeScript",
+      "total_battles": 100,
+      "language1_wins": 6,
+      "language2_wins": 94,
+      "language1_win_rate": 0.06,
+      "language2_win_rate": 0.94
+    },
+    "go_vs_rust": {
+      "language1": "go",
+      "language2": "rust",
+      "language1_name": "Go",
+      "language2_name": "Rust",
+      "total_battles": 100,
+      "language1_wins": 70,
+      "language2_wins": 30,
+      "language1_win_rate": 0.7,
+      "language2_win_rate": 0.3
+    },
+    "go_vs_ocaml": {
+      "language1": "go",
+      "language2": "ocaml",
+      "language1_name": "Go",
+      "language2_name": "OCaml",
+      "total_battles": 100,
+      "language1_wins": 49,
+      "language2_wins": 51,
+      "language1_win_rate": 0.49,
+      "language2_win_rate": 0.51
+    },
+    "go_vs_csharp": {
+      "language1": "go",
+      "language2": "csharp",
+      "language1_name": "Go",
+      "language2_name": "C#",
+      "total_battles": 100,
+      "language1_wins": 15,
+      "language2_wins": 85,
+      "language1_win_rate": 0.15,
+      "language2_win_rate": 0.85
+    },
+    "go_vs_javascript": {
+      "language1": "go",
+      "language2": "javascript",
+      "language1_name": "Go",
+      "language2_name": "JavaScript & TypeScript",
+      "total_battles": 100,
+      "language1_wins": 73,
+      "language2_wins": 27,
+      "language1_win_rate": 0.73,
+      "language2_win_rate": 0.27
+    },
+    "rust_vs_ocaml": {
+      "language1": "rust",
+      "language2": "ocaml",
+      "language1_name": "Rust",
+      "language2_name": "OCaml",
+      "total_battles": 100,
+      "language1_wins": 69,
+      "language2_wins": 31,
+      "language1_win_rate": 0.69,
+      "language2_win_rate": 0.31
+    },
+    "rust_vs_csharp": {
+      "language1": "rust",
+      "language2": "csharp",
+      "language1_name": "Rust",
+      "language2_name": "C#",
+      "total_battles": 100,
+      "language1_wins": 28,
+      "language2_wins": 72,
+      "language1_win_rate": 0.28,
+      "language2_win_rate": 0.72
+    },
+    "rust_vs_javascript": {
+      "language1": "rust",
+      "language2": "javascript",
+      "language1_name": "Rust",
+      "language2_name": "JavaScript & TypeScript",
+      "total_battles": 100,
+      "language1_wins": 79,
+      "language2_wins": 21,
+      "language1_win_rate": 0.79,
+      "language2_win_rate": 0.21
+    },
+    "ocaml_vs_csharp": {
+      "language1": "ocaml",
+      "language2": "csharp",
+      "language1_name": "OCaml",
+      "language2_name": "C#",
+      "total_battles": 100,
+      "language1_wins": 66,
+      "language2_wins": 34,
+      "language1_win_rate": 0.66,
+      "language2_win_rate": 0.34
+    },
+    "ocaml_vs_javascript": {
+      "language1": "ocaml",
+      "language2": "javascript",
+      "language1_name": "OCaml",
+      "language2_name": "JavaScript & TypeScript",
+      "total_battles": 100,
+      "language1_wins": 84,
+      "language2_wins": 16,
+      "language1_win_rate": 0.84,
+      "language2_win_rate": 0.16
+    },
+    "csharp_vs_javascript": {
+      "language1": "csharp",
+      "language2": "javascript",
+      "language1_name": "C#",
+      "language2_name": "JavaScript & TypeScript",
+      "total_battles": 100,
+      "language1_wins": 93,
+      "language2_wins": 7,
+      "language1_win_rate": 0.93,
+      "language2_win_rate": 0.07
+    }
+  },
+  "raw_results": [
+    {
+      "battle_num": 0,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 4.212745719359759,
+      "turns_taken": 5,
+      "winner_ability_used": "Rapid Prototype",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 100,
+        "go": 95.78725428064024
+      }
+    },
+    {
+      "battle_num": 1,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 2,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 25,
+      "turns_taken": 5,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 75,
+        "go": 126.98630888232026
+      }
+    },
+    {
+      "battle_num": 3,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 101.38970341506476
+      }
+    },
+    {
+      "battle_num": 4,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 5,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 6,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 123.51966066761493
+      }
+    },
+    {
+      "battle_num": 7,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 1.5730269288575656,
+      "turns_taken": 5,
+      "winner_ability_used": "Rapid Prototype",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 100,
+        "go": 98.42697307114243
+      }
+    },
+    {
+      "battle_num": 8,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 4.1307867533764195,
+      "turns_taken": 5,
+      "winner_ability_used": "Rapid Prototype",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 100,
+        "go": 95.86921324662359
+      }
+    },
+    {
+      "battle_num": 9,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 10,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 3.293796955103069,
+      "turns_taken": 5,
+      "winner_ability_used": "Rapid Prototype",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 100,
+        "go": 96.70620304489694
+      }
+    },
+    {
+      "battle_num": 11,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 4.542958116978824,
+      "turns_taken": 7,
+      "winner_ability_used": "Ecosystem Call",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 105,
+        "go": 95.45704188302118
+      }
+    },
+    {
+      "battle_num": 12,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 132.74858433252464
+      }
+    },
+    {
+      "battle_num": 13,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 14,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 15,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 25,
+      "turns_taken": 5,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 75,
+        "go": 129.19945576167163
+      }
+    },
+    {
+      "battle_num": 16,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 10,
+      "turns_taken": 6,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 90,
+        "go": 128.4309503067991
+      }
+    },
+    {
+      "battle_num": 17,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 18,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 19,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 20,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 128.30394838235856
+      }
+    },
+    {
+      "battle_num": 21,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 22,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 23,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 24,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 25,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100.88064862034713
+      }
+    },
+    {
+      "battle_num": 26,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 126.48547223594903
+      }
+    },
+    {
+      "battle_num": 27,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 28,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 29,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 30,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 25,
+      "turns_taken": 5,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 75,
+        "go": 125.43891891148634
+      }
+    },
+    {
+      "battle_num": 31,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 32,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 127.54340135991367
+      }
+    },
+    {
+      "battle_num": 33,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 34,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 38.530599063557766,
+      "turns_taken": 7,
+      "winner_ability_used": "Ecosystem Call",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 105,
+        "go": 61.469400936442234
+      }
+    },
+    {
+      "battle_num": 35,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 35.07283355600266,
+      "turns_taken": 5,
+      "winner_ability_used": "Rapid Prototype",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 100,
+        "go": 64.92716644399734
+      }
+    },
+    {
+      "battle_num": 36,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 126.27347705072117
+      }
+    },
+    {
+      "battle_num": 37,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 10,
+      "turns_taken": 6,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 90,
+        "go": 101.65164111331241
+      }
+    },
+    {
+      "battle_num": 38,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 25,
+      "turns_taken": 5,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 75,
+        "go": 100.13216839829627
+      }
+    },
+    {
+      "battle_num": 39,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 40,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 128.31522176198027
+      }
+    },
+    {
+      "battle_num": 41,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 25,
+      "turns_taken": 5,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 75,
+        "go": 129.07557446571172
+      }
+    },
+    {
+      "battle_num": 42,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 43,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 129.98277692365164
+      }
+    },
+    {
+      "battle_num": 44,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 45,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 129.74714437637124
+      }
+    },
+    {
+      "battle_num": 46,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 25,
+      "turns_taken": 5,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 75,
+        "go": 129.38916903247087
+      }
+    },
+    {
+      "battle_num": 47,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 48,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 25,
+      "turns_taken": 5,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 75,
+        "go": 129.00312319863858
+      }
+    },
+    {
+      "battle_num": 49,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 5.815365432721215,
+      "turns_taken": 5,
+      "winner_ability_used": "Rapid Prototype",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 100,
+        "go": 94.18463456727878
+      }
+    },
+    {
+      "battle_num": 50,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 2.1662766918842706,
+      "turns_taken": 5,
+      "winner_ability_used": "Rapid Prototype",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 100,
+        "go": 97.83372330811574
+      }
+    },
+    {
+      "battle_num": 51,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 25,
+      "turns_taken": 5,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 75,
+        "go": 130.8049103293434
+      }
+    },
+    {
+      "battle_num": 52,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 6.36515984414973,
+      "turns_taken": 5,
+      "winner_ability_used": "Rapid Prototype",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 100,
+        "go": 93.63484015585027
+      }
+    },
+    {
+      "battle_num": 53,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 54,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 0.7851180479238664,
+      "turns_taken": 5,
+      "winner_ability_used": "Rapid Prototype",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 100,
+        "go": 99.21488195207613
+      }
+    },
+    {
+      "battle_num": 55,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 56,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 1.8450616526271375,
+      "turns_taken": 5,
+      "winner_ability_used": "Rapid Prototype",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 100,
+        "go": 98.15493834737288
+      }
+    },
+    {
+      "battle_num": 57,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 58,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 59,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 130.29186426498856
+      }
+    },
+    {
+      "battle_num": 60,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 61,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 62,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 10,
+      "turns_taken": 6,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 90,
+        "go": 132.61530429553187
+      }
+    },
+    {
+      "battle_num": 63,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 25,
+      "turns_taken": 5,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 75,
+        "go": 125.89414689714509
+      }
+    },
+    {
+      "battle_num": 64,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 31.758011742411625,
+      "turns_taken": 5,
+      "winner_ability_used": "Rapid Prototype",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 100,
+        "go": 68.24198825758837
+      }
+    },
+    {
+      "battle_num": 65,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 37.01457155962501,
+      "turns_taken": 5,
+      "winner_ability_used": "Rapid Prototype",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 100,
+        "go": 62.985428440374996
+      }
+    },
+    {
+      "battle_num": 66,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 67,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 68,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 129.91884963478626
+      }
+    },
+    {
+      "battle_num": 69,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 70,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 55,
+      "turns_taken": 3,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 45,
+        "go": 101.18980185376628
+      }
+    },
+    {
+      "battle_num": 71,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 37.36772931390328,
+      "turns_taken": 7,
+      "winner_ability_used": "Ecosystem Call",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 105,
+        "go": 62.63227068609672
+      }
+    },
+    {
+      "battle_num": 72,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 102.10092446615312
+      }
+    },
+    {
+      "battle_num": 73,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 5.123422811652766,
+      "turns_taken": 5,
+      "winner_ability_used": "Rapid Prototype",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 100,
+        "go": 94.87657718834723
+      }
+    },
+    {
+      "battle_num": 74,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 133.2947818423702
+      }
+    },
+    {
+      "battle_num": 75,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 25,
+      "turns_taken": 5,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 75,
+        "go": 123.77276085570108
+      }
+    },
+    {
+      "battle_num": 76,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 127.60200117082607
+      }
+    },
+    {
+      "battle_num": 77,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 78,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 1.7162989576016372,
+      "turns_taken": 7,
+      "winner_ability_used": "Ecosystem Call",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 105,
+        "go": 98.28370104239835
+      }
+    },
+    {
+      "battle_num": 79,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 80,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 127.48533744841987
+      }
+    },
+    {
+      "battle_num": 81,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 33.701077398800564,
+      "turns_taken": 5,
+      "winner_ability_used": "Rapid Prototype",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 100,
+        "go": 66.29892260119944
+      }
+    },
+    {
+      "battle_num": 82,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 3,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 60,
+        "go": 101.4498726018947
+      }
+    },
+    {
+      "battle_num": 83,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 84,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 85,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 38.83535483778232,
+      "turns_taken": 7,
+      "winner_ability_used": "Ecosystem Call",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 105,
+        "go": 61.16464516221768
+      }
+    },
+    {
+      "battle_num": 86,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 87,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 88,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 89,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 90,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 91,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 92,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 32.23164543114291,
+      "turns_taken": 5,
+      "winner_ability_used": "Rapid Prototype",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 100,
+        "go": 67.76835456885709
+      }
+    },
+    {
+      "battle_num": 93,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 94,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 40,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 60,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 95,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 4.558399101543181,
+      "turns_taken": 5,
+      "winner_ability_used": "Rapid Prototype",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 100,
+        "go": 95.44160089845681
+      }
+    },
+    {
+      "battle_num": 96,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 1,
+      "ability2_index": 1,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 25,
+      "turns_taken": 5,
+      "winner_ability_used": "Goroutine Swarm",
+      "loser_ability_used": "Ecosystem Call",
+      "damage_dealt": {
+        "python": 75,
+        "go": 131.79146277588578
+      }
+    },
+    {
+      "battle_num": 97,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 98,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 0,
+      "winner": "go",
+      "loser": "python",
+      "winner_hp_remaining": 20,
+      "turns_taken": 4,
+      "winner_ability_used": "Fast Compilation",
+      "loser_ability_used": "Rapid Prototype",
+      "damage_dealt": {
+        "python": 80,
+        "go": 100
+      }
+    },
+    {
+      "battle_num": 99,
+      "language1": "python",
+      "language2": "go",
+      "ability1_index": 0,
+      "ability2_index": 1,
+      "winner": "python",
+      "loser": "go",
+      "winner_hp_remaining": 1.1915737788864504,
+      "turns_taken": 5,
+      "winner_ability_used": "Rapid Prototype",
+      "loser_ability_used": "Goroutine Swarm",
+      "damage_dealt": {
+        "python": 100,
+        "go": 98.80842622111356
+      }
+    }
+  ]
+}

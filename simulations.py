@@ -144,8 +144,12 @@ class CodemonSimulator:
             damage_dealt=damage_dealt
         )
     
-    def run_simulation(self, battles_per_matchup: int = 100) -> Dict[str, Any]:
+    def run_simulation(self, battles_per_matchup: int = 100, custom_config: Dict = None) -> Dict[str, Any]:
         """Run full simulation across all language matchups."""
+        # Load custom configuration if provided
+        if custom_config:
+            self.load_custom_config(custom_config)
+        
         language_ids = list(self.languages.keys())
         results = []
         
@@ -182,6 +186,16 @@ class CodemonSimulator:
                     })
         
         return self.analyze_results(results)
+    
+    def load_custom_config(self, config: Dict):
+        """Load custom power configuration"""
+        # Update power values in languages
+        for lang_id, lang_data in self.languages.items():
+            for ability in lang_data['abilities']:
+                ability_name = ability['name'].replace(' ', '_').lower()
+                config_key = f"{lang_id}_{ability_name}"
+                if config_key in config:
+                    ability['power'] = config[config_key]
     
     def analyze_results(self, results: List[Dict]) -> Dict[str, Any]:
         """Analyze simulation results and generate statistics."""

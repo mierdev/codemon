@@ -3,7 +3,10 @@
     "version": "1.0",
     "description": "Codemon battle simulator data with pre-calculated damage scores",
     "damage_formula": "(Base_Power * Attack_Stat / Defense_Stat) * Random_Factor",
-    "random_factor_range": [0.85, 1.15],
+    "random_factor_range": [
+      0.85,
+      1.15
+    ],
     "stat_stages": {
       "buff_multiplier": 1.5,
       "debuff_multiplier": 0.67,
@@ -40,7 +43,7 @@
         {
           "name": "Rapid Prototype",
           "type": "Passive",
-          "power": 10,
+          "power": 28,
           "accuracy": 100,
           "description": "Starts battle with +10 Speed bonus. Status effects last 1 less turn.",
           "cooldown": 0,
@@ -51,7 +54,7 @@
         {
           "name": "Ecosystem Call",
           "type": "Utility",
-          "power": 15,
+          "power": 28,
           "accuracy": 100,
           "description": "Temporarily gains a secondary type for 3 turns.",
           "cooldown": 5,
@@ -79,7 +82,7 @@
         {
           "name": "Fast Compilation",
           "type": "Passive",
-          "power": 10,
+          "power": 25,
           "accuracy": 100,
           "description": "Takes turn first vs Script/Managed types. +5 Defense/SpDefense.",
           "cooldown": 0,
@@ -157,7 +160,7 @@
         {
           "name": "Zero-Cost Abstraction",
           "type": "Buff",
-          "power": 15,
+          "power": 25,
           "accuracy": 100,
           "description": "Increases Attack and Special Attack by 1 stage for 3 turns.",
           "cooldown": 3,
@@ -185,7 +188,7 @@
         {
           "name": "Type Inference",
           "type": "Passive",
-          "power": 25,
+          "power": 24,
           "accuracy": 100,
           "description": "All abilities gain +10% accuracy. +15% crit vs multi-type targets.",
           "cooldown": 0,
@@ -196,7 +199,7 @@
         {
           "name": "Pattern Matching",
           "type": "Special",
-          "power": 60,
+          "power": 44,
           "accuracy": 85,
           "description": "Deals special damage. +25 bonus vs C++ and JS/TS.",
           "cooldown": 3,
@@ -252,7 +255,7 @@
         {
           "name": "Garbage Collection",
           "type": "Recovery",
-          "power": 15,
+          "power": 25,
           "accuracy": 100,
           "description": "Heals 30% max HP and removes one debuff. 25% chance to gain +1 Defense.",
           "cooldown": 4,
@@ -264,7 +267,7 @@
         {
           "name": "LINQ Query",
           "type": "Special",
-          "power": 50,
+          "power": 45,
           "accuracy": 85,
           "description": "Deals special damage. 30% chance to inflict 'Data Binding Error'.",
           "cooldown": 3,
@@ -320,7 +323,7 @@
         {
           "name": "Asynchronous Promise",
           "type": "Special",
-          "power": 45,
+          "power": 48,
           "accuracy": 75,
           "description": "Deals initial damage + 25 delayed damage. 25% chance of Callback Hell.",
           "cooldown": 2,
@@ -360,7 +363,7 @@
         {
           "name": "Framework Flux",
           "type": "Passive",
-          "power": 30,
+          "power": 38,
           "accuracy": 100,
           "description": "40% chance each turn to gain +1 random stat. 10% chance to lose -1.",
           "cooldown": 0,
@@ -388,11 +391,17 @@
     },
     "accuracy": {
       "description": "Percentage chance for ability to hit",
-      "range": [0, 100]
+      "range": [
+        0,
+        100
+      ]
     },
     "cooldown": {
       "description": "Number of turns before ability can be used again",
-      "range": [0, 10]
+      "range": [
+        0,
+        10
+      ]
     }
   },
   "simulation_data": {
@@ -419,7 +428,11 @@
     "most_versatile_language": {
       "name": "C#",
       "type": "Managed/Enterprise",
-      "abilities": ["Recovery", "Special", "Passive"]
+      "abilities": [
+        "Recovery",
+        "Special",
+        "Passive"
+      ]
     }
   }
-} 
+}
