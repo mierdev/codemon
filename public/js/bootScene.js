@@ -11,6 +11,7 @@ class BootScene extends Phaser.Scene {
 		super({ key: "BootScene" });
 		this.selectedTournament = 3;
 		this.selectedLanguage = "python";
+		this.audioManager = null;
 	}
 	/**
 	 * Preloads assets
@@ -44,6 +45,8 @@ class BootScene extends Phaser.Scene {
 		this.load.image("greyUnpressed", [
 			"assets/UI/components/greyUnpressed.png",
 		]);
+		// Background music (cider)
+		this.load.audio("cider", ["assets/audio/backgrounds/apple_cider.wav"]);
 	}
 
 	/**
@@ -55,10 +58,23 @@ class BootScene extends Phaser.Scene {
 	create() {
 		window.gameManager = new GameManager();
 
+		// Check Audio manager has loaded
+		if (window.AudioManager) {
+			this.audioManager = new window.AudioManager(this);
+		} else {
+			console.log("something went wrong with the audio manager!");
+		}
+
 		// Simple background
 		// this.add.rectangle(0, 0, 960, 720, 0x2c3e50).setOrigin(0, 0);
 		const backdrop = this.add.image(480, 360, "danLaneStandoff");
 		backdrop.setDisplaySize(960, 720);
+
+		console.log("About to play cider");
+		if (this.audioManager) {
+			this.audioManager.playMusic("cider", { loop: true, volume: 0.4 });
+		}
+		console.log("Shouuld be playing cider");
 
 		this.createCodemonBanner();
 
@@ -239,6 +255,9 @@ class BootScene extends Phaser.Scene {
 			this.selectedLanguage,
 			initialOpponent.language
 		);
+		if (this.audioManager) {
+			this.audioManager.stopMusic();
+		}
 		if (battleData) {
 			battleData.tournamentInfo = tournamentSetup;
 			battleData.playerLanguage = this.selectedLanguage;
