@@ -57,21 +57,12 @@ class BootScene extends Phaser.Scene {
 	 */
 	create() {
 		window.gameManager = new GameManager();
-
-<<<<<<< Updated upstream
 		// Check Audio manager has loaded
 		if (!window.audioManager && window.AudioManager) {
 			this.audioManager = new window.AudioManager(this);
 		} else {
 			console.log("something went wrong with the audio manager!");
 		}
-=======
-		// Get all available language IDs
-		// const availableLanguages = ['python', 'go', 'rust', 'ocaml', 'csharp', 'javascript'];
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
 		console.log("About to play cider");
 		if (this.audioManager && !this.audioManager.currentMusic) {
