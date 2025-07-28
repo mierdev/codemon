@@ -48,11 +48,11 @@ npm install
 
 4. Install MongoDB
 
-### On Mac
+*On Mac*
 
 (insert installation instructions)
 
-### On WSL2/Ubuntu (Windows)
+*On WSL2/Ubuntu (Windows)*
 
 - Import the public key:
   From a terminal, install `gnupg` and `curl` if they are not already available:
@@ -93,11 +93,11 @@ sudo apt-get install -y mongodb-org
 
 1. Start MongoDB
 
-### On Mac
+*On Mac*
 
 Do something.
 
-### On WSL2/Ubuntu (Windows)
+*On WSL2/Ubuntu (Windows)*
 
 - Run this command to start MongoDBL:
 
