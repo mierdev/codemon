@@ -91,6 +91,27 @@ export class AudioManager {
 	}
 	
 	/**
+	 * Fades out the currently playing music over a specified duration
+	 * @param {number} duration - Duration in milliseconds for the fade out
+	 */
+	fadeOutMusic(duration = 1000) {
+		if (this.currentMusic && this.currentMusic.isPlaying) {
+			const startVolume = this.currentMusic.volume;
+			this.scene.tweens.add({
+				targets: this.currentMusic,
+				volume: 0,
+				duration: duration,
+				ease: 'Power2',
+				onComplete: () => {
+					this.currentMusic.stop();
+					this.currentMusic.destroy();
+					this.currentMusic = null;
+				}
+			});
+		}
+	}
+	
+	/**
 	 * Stops all audio playback and clears sound pools
 	 */
 	stopAll() {
