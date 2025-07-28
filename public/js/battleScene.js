@@ -917,6 +917,10 @@ class BattleScene extends Phaser.Scene {
 			this.tournamentPlayerLanguage = this.tournamentInfo?.playerLanguage;
 			this.turnText.setText("Press SPACE for next battle");
 			this.nextOpponent = result.nextOpponent;
+			
+			if (result.nextOpponent && result.nextOpponent.trainer) {
+				console.log(`Next match: ${this.tournamentPlayerLanguage} vs ${result.nextOpponent.trainer.codemon}`);
+			}
 		} else {
 			this.turnText.setText("Press SPACE for next battle");
 		}
@@ -934,6 +938,10 @@ class BattleScene extends Phaser.Scene {
 			this.tournamentPlayerLanguage = this.tournamentInfo?.playerLanguage;
 			this.turnText.setText("Press SPACE for next battle");
 			this.nextOpponent = result.nextOpponent;
+			
+			if (result.nextOpponent && result.nextOpponent.trainer) {
+				console.log(`Next match: ${this.tournamentPlayerLanguage} vs ${result.nextOpponent.trainer.codemon}`);
+			}
 		} else {
 			this.turnText.setText("Press SPACE for next battle");
 		}
