@@ -10,6 +10,8 @@ router.post("/", async (req, res) => {
   const codemon = new Codemon({
     name: req.body.name,
     type: req.body.type,
+    image: req.body.image,
+    area: req.body.area,
     abilities: req.body.abilities
   });
 
@@ -44,6 +46,12 @@ router
   };
   if (req.body.type !== null) {
     res.codemon.type = req.body.type;
+  };
+  if (req.body.image !== null) {
+    res.codemon.image = req.body.image;
+  };
+  if (req.body.area !== null) {
+    res.codemon.area = req.body.area;
   };
   if (req.body.abilities !== null) {
     res.codemon.abilities = req.body.abilities;

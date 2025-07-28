@@ -11,6 +11,16 @@ const codemonSchema = new mongoose.Schema({
     type: String,
     required: true, 
   },
+  image: {
+    type: String,
+    required: true,
+
+  },
+  area: {
+    type: String,
+    required: true,
+
+  },
   abilities: {
     type: Object,
     required: true
