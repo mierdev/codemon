@@ -22,6 +22,7 @@ class BattleScene extends Phaser.Scene {
 		this.audioManager = null; // Added audio manage for sound effects
 		this.isPlayerTurn = true;
 		this.roundCooldowns = new Map();
+		this.audioManager = null;
 	}
 
 	/**
@@ -55,6 +56,21 @@ class BattleScene extends Phaser.Scene {
 	 * Preloads audio files from assets folder
 	 */
 	preload() {
+		// Backdrops
+		this.load.image("cave", ["assets/backgrounds/cave"]);
+		this.load.image("desert", ["assets/backgrounds/desert"]);
+		this.load.image("grasslands", ["assets/backgrounds/grasslands"]);
+		// Sprites
+		this.load.image("birb", ["assets/codemon/birb.png"]);
+		this.load.image("camel", ["assets/codemon/camel.png"]);
+		this.load.image("crab", ["assets/codemon/crab.png"]);
+		this.load.image("fox", ["assets/codemon/fox_with_many_tails.png"]);
+		this.load.image("gopher", ["assets/codemon/gopher.png"]);
+		this.load.image("lotus", ["assets/codemon/lotus_flower.png"]);
+		this.load.image("lotus2", ["assets/codemon/lotus_flower2.png"]);
+		this.load.image("snake", ["assets/codemon/snake.png"]);
+		this.load.image("windows", ["assets/codemon/windows_logo.png"]);
+		// Sound effects
 		this.load.audio("buff", ["assets/audio/effects/buff.mp3"]);
 		this.load.audio("control", ["assets/audio/effects/control.wav"]);
 		this.load.audio("debuff", ["assets/audio/effects/debuff.mp3"]);
@@ -66,6 +82,29 @@ class BattleScene extends Phaser.Scene {
 		this.load.audio("support", ["assets/audio/effects/support.mp3"]);
 		this.load.audio("utility", ["assets/audio/effects/support.mp3"]);
 		this.load.audio("miss", ["assets/audio/effects/miss.mp3"]);
+		// Background music (cider)
+		this.load.audio("cider", ["assets/audio/backgrounds/apple_cider.wav"]);
+		// UI components
+		// Arrows
+		this.load.image("blueArrow", ["assets/UI/components/arrowBlue_right.png"]);
+		// Sword
+		this.load.image("sword", ["assets/UI/components/sword.png"]);
+		// Language banner
+		this.load.image("langLeft", ["assets/UI/components/langLeft.png"]);
+		this.load.image("langMid", ["assets/UI/components/langMid.png"]);
+		this.load.image("langRight", ["assets/UI/components/langRight.png"]);
+		// Battle Log
+		this.load.image("battleLog", ["assets/UI/components/battleLog.png"]);
+		// Status Effects
+		this.load.image("statusEffects", [
+			"assets/UI/components/statusEffects.png",
+		]);
+		// Effect Buttons
+		// Language buttons
+		this.load.image("enterButton", ["assets/UI/components/enterButton.png"]);
+		this.load.image("enterPressed", ["assets/UI/components/enterPressed.png"]);
+		// Effect Info
+		this.load.image("greyPressed", ["assets/UI/components/greyPressed.png"]);
 	}
 
 	/**
@@ -85,37 +124,52 @@ class BattleScene extends Phaser.Scene {
 			return;
 		}
 
-		this.add.rectangle(0, 0, 960, 720, 0x87ceeb).setOrigin(0, 0);
+		// Initialize AudioManager and play background music
+		if (window.AudioManager) {
+			this.audioManager = new window.AudioManager(this);
+			// Play cider track
+			console.log("About to play cider music...");
+			this.audioManager.playMusic("cider", { loop: true, volume: 0.4 });
+			console.log("Cider music should be playing");
+		} else {
+			console.log("Oops... something cursed happened to the audio manager");
+		}
 
-		this.add.rectangle(480, 360, 840, 600, 0x228b22).setOrigin(0.5);
-		this.add.rectangle(480, 360, 820, 580, 0x32cd32).setOrigin(0.5);
+		// Adding grasslands backdrop as default
+		const backdrop = this.add.image(480, 360, "cave");
+		backdrop.setDisplaySize(960, 720);
+		// this.add.rectangle(0, 0, 960, 720, 0x87ceeb).setOrigin(0, 0);
 
-		this.pokemon1Sprite = this.add.rectangle(240, 240, 80, 80, 0xff6b35);
-		this.pokemon2Sprite = this.add.rectangle(720, 240, 80, 80, 0x4169e1);
+		// Battle area default placeholder
+		// this.add.rectangle(480, 360, 840, 600, 0x228b22).setOrigin(0.5);
+		// this.add.rectangle(480, 360, 820, 580, 0x32cd32).setOrigin(0.5);
 
-		this.add
-			.text(240, 144, this.pokemon1.name, {
-				fontSize: "24px",
-				fill: "#fff",
-				stroke: "#000",
-				strokeThickness: 3,
-			})
-			.setOrigin(0.5);
+		// this.pokemon1Sprite = this.add.rectangle(240, 240, 80, 80, 0xff6b35);
+		// this.pokemon2Sprite = this.add.rectangle(720, 240, 80, 80, 0x4169e1);
+		const pokemon1SpriteKey = this.getLanguageSprite(this.pokemon1.name);
+		const pokemon2SpriteKey = this.getLanguageSprite(this.pokemon2.name);
 
-		this.add
-			.text(720, 144, this.pokemon2.name, {
-				fontSize: "24px",
-				fill: "#fff",
-				stroke: "#000",
-				strokeThickness: 3,
-			})
-			.setOrigin(0.5);
+		// Assign sprites
+		this.pokemon1Sprite = this.add.image(240, 220, pokemon1SpriteKey);
+		this.pokemon1Sprite.setScale(0.3);
+
+		this.pokemon2Sprite = this.add.image(720, 220, pokemon2SpriteKey);
+		if (pokemon2SpriteKey === "C++") {
+			this.pokemon2Sprite.setScale(0.8);
+		} else {
+			this.pokemon2Sprite.setScale(0.3);
+		}
+
+		// Create langauge banners
+		this.createLanguageBanner(this.pokemon1.name, 240, 94);
+		this.createLanguageBanner(this.pokemon2.name, 720, 94);
 
 		this.createHPBars();
 		this.createBuffsDebuffsUI();
 		this.createAbilityUI();
 		this.createAbilityMessageBoxes();
 
+		this.add.image(470, 470, "sword").setOrigin(0.5);
 		this.turnText = this.add
 			.text(480, 500, `Turn: ${this.pokemon1.name}`, {
 				fontSize: "16px",
@@ -156,7 +210,43 @@ class BattleScene extends Phaser.Scene {
 
 		this.updateUI();
 	}
+	/**
+	 * Maps language names to sprite keys
+	 */
+	getLanguageSprite(languageName) {
+		const spriteMap = {
+			Python: "snake",
+			Go: "gopher",
+			// TODO:
+			// Add fox, and lotus
+			JavaScript: "birb",
+			Rust: "crab",
+			OCaml: "camel",
+			"C++": "windows",
+		};
+		return spriteMap[languageName] || "fox";
+	}
+	createLanguageBanner(pokemonName, x, y) {
+		// Banner pieces
+		const bannerLeft = this.add.image(x - 30, y, "langLeft");
+		bannerLeft.setScale(1.5);
+		const bannerMid = this.add.image(x, y, "langMid");
+		bannerMid.setScale(1.5);
+		const bannerRight = this.add.image(x + 30, y, "langRight");
+		bannerRight.setScale(1.5);
 
+		// Add pokemon name to banner
+		this.add
+			.text(x, y, pokemonName, {
+				fontSize: "18px",
+				fill: "#fff",
+				fontStyle: "bold",
+				stroke: "#000",
+				strokeThickness: 2,
+			})
+			.setOrigin(0.5)
+			.setDepth(1);
+	}
 	/**
 	 * Creates HP bars for both Pokemon.
 	 * Sets up background and foreground rectangles for each Pokemon's HP display,
