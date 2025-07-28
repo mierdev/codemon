@@ -744,6 +744,29 @@ class BattleScene extends Phaser.Scene {
 
 			this.abilityButtons.push({ button, text, ability });
 		});
+		
+		// Initially hide all ability buttons
+		this.hideAbilityButtons();
+	}
+	
+	/**
+	 * Shows all ability buttons
+	 */
+	showAbilityButtons() {
+		this.abilityButtons.forEach((buttonData) => {
+			buttonData.button.setVisible(true);
+			buttonData.text.setVisible(true);
+		});
+	}
+	
+	/**
+	 * Hides all ability buttons
+	 */
+	hideAbilityButtons() {
+		this.abilityButtons.forEach((buttonData) => {
+			buttonData.button.setVisible(false);
+			buttonData.text.setVisible(false);
+		});
 	}
 
 	/**
@@ -981,9 +1004,108 @@ class BattleScene extends Phaser.Scene {
 			return;
 		}
 
+		// Restore this block to start the AI's turn after a delay
 		this.time.delayedCall(2000, () => {
 			this.startAITurn();
 		});
+	}
+	
+	/**
+	 * Handles the player win scenario
+	 */
+	handlePlayerWin() {
+		if (this.tournamentInfo) {
+			console.log("Handling player win as TOURNAMENT battle");
+			const result = window.gameManager.recordWin();
+			console.log("Execute player attack: ", result);
+
+			if (result.completed) {
+				// Fade out music before transitioning
+				if (this.audioManager) {
+					this.audioManager.fadeOutMusic(1000);
+				}
+				
+				// Force transition to EndScene by resetting transition state first
+				if (window.transitionManager) {
+					window.transitionManager.resetTransitionState();
+					window.transitionManager.startTransition(this, 'BattleScene', 'EndScene', {
+						result: result,
+						playerLanguage: this.tournamentPlayerLanguage,
+					});
+				} else {
+					this.scene.start("EndScene", {
+						result: result,
+						playerLanguage: this.tournamentPlayerLanguage,
+					});
+				}
+			} else {
+				console.log("Getting next opponent.... ");
+				const nextOpponent = result.nextOpponent;
+				console.log("Getting next opponent: ", nextOpponent);
+				this.nextOpponent = nextOpponent;
+				this.battleText.setText(
+					`${this.pokemon2.name} fainted! ${this.pokemon1.name} wins`
+				);
+				this.turnText.setText("Press SPACE for next battle");
+			}
+		} else {
+			// Return single battle
+			console.log("Handling player win as SINGLE battle");
+			this.battleText.setText(
+				`${this.pokemon2.name} fainted! ${this.pokemon1.name} wins`
+			);
+			console.log("Single battle triggered");
+			this.turnText.setText("Press SPACE or R to restart");
+		}
+	}
+	
+	/**
+	 * Handles the AI win scenario
+	 */
+	handleAIWin() {
+		if (this.tournamentInfo) {
+			console.log("Handling AI win as TOURNAMENT battle");
+			const result = window.gameManager.recordLoss();
+			console.log("AI Attack - Tournament result: ", result);
+
+			if (result && result.completed) {
+				// Fade out music before transitioning
+				if (this.audioManager) {
+					this.audioManager.fadeOutMusic(1000);
+				}
+				
+				// Force transition to EndScene by resetting transition state first
+				if (window.transitionManager) {
+					window.transitionManager.resetTransitionState();
+					window.transitionManager.startTransition(this, 'BattleScene', 'EndScene', {
+						result: result,
+						playerLanguage: this.tournamentPlayerLanguage,
+					});
+				} else {
+					this.scene.start("EndScene", {
+						result: result,
+						playerLanguage: this.tournamentPlayerLanguage,
+					});
+				}
+			} else if (result && !result.completed) {
+				this.nextOpponent = result.nextOpponent;
+				this.battleText.setText(
+					`${this.pokemon1.name} fainted! ${this.pokemon2.name} wins!`
+				);
+				this.turnText.setText("Press SPACE for next battle");
+			} else {
+				console.error(
+					"Tournament result is null.. it shouldn't be doing that...restarting!"
+				);
+				this.scene.start("BootScene");
+			}
+		} else {
+			console.log("Handling AI win as SINGLE battle");
+			this.battleText.setText(
+				`${this.pokemon1.name} fainted! ${this.pokemon2.name} wins!`
+			);
+			this.turnText.setText("Press SPACE or R to restart");
+		}
 	}
 
 	/**
@@ -1091,6 +1213,11 @@ class BattleScene extends Phaser.Scene {
 
 		this.battleState = "animating";
 		this.battleText.setText(`${attacker.name} used ${ability.name}!`);
+		
+		// Show random battle dialogue for AI trainer
+		if (this.trainerData.pokemon2 && this.trainerData.pokemon2.name) {
+			this.showRandomBattleDialogue(this.trainerData.pokemon2.name);
+		}
 
 		const accuracy = Math.random() * 100;
 		console.log(
