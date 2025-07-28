@@ -59,22 +59,22 @@ class BootScene extends Phaser.Scene {
 		window.gameManager = new GameManager();
 
 		// Check Audio manager has loaded
-		if (window.AudioManager) {
+		if (!window.audioManager && window.AudioManager) {
 			this.audioManager = new window.AudioManager(this);
 		} else {
 			console.log("something went wrong with the audio manager!");
 		}
 
+		console.log("About to play cider");
+		if (this.audioManager && !this.audioManager.currentMusic) {
+			this.audioManager.playMusic("cider", { loop: true, volume: 0.4 });
+		}
+		console.log("Shouuld be playing cider");
+
 		// Simple background
 		// this.add.rectangle(0, 0, 960, 720, 0x2c3e50).setOrigin(0, 0);
 		const backdrop = this.add.image(480, 360, "danLaneStandoff");
 		backdrop.setDisplaySize(960, 720);
-
-		console.log("About to play cider");
-		if (this.audioManager) {
-			this.audioManager.playMusic("cider", { loop: true, volume: 0.4 });
-		}
-		console.log("Shouuld be playing cider");
 
 		this.createCodemonBanner();
 

@@ -32,8 +32,12 @@ export class AudioManager {
 			volume: options.volume || 0.5,
 			loop: options.loop || false,
 		};
+
 		// Play audio
-		const audioTrack = this.scene.sound.add(key, { volume: 0.5 });
+		const audioTrack = this.scene.sound.add(key, {
+			volume: audioConfig.volume,
+			loop: audioConfig.loop,
+		});
 		this.currentMusic = audioTrack;
 		audioTrack.play();
 
@@ -53,6 +57,12 @@ export class AudioManager {
 			this.currentMusic = null;
 		}
 	}
+	// HACK:
+	// Trying to stop all audio
+	stopAll() {
+		this.scene.sound.stopAll();
+	}
+
 	toggleSoundEffect() {
 		// handle audioIsEnabled
 		this.audioIsEnabled = !this.audioIsEnabled;
