@@ -56,7 +56,18 @@ class BootScene extends Phaser.Scene {
 	 * If battle initialization fails, logs an error to the console.
 	 */
 	create() {
+		// Reset transition state to ensure clean transitions
+		if (window.transitionManager) {
+			window.transitionManager.resetTransitionState();
+		}
+
 		window.gameManager = new GameManager();
+
+		// Initialize transition manager
+		if (window.TransitionManager && !window.transitionManager) {
+			window.transitionManager = new window.TransitionManager();
+			console.log("Transition manager initialized");
+		}
 
 		// Check Audio manager has loaded
 		if (!window.audioManager && window.AudioManager) {
@@ -267,7 +278,13 @@ class BootScene extends Phaser.Scene {
 		if (battleData) {
 			battleData.tournamentInfo = tournamentSetup;
 			battleData.playerLanguage = this.selectedLanguage;
-			this.scene.start("BattleScene", battleData);
+			
+			// Use transition manager if available, otherwise fall back to direct scene change
+			if (window.transitionManager) {
+				window.transitionManager.startTransition(this, 'BootScene', 'BattleScene', battleData);
+			} else {
+				this.scene.start("BattleScene", battleData);
+			}
 		}
 	}
 }

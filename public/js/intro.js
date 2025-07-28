@@ -1,311 +1,349 @@
+/**
+ * Intro scene that plays an animated sequence before the main game
+ * Displays a movie sequence with fire effects and text animations
+ */
 class IntroScene extends Phaser.Scene {
-	constructor() {
-		super({ key: "IntroScene" });
-		this.currentFrame = 1;
-		this.totalFrames = 100;
-		this.frameRate = 24; // 24 FPS for smooth playback
-		this.movieSprite = null;
-		this.titleText = null;
-		this.chaosText = null;
-		this.fireSprites = [];
-		this.textFadeInComplete = false;
-		this.imagesLoaded = 0;
-		this.audioManager = null;
-	}
+    /**
+     * Initializes the IntroScene with animation properties
+     */
+    constructor() {
+        super({ key: 'IntroScene' });
+        this.currentFrame = 1;
+        this.totalFrames = 100; // Back to original 100 frames
+        this.frameRate = 24;
+        this.movieSprite = null;
+        this.titleText = null;
+        this.chaosText = null;
+        this.fireSprites = [];
+        this.textFadeInComplete = false;
+        this.imagesLoaded = 0;
+    }
 
-	preload() {
-		// Add sound track
-		this.load.audio("fire", ["assets/audio/backgrounds/fire.mp3"]);
+    /**
+     * Preloads all intro movie frames and sets up loading callbacks
+     */
+    preload() {
+        const loadingText = this.add.text(400, 300, 'Loading...', {
+            fontSize: '32px',
+            color: '#ffffff'
+        }).setOrigin(0.5);
 
-		// Add loading text
-		const loadingText = this.add
-			.text(400, 300, "Loading...", {
-				fontSize: "32px",
-				color: "#ffffff",
-			})
-			.setOrigin(0.5);
+        for (let i = 1; i <= this.totalFrames; i++) {
+            const frameNumber = i.toString().padStart(4, '0');
+            this.load.image(`frame_${frameNumber}`, `assets/intro_images/output_${frameNumber}.png`);
+        }
+        
+        this.load.on('complete', () => {
+            console.log('All images loaded successfully!');
+            loadingText.destroy();
+        });
+        
+        this.load.on('loaderror', (file) => {
+            console.error('Failed to load:', file.src);
+        });
+    }
 
-		// Load all 100 frames with progress tracking
-		for (let i = 1; i <= this.totalFrames; i++) {
-			const frameNumber = i.toString().padStart(4, "0");
-			this.load.image(
-				`frame_${frameNumber}`,
-				`assets/intro_images/output_${frameNumber}.png`
-			);
-		}
+    /**
+     * Creates the intro scene with movie sprite, text elements, and fire effects
+     * Sets up the complete intro sequence with timing for transitions
+     */
+    create() {
+        console.log('Creating intro scene...');
+        
+        // Reset transition state to ensure clean transitions
+        if (window.transitionManager) {
+            window.transitionManager.resetTransitionState();
+        }
+        
+        this.cameras.main.setBackgroundColor('#000000');
+        
+        this.movieSprite = this.add.sprite(480, 360, 'frame_0001');
+        this.movieSprite.setScale(0.8);
+        
+        this.titleText = this.add.text(480, 80, 'LITTLE SHOP OF', {
+            fontSize: '48px',
+            fontFamily: 'Arial',
+            color: '#ffffff',
+            fontStyle: 'bold',
+            stroke: '#000000',
+            strokeThickness: 4,
+            shadow: {
+                offsetX: 2,
+                offsetY: 2,
+                color: '#000000',
+                blur: 4,
+                fill: true
+            }
+        }).setOrigin(0.5).setAlpha(0);
+        
+        this.chaosText = this.add.text(480, 140, 'CHAOS', {
+            fontSize: '72px',
+            fontFamily: 'Arial',
+            color: '#ff4400',
+            fontStyle: 'bold',
+            stroke: '#000000',
+            strokeThickness: 4,
+            shadow: {
+                offsetX: 2,
+                offsetY: 2,
+                color: '#000000',
+                blur: 4,
+                fill: true
+            }
+        }).setOrigin(0.5).setAlpha(0);
+        
+        this.startMoviePlayback();
+        
+        this.time.delayedCall(2000, () => {
+            this.fadeInText();
+        });
+        
+        // Create fire effect after text fades in
+        this.time.delayedCall(3000, () => {
+            this.createFireEffect();
+        });
+        
+        this.time.delayedCall(8000, () => {
+            console.log('Intro complete, transitioning to BootScene...');
+            console.log('Transition manager available:', !!window.transitionManager);
+            console.log('Current scene:', this.scene.key);
+            
+            // Stop fire effect before transitioning
+            this.stopFireEffect();
+            
+            // Use transition manager if available, otherwise fall back to direct scene change
+            if (window.transitionManager) {
+                console.log('Using transition manager for transition');
+                window.transitionManager.startTransition(this, 'IntroScene', 'BootScene');
+            } else {
+                console.log('Using direct scene change');
+                this.scene.start('BootScene');
+            }
+        });
+        
+        console.log('Intro scene created successfully');
+    }
 
-		// Track loading progress
-		this.load.on("complete", () => {
-			console.log("All images loaded successfully!");
-			loadingText.destroy();
-		});
+    /**
+     * Creates animated fire sprites around the screen edges
+     * Generates multiple fire particles with random positioning and animation
+     */
+    createFireEffect() {
+        console.log('Creating fire effect...');
+        
+        this.fireSprites = []; // Reset array
+        this.fireActive = true; // Flag to control particle creation
+        
+        // Position fire particles at the base of the CHAOS text
+        const chaosTextX = 480; // Center X of CHAOS text
+        const chaosTextY = 140; // Y position of CHAOS text
+        const fireBaseY = chaosTextY + 25; // Base of the fire (below the text)
+        const fireWidth = 200; // Increased from 100 to 200 (100% wider)
+        
+        // Store fire parameters for particle creation
+        this.fireParams = {
+            chaosTextX: chaosTextX,
+            fireBaseY: fireBaseY,
+            fireWidth: fireWidth,
+            colors: [0xff4400, 0xff6600, 0xff8800, 0xffaa00, 0xffcc00]
+        };
+        
+        // Start creating particles over time instead of all at once
+        this.startParticleCreation();
+        
+        console.log(`Starting fire effect with ${fireWidth}px width`);
+    }
 
-		this.load.on("loaderror", (file) => {
-			console.error("Failed to load:", file.src);
-		});
-	}
+    /**
+     * Starts the movie playback sequence
+     * Begins playing the intro movie frames at the specified frame rate
+     */
+    startMoviePlayback() {
+        console.log('Starting movie playback...');
+        console.log('start playing fire');
+        
+        // Note: Fire sound effect removed as it's not available in the audio assets
+        // The visual fire effects will still play without audio
+        
+        this.time.addEvent({
+            delay: 1000 / this.frameRate,
+            callback: this.updateFrame,
+            callbackScope: this,
+            loop: true
+        });
+    }
 
-	create() {
-		console.log("Creating intro scene...");
+    /**
+     * Updates the current movie frame to the next frame in sequence
+     * Handles frame progression and loops back to the beginning when complete
+     */
+    updateFrame() {
+        this.currentFrame++;
+        
+        if (this.currentFrame > this.totalFrames) {
+            this.currentFrame = 1;
+        }
+        
+        const frameNumber = this.currentFrame.toString().padStart(4, '0');
+        this.movieSprite.setTexture(`frame_${frameNumber}`);
+    }
 
-		// Check Audio manager has loaded
-		if (window.AudioManager) {
-			this.audioManager = new window.AudioManager(this);
-		} else {
-			console.log("something went wrong with the audio manager!");
-		}
+    /**
+     * Fades in the title and chaos text with staggered timing
+     * Creates a dramatic reveal effect for the game title
+     */
+    fadeInText() {
+        this.tweens.add({
+            targets: this.titleText,
+            alpha: 1,
+            duration: 1000,
+            ease: 'Power2'
+        });
+        
+        this.time.delayedCall(500, () => {
+            this.tweens.add({
+                targets: this.chaosText,
+                alpha: 1,
+                duration: 1000,
+                ease: 'Power2'
+            });
+        });
+        
+        this.textFadeInComplete = true;
+    }
 
-		// Set background to black
-		this.cameras.main.setBackgroundColor("#000000");
+    /**
+     * Animates a single fire sprite with realistic fire motion
+     * @param {Phaser.GameObjects.Graphics} sprite - The fire sprite to animate
+     */
+    animateFireSprite(sprite) {
+        const startX = sprite.startX;
+        const startY = sprite.startY;
+        const maxHeight = sprite.maxHeight;
+        
+        // Create consistent fire motion - particles rise steadily
+        this.tweens.add({
+            targets: sprite,
+            y: startY - maxHeight, // Move upward
+            x: startX + (Math.random() - 0.5) * 15, // Reduced horizontal drift for consistency
+            alpha: 0, // Fade out as it rises
+            scaleX: 0.5, // Less shrinking for consistency
+            scaleY: 0.5,
+            duration: 3000 + Math.random() * 500, // More consistent timing (3-3.5 seconds)
+            ease: 'Power1',
+            onComplete: () => {
+                // Remove this sprite from the array and destroy it
+                const index = this.fireSprites.indexOf(sprite);
+                if (index > -1) {
+                    this.fireSprites.splice(index, 1);
+                }
+                sprite.destroy();
+            }
+        });
+        
+        // Add gentle flickering effect (less dramatic)
+        this.tweens.add({
+            targets: sprite,
+            alpha: 0.5 + Math.random() * 0.3, // Less dramatic alpha change
+            duration: 200 + Math.random() * 300, // Slower flickering for consistency
+            ease: 'Sine.easeInOut',
+            yoyo: true,
+            repeat: -1
+        });
+        
+        // Add subtle color cycling for fire effect
+        this.tweens.add({
+            targets: sprite,
+            duration: 800 + Math.random() * 400, // Slower color changes
+            ease: 'Sine.easeInOut',
+            yoyo: true,
+            repeat: -1,
+            onUpdate: () => {
+                const colors = [0xff4400, 0xff6600, 0xff8800, 0xffaa00, 0xffcc00];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                sprite.setFillStyle(color);
+            }
+        });
+    }
 
-		// Create movie sprite with first frame
-		this.movieSprite = this.add.sprite(400, 300, "frame_0001");
-		this.movieSprite.setScale(0.8); // Scale down to fit screen
+    /**
+     * Stops and deletes all fire particles
+     * Called when transitioning to clean up the fire effect
+     */
+    stopFireEffect() {
+        console.log('Stopping fire effect...');
+        
+        // Stop creating new particles
+        this.fireActive = false;
+        
+        // Stop all particle creation events
+        this.time.removeAllEvents();
+        
+        this.fireSprites.forEach(sprite => {
+            // Stop all tweens on this sprite
+            this.tweens.killTweensOf(sprite);
+            // Destroy the sprite
+            sprite.destroy();
+        });
+        this.fireSprites = [];
+        console.log('Fire effect stopped and cleaned up');
+    }
 
-		// Create title text at the top (initially invisible)
-		this.titleText = this.add
-			.text(400, 80, "LITTLE SHOP OF", {
-				fontSize: "48px",
-				fontFamily: "Arial",
-				color: "#ffffff",
-				fontStyle: "bold",
-				stroke: "#000000",
-				strokeThickness: 4,
-				shadow: {
-					offsetX: 2,
-					offsetY: 2,
-					color: "#000000",
-					blur: 4,
-					fill: true,
-				},
-			})
-			.setOrigin(0.5)
-			.setAlpha(0);
+    /**
+     * Starts creating fire particles over time instead of all at once
+     * Creates a more natural fire effect with particles appearing randomly
+     */
+    startParticleCreation() {
+        // Create a new particle every 25-75ms (4x faster than before)
+        this.time.addEvent({
+            delay: 25 + Math.random() * 50,
+            callback: this.createFireParticle,
+            callbackScope: this,
+            loop: true
+        });
+    }
 
-		// Create CHAOS text below title (initially invisible)
-		this.chaosText = this.add
-			.text(400, 140, "CHAOS", {
-				fontSize: "72px",
-				fontFamily: "Arial",
-				color: "#ff4400",
-				fontStyle: "bold",
-				stroke: "#000000",
-				strokeThickness: 4,
-				shadow: {
-					offsetX: 2,
-					offsetY: 2,
-					color: "#000000",
-					blur: 4,
-					fill: true,
-				},
-			})
-			.setOrigin(0.5)
-			.setAlpha(0);
+    /**
+     * Creates a single fire particle at a random position along the base
+     */
+    createFireParticle() {
+        if (!this.fireActive) return; // Stop creating particles if fire is stopped
+        
+        const params = this.fireParams;
+        
+        // Random position along the base of the fire
+        const x = params.chaosTextX + (Math.random() - 0.5) * params.fireWidth;
+        const y = params.fireBaseY + Math.random() * 10;
+        
+        const color = params.colors[Math.floor(Math.random() * params.colors.length)];
+        const size = Math.random() * 4 + 2;
+        
+        const fireSprite = this.add.circle(x, y, size, color);
+        fireSprite.setAlpha(0.8);
+        fireSprite.setDepth(10);
+        
+        // Store initial position for animation
+        fireSprite.startX = x;
+        fireSprite.startY = y;
+        fireSprite.maxHeight = 40 + Math.random() * 20;
+        
+        this.fireSprites.push(fireSprite);
+        
+        // Start animating this particle
+        this.animateFireSprite(fireSprite);
+        
+        // Limit total particles to prevent performance issues
+        if (this.fireSprites.length > 120) {
+            const oldestSprite = this.fireSprites.shift();
+            this.tweens.killTweensOf(oldestSprite);
+            oldestSprite.destroy();
+        }
+    }
 
-		// Create fire effect AFTER text (so it renders on top)
-		this.createFireEffect();
-
-		// Start movie playback
-		this.startMoviePlayback();
-
-		// Start text fade-in after a delay
-		this.time.delayedCall(2000, () => {
-			this.fadeInText();
-		});
-
-		// Transition to BootScene after 5 seconds
-		this.time.delayedCall(8000, () => {
-			console.log("Intro complete, transitioning to BootScene...");
-			this.scene.start("BootScene");
-		});
-
-		console.log("Intro scene created successfully");
-	}
-
-	createFireEffect() {
-		console.log("Creating fire effect...");
-
-		// Create a larger, more visible fire particle texture
-		const fireGraphics = this.add.graphics();
-		fireGraphics.fillStyle(0xffff00, 1);
-		fireGraphics.fillCircle(0, 0, 8); // Larger circle
-		fireGraphics.generateTexture("fire-particle", 16, 16); // Larger texture
-		fireGraphics.destroy();
-
-		// Create fire sprites for each letter of CHAOS
-		const letterPositions = [
-			{ x: 320, y: 140 }, // C
-			{ x: 360, y: 140 }, // H
-			{ x: 400, y: 140 }, // A
-			{ x: 440, y: 140 }, // O
-			{ x: 480, y: 140 }, // S
-		];
-
-		// Create many more fire sprites for each letter
-		letterPositions.forEach((pos, letterIndex) => {
-			for (let i = 0; i < 15; i++) {
-				// 15 fire sprites per letter
-				const fireSprite = this.add.sprite(pos.x, pos.y + 40, "fire-particle");
-				fireSprite.setScale(1.2); // Slightly smaller for more density
-				fireSprite.setAlpha(0);
-				fireSprite.setTint(0xffff00); // Start with yellow
-				fireSprite.letterIndex = letterIndex;
-				fireSprite.spriteIndex = i;
-				fireSprite.delay = i * 150; // Slower stagger (150ms instead of 100ms)
-				this.fireSprites.push(fireSprite);
-
-				// console.log(
-				// 	`Created fire sprite ${letterIndex}-${i} at ${pos.x}, ${pos.y + 40}`
-				// );
-			}
-		});
-
-		console.log(`Created ${this.fireSprites.length} fire sprites total`);
-		// Note: Fire animation will start later when CHAOS text fades in
-	}
-
-	startMoviePlayback() {
-		console.log("Starting movie playback...");
-
-		// HACK:
-		// Not sure this is the best place to put this but it works
-		console.log("start playing fire");
-		this.audioManager.playSoundEffect("fire");
-		console.log("Fire should be playing");
-
-		// Create timer for frame updates
-		this.movieTimer = this.time.addEvent({
-			delay: 1000 / this.frameRate, // Convert FPS to milliseconds
-			callback: this.updateFrame,
-			callbackScope: this,
-			loop: true,
-		});
-	}
-
-	updateFrame() {
-		this.currentFrame++;
-
-		if (this.currentFrame > this.totalFrames) {
-			// Loop the movie
-			this.currentFrame = 1;
-		}
-
-		const frameNumber = this.currentFrame.toString().padStart(4, "0");
-		const textureKey = `frame_${frameNumber}`;
-
-		// Check if texture exists before setting it
-		if (this.textures.exists(textureKey)) {
-			this.movieSprite.setTexture(textureKey);
-		} else {
-			console.warn(`Texture not found: ${textureKey}`);
-		}
-	}
-
-	fadeInText() {
-		console.log("Starting text fade-in...");
-
-		// Fade in "LITTLE SHOP OF"
-		this.tweens.add({
-			targets: this.titleText,
-			alpha: 1,
-			duration: 2000,
-			ease: "Power2",
-			onComplete: () => {
-				console.log("Title text faded in");
-				// After title fades in, fade in CHAOS with fire effect
-				this.tweens.add({
-					targets: this.chaosText,
-					alpha: 1,
-					duration: 1500,
-					ease: "Power2",
-					onComplete: () => {
-						console.log("CHAOS text faded in - starting fire effect!");
-						this.textFadeInComplete = true;
-
-						// Start fire animation AFTER CHAOS text has fully faded in
-						this.startFireAnimation();
-
-						// Add some pulsing effect to CHAOS
-						this.tweens.add({
-							targets: this.chaosText,
-							scaleX: 1.05,
-							scaleY: 1.05,
-							duration: 1000,
-							yoyo: true,
-							repeat: -1,
-							ease: "Sine.easeInOut",
-						});
-					},
-				});
-			},
-		});
-	}
-
-	startFireAnimation() {
-		console.log("Starting fire animation...");
-
-		// Start all fire sprites with staggered timing for constant effect
-		this.fireSprites.forEach((sprite) => {
-			this.time.delayedCall(sprite.delay, () => {
-				this.animateFireSprite(sprite);
-			});
-		});
-	}
-
-	animateFireSprite(sprite) {
-		// Get base position for this letter
-		const letterPositions = [320, 360, 400, 440, 480];
-		const baseX = letterPositions[sprite.letterIndex];
-		const baseY = 180; // Bottom of letter
-
-		// Set initial position
-		sprite.setPosition(baseX + Phaser.Math.Between(-20, 20), baseY);
-		sprite.setScale(1.2);
-		sprite.setAlpha(1);
-		sprite.setTint(0xffff00); // Start yellow
-
-		// Create fire animation - SLOWER
-		this.tweens.add({
-			targets: sprite,
-			y: baseY - 150, // Move upward more
-			scale: 0.1, // Shrink as it rises
-			alpha: 0, // Fade out
-			duration: 2500, // Slower animation (2500ms instead of 1500ms)
-			ease: "Power2",
-			onUpdate: () => {
-				// Change color from yellow to red as it rises
-				const progress = 1 - (sprite.y - (baseY - 150)) / 150;
-				if (progress < 0.2) {
-					sprite.setTint(0xffff00); // Yellow
-				} else if (progress < 0.4) {
-					sprite.setTint(0xffaa00); // Orange-yellow
-				} else if (progress < 0.6) {
-					sprite.setTint(0xff6600); // Orange
-				} else if (progress < 0.8) {
-					sprite.setTint(0xff4400); // Red-orange
-				} else {
-					sprite.setTint(0xff0000); // Red
-				}
-			},
-			onComplete: () => {
-				// Restart animation after a longer delay for slower effect
-				const restartDelay = Phaser.Math.Between(200, 600); // Longer delays
-				this.time.delayedCall(restartDelay, () => {
-					this.animateFireSprite(sprite);
-				});
-			},
-		});
-	}
-
-	update() {
-		// Add some dynamic movement to fire sprites
-		if (this.textFadeInComplete && this.fireSprites) {
-			this.fireSprites.forEach((sprite) => {
-				// Slightly vary the position for more realistic fire
-				if (sprite.alpha > 0) {
-					sprite.x += Phaser.Math.Between(-1, 1);
-				}
-			});
-		}
-	}
-}
+    /**
+     * Update method called every frame
+     * Currently empty but available for future frame-specific logic
+     */
+    update() {
+    }
+} 

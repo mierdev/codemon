@@ -1,11 +1,14 @@
-// importing libraries using the import syntax favoured by ES6
 import express from "express";
 import Trainer from "../models/modelTrainers.js";
 import { error } from "console";
 
 const router = express.Router();
 
-// CREATE one
+/**
+ * Creates a new trainer in the database
+ * @param {Object} req - Express request object containing trainer data
+ * @param {Object} res - Express response object
+ */
 router.post("/", async (req, res) => {
   const trainer = new Trainer({
     name: req.body.name,
@@ -20,7 +23,11 @@ router.post("/", async (req, res) => {
   }
 });
 
-// READ all
+/**
+ * Retrieves all trainers from the database
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 router.get("/", async (_, res) => {
   try {
     const trainer = await Trainer.find();
@@ -30,8 +37,13 @@ router.get("/", async (_, res) => {
   }
 });
 
-
-// dynamic endpoints (READ/UPDATE/DELETE one)
+/**
+ * GET: Retrieves a specific trainer by ID
+ * PATCH: Updates a specific trainer by ID
+ * DELETE: Removes a specific trainer by ID
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 router
 .route("/:id")
 .get(getTrainer, (_, res) => {
@@ -61,7 +73,12 @@ router
   }
 });
 
-// middleware to get id
+/**
+ * Middleware to retrieve a trainer by ID and attach it to the response object
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 async function getTrainer(req, res, next) {
   let trainer;
   try {
@@ -77,5 +94,4 @@ async function getTrainer(req, res, next) {
   next();
 };
 
-// export
 export default router;

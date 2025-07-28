@@ -54,6 +54,12 @@ function initializeGame() {
 	 * Initializes the game with the specified configuration and manages scene transitions.
 	 */
 	window.game = new Phaser.Game(config);
+
+	// Initialize transition manager after game is created
+	if (window.TransitionManager) {
+		window.transitionManager = new window.TransitionManager();
+		console.log("Transition manager initialized in main.js");
+	}
 }
 
 // Initialize game when DOM is ready
@@ -64,7 +70,12 @@ if (document.readyState === "loading") {
 }
 
 /**
- * Starts a new battle between two Pokemon.
+ * Global transition manager instance for scene transitions
+ */
+window.transitionManager = null;
+
+/**
+ * Starts a new battle between two Pokemon with transition effect.
  * Uses the global gameManager to create battle data and transitions to the BattleScene.
  * @param {string} pokemon1Id - The ID of the first Pokemon (player's Pokemon)
  * @param {string} pokemon2Id - The ID of the second Pokemon (AI's Pokemon)
@@ -72,7 +83,10 @@ if (document.readyState === "loading") {
 function startNewBattle(pokemon1Id, pokemon2Id) {
 	if (window.gameManager && window.game) {
 		const battleData = window.gameManager.startBattle(pokemon1Id, pokemon2Id);
-		if (battleData) {
+		if (battleData && window.transitionManager) {
+			const currentScene = window.game.scene.getScene('BootScene');
+			window.transitionManager.startTransition(currentScene, 'BootScene', 'BattleScene', battleData);
+		} else if (battleData) {
 			window.game.scene.start("BattleScene", battleData);
 		}
 	}

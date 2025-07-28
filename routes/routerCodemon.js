@@ -1,11 +1,14 @@
-// importing libraries using the import syntax favoured by ES6
 import express from "express";
 import Codemon from "../models/modelCodemon.js";
 import { error } from "console";
 
 const router = express.Router();
 
-// CREATE one
+/**
+ * Creates a new codemon in the database
+ * @param {Object} req - Express request object containing codemon data
+ * @param {Object} res - Express response object
+ */
 router.post("/", async (req, res) => {
   const codemon = new Codemon({
     name: req.body.name,
@@ -31,7 +34,11 @@ router.post("/", async (req, res) => {
   }
 });
 
-// READ all
+/**
+ * Retrieves all codemon from the database
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 router.get("/", async (_, res) => {
   try {
     const codemon = await Codemon.find();
@@ -41,8 +48,13 @@ router.get("/", async (_, res) => {
   }
 });
 
-
-// dynamic endpoints (READ/UPDATE/DELETE one)
+/**
+ * GET: Retrieves a specific codemon by ID
+ * PATCH: Updates a specific codemon by ID
+ * DELETE: Removes a specific codemon by ID
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 router
 .route("/:id")
 .get(getCodemon, (_, res) => {
@@ -105,7 +117,12 @@ router
   }
 });
 
-// middleware to get id
+/**
+ * Middleware to retrieve a codemon by ID and attach it to the response object
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 async function getCodemon(req, res, next) {
   let codemon;
   try {
@@ -121,5 +138,4 @@ async function getCodemon(req, res, next) {
   next();
 };
 
-// export
 export default router;

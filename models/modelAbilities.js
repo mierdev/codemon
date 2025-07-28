@@ -1,7 +1,9 @@
-// importing with ES6 syntax
 import mongoose from "mongoose";
 
-// setup schema
+/**
+ * Mongoose schema for Ability model
+ * Defines the structure for ability data including name, type, description, power, accuracy, and status effects
+ */
 const abilitiesSchema = new mongoose.Schema({
 	name: {
 		type: String,
@@ -40,5 +42,4 @@ const abilitiesSchema = new mongoose.Schema({
 	}
 });
 
-// export
 export default mongoose.model("Ability", abilitiesSchema);

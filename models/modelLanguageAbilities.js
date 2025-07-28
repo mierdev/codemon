@@ -1,7 +1,9 @@
-// importing with ES6 syntax
 import mongoose from "mongoose";
 
-// setup schema
+/**
+ * Mongoose schema for LanguageAbilities model
+ * Defines the structure for language abilities data including name and associated abilities array
+ */
 const languageAbilitiesSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -13,5 +15,4 @@ const languageAbilitiesSchema = new mongoose.Schema({
   }
 });
 
-// export
 export default mongoose.model("LanguageAbilities", languageAbilitiesSchema);

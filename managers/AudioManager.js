@@ -1,39 +1,50 @@
 /**
- * Hande playing music
+ * Manages audio playback for the game including music and sound effects
  */
 export class AudioManager {
+	/**
+	 * Initializes the AudioManager with scene reference and audio state
+	 * @param {Object} scene - The Phaser scene instance
+	 */
 	constructor(scene) {
 		this.audioIsEnabled = true;
 		this.scene = scene;
 		this.currentMusic = null;
 	}
+
+	/**
+	 * Plays a sound effect with automatic cleanup
+	 * @param {string} key - The sound effect key to play
+	 */
 	playSoundEffect(key) {
-		// If sound is not enabled return
 		if (!this.audioIsEnabled) return;
-		// Setting default to 0.4 to start
 		const soundEffect = this.scene.sound.add(key, { volume: 0.4 });
 		soundEffect.play();
-		// Clean up after playing
 		soundEffect.once("complete", () => {
 			soundEffect.destroy();
 		});
 	}
+
+	/**
+	 * Plays background music with configurable options
+	 * @param {string} key - The music key to play
+	 * @param {Object} options - Configuration options for music playback
+	 * @param {number} options.volume - Volume level (0-1)
+	 * @param {boolean} options.loop - Whether to loop the music
+	 */
 	playMusic(key, options = {}) {
 		if (!this.audioIsEnabled) return;
 
-		// Stop current music if playing
 		if (this.currentMusic) {
 			this.currentMusic.stop();
 			this.currentMusic.destroy();
 		}
 
-		// audio default options
 		const audioConfig = {
 			volume: options.volume || 0.5,
 			loop: options.loop || false,
 		};
 
-		// Play audio
 		const audioTrack = this.scene.sound.add(key, {
 			volume: audioConfig.volume,
 			loop: audioConfig.loop,
@@ -50,6 +61,10 @@ export class AudioManager {
 			});
 		}
 	}
+
+	/**
+	 * Stops the currently playing music
+	 */
 	stopMusic() {
 		if (this.currentMusic) {
 			this.currentMusic.stop();
@@ -57,18 +72,26 @@ export class AudioManager {
 			this.currentMusic = null;
 		}
 	}
-	// HACK:
-	// Trying to stop all audio
+
+	/**
+	 * Stops all audio playback
+	 */
 	stopAll() {
 		this.scene.sound.stopAll();
 	}
 
+	/**
+	 * Toggles audio on/off state
+	 */
 	toggleSoundEffect() {
-		// handle audioIsEnabled
 		this.audioIsEnabled = !this.audioIsEnabled;
-		// toggle mute
 		this.scene.sound.mute = !this.audioIsEnabled;
 	}
+
+	/**
+	 * Returns the current audio enabled state
+	 * @returns {boolean} Whether audio is currently enabled
+	 */
 	isAudioEnabled() {
 		return this.audioIsEnabled;
 	}

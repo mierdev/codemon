@@ -6,12 +6,15 @@ import Dialogue from '../models/modelDialogue.js';
 import LanguageAbilities from '../models/modelLanguageAbilities.js';
 import Trainer from '../models/modelTrainers.js';
 
-// Load environment variables
 dotenv.config();
 
+/**
+ * Seeds the database with initial game data including abilities, codemon, dialogue, language abilities, and trainers
+ * Connects to MongoDB, clears existing data, and inserts new seed data for all collections
+ * @returns {Promise<void>} Resolves when seeding is complete or rejects on error
+ */
 const seedData = async () => {
   try {
-    // Connect to MongoDB
     if (!process.env.MONGODB_URI) {
       console.error('MONGODB_URI not found in environment variables');
       process.exit(1);
@@ -20,14 +23,12 @@ const seedData = async () => {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('Connected to MongoDB for seeding...');
 
-    // Clear existing data
     await Ability.deleteMany({});
     await Codemon.deleteMany({});
     await Dialogue.deleteMany({});
     await LanguageAbilities.deleteMany({});
     await Trainer.deleteMany({});
 
-    // Seed abilities
     const abilities = await Ability.insertMany([
       {
       name: "Rapid Prototype",
@@ -175,7 +176,6 @@ const seedData = async () => {
     }
     ]);
 
-    // Seed codemon
     const codemon = await Codemon.insertMany([
       {
       name: "Python",
@@ -263,7 +263,6 @@ const seedData = async () => {
     }
     ]);
 
-    // Seed dialogue
     const dialogue = await Dialogue.insertMany([
       {
         name: "Nallo",
@@ -304,7 +303,6 @@ const seedData = async () => {
       }
      ]);
 
-    // Seed trainers
     const trainers = await Trainer.insertMany([
       {
         name: "Nallo",
@@ -323,13 +321,11 @@ const seedData = async () => {
     console.log(`Added ${languageAbilities.length} language abilities`);
     console.log(`Added ${trainers.length} trainers`);
 
-    // Close the database connection
     await mongoose.connection.close();
     console.log('Database connection closed.');
 
   } catch (error) {
     console.error('Error seeding database:', error);
-    // Close the database connection even on error
     if (mongoose.connection.readyState === 1) {
       await mongoose.connection.close();
       console.log('Database connection closed after error.');

@@ -1,7 +1,9 @@
-// importing with ES6 syntax
 import mongoose from "mongoose";
 
-// setup schema
+/**
+ * Mongoose schema for Trainer model
+ * Defines the structure for trainer data including name and associated codemon
+ */
 const trainersSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -13,5 +15,4 @@ const trainersSchema = new mongoose.Schema({
   }
 });
 
-// export
 export default mongoose.model("Trainer", trainersSchema);

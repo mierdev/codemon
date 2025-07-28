@@ -341,10 +341,20 @@ class EndScene extends Phaser.Scene {
 	setupInputHandlers() {
 		// play again
 		this.input.keyboard.on("keydown-SPACE", () => {
-			this.scene.start("BootScene");
+			// Use transition manager if available, otherwise fall back to direct scene change
+			if (window.transitionManager) {
+				window.transitionManager.startTransition(this, 'EndScene', 'BootScene');
+			} else {
+				this.scene.start("BootScene");
+			}
 		});
 		this.input.keyboard.on("keydown-R", () => {
-			this.scene.start("BootScene");
+			// Use transition manager if available, otherwise fall back to direct scene change
+			if (window.transitionManager) {
+				window.transitionManager.startTransition(this, 'EndScene', 'BootScene');
+			} else {
+				this.scene.start("BootScene");
+			}
 		});
 	}
 }

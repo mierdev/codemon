@@ -1,11 +1,14 @@
-// importing libraries using the import syntax favoured by ES6
 import express from "express";
 import Dialogue from "../models/modelDialogue.js";
 import { error } from "console";
 
 const router = express.Router();
 
-// CREATE one
+/**
+ * Creates a new dialogue entry in the database
+ * @param {Object} req - Express request object containing dialogue data
+ * @param {Object} res - Express response object
+ */
 router.post("/", async (req, res) => {
   const dialogue = new Dialogue({
     name: req.body.name,
@@ -21,7 +24,11 @@ router.post("/", async (req, res) => {
   }
 });
 
-// READ all
+/**
+ * Retrieves all dialogue entries from the database
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 router.get("/", async (_, res) => {
   try {
     const dialogue = await Dialogue.find();
@@ -31,8 +38,13 @@ router.get("/", async (_, res) => {
   }
 });
 
-
-// dynamic endpoints (READ/UPDATE/DELETE one)
+/**
+ * GET: Retrieves a specific dialogue entry by ID
+ * PATCH: Updates a specific dialogue entry by ID
+ * DELETE: Removes a specific dialogue entry by ID
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 router
 .route("/:id")
 .get(getDialogue, (_, res) => {
@@ -65,7 +77,12 @@ router
   }
 });
 
-// middleware to get id
+/**
+ * Middleware to retrieve a dialogue entry by ID and attach it to the response object
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 async function getDialogue(req, res, next) {
   let dialogue;
   try {
@@ -81,5 +98,4 @@ async function getDialogue(req, res, next) {
   next();
 };
 
-// export
 export default router;

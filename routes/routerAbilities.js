@@ -1,11 +1,14 @@
-// importing libraries using the import syntax favoured by ES6
 import express from "express";
 import Ability from "../models/modelAbilities.js";
 import { error } from "console";
 
 const router = express.Router();
 
-// CREATE one
+/**
+ * Creates a new ability in the database
+ * @param {Object} req - Express request object containing ability data
+ * @param {Object} res - Express response object
+ */
 router.post("/", async (req, res) => {
 	const ability = new Ability({
 		name: req.body.name,
@@ -28,7 +31,11 @@ router.post("/", async (req, res) => {
 	}
 });
 
-// READ all
+/**
+ * Retrieves all abilities from the database
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 router.get("/", async (_, res) => {
 	try {
 		const abilities = await Ability.find();
@@ -38,8 +45,13 @@ router.get("/", async (_, res) => {
 	}
 });
 
-
-// dynamic endpoints (READ/UPDATE/DELETE one)
+/**
+ * GET: Retrieves a specific ability by ID
+ * PATCH: Updates a specific ability by ID
+ * DELETE: Removes a specific ability by ID
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 router
 .route("/:id")
 .get(getAbility, (_, res) => {
@@ -93,7 +105,12 @@ router
 	}
 });
 
-// middleware to get id
+/**
+ * Middleware to retrieve an ability by ID and attach it to the response object
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 async function getAbility(req, res, next) {
 	let ability;
 	try {
@@ -109,5 +126,4 @@ async function getAbility(req, res, next) {
 	next();
 };
 
-// export
 export default router;

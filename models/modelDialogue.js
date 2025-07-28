@@ -1,7 +1,9 @@
-// importing with ES6 syntax
 import mongoose from "mongoose";
 
-// setup schema
+/**
+ * Mongoose schema for Dialogue model
+ * Defines the structure for dialogue data including name, start dialogue, and battle dialogue
+ */
 const dialogueSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -17,5 +19,4 @@ const dialogueSchema = new mongoose.Schema({
   }
 });
 
-// export
 export default mongoose.model("Dialogue", dialogueSchema);

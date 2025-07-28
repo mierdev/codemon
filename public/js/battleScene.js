@@ -862,10 +862,18 @@ class BattleScene extends Phaser.Scene {
 					// this.turnText.setText(
 					// 	`Final Score: ${result.wins}/${result.total} - Press SPACE or R to restart`
 					// );
-					this.scene.start("EndScene", {
-						result: result,
-						playerLanguage: this.tournamentPlayerLanguage,
-					});
+					// Use transition manager if available, otherwise fall back to direct scene change
+					if (window.transitionManager) {
+						window.transitionManager.startTransition(this, 'BattleScene', 'EndScene', {
+							result: result,
+							playerLanguage: this.tournamentPlayerLanguage,
+						});
+					} else {
+						this.scene.start("EndScene", {
+							result: result,
+							playerLanguage: this.tournamentPlayerLanguage,
+						});
+					}
 				} else {
 					console.log("Getting next opponent.... ");
 					const nextOpponent = result.nextOpponent;
@@ -998,10 +1006,18 @@ class BattleScene extends Phaser.Scene {
 				console.log("AI Attack - Tournament result: ", result);
 
 				if (result && result.completed) {
-					this.scene.start("EndScene", {
-						result: result,
-						playerLanguage: this.tournamentPlayerLanguage,
-					});
+					// Use transition manager if available, otherwise fall back to direct scene change
+					if (window.transitionManager) {
+						window.transitionManager.startTransition(this, 'BattleScene', 'EndScene', {
+							result: result,
+							playerLanguage: this.tournamentPlayerLanguage,
+						});
+					} else {
+						this.scene.start("EndScene", {
+							result: result,
+							playerLanguage: this.tournamentPlayerLanguage,
+						});
+					}
 				} else if (result && !result.completed) {
 					this.nextOpponent = result.nextOpponent;
 					this.battleText.setText(

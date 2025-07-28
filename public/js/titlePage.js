@@ -1,23 +1,33 @@
+/**
+ * Title page scene that displays the game title and enter button
+ * Acts as a click-through scene to allow loading scene to have working audio
+ */
 class TitlePage extends Phaser.Scene {
 	/**
-	 * Initialize click through scene to allow for loading scene to have working audio
+	 * Initializes the TitlePage scene with interactive elements
 	 */
 	constructor() {
 		super({ key: "ClickThroughScene" });
 		this.enterButton = null;
 		this.titleText = null;
 	}
+
+	/**
+	 * Preloads assets for the title page including backdrop and button images
+	 */
 	preload() {
-		// Backdrop, button, and cursor images
 		this.load.image("bootsSky", ["assets/boots_screens/bootsandsky.png"]);
 		this.load.image("enterButton", ["assets/UI/components/enterButton.png"]);
 	}
+
+	/**
+	 * Creates the title page UI with backdrop, enter button, and interactive elements
+	 * Sets up click handlers and hover effects for user interaction
+	 */
 	create() {
-		// Backdrop
 		const backdrop = this.add.image(480, 360, "bootsSky");
 		backdrop.setDisplaySize(960, 720);
 
-		// Enter button
 		this.enterButton = this.add.image(650, 400, "enterButton");
 		this.enterButton.setInteractive({ useHandCursor: false });
 
@@ -39,27 +49,32 @@ class TitlePage extends Phaser.Scene {
 			})
 			.setOrigin(0.5);
 
-		// Click handlers
 		this.enterButton.on("pointerdown", () => {
-			this.scene.start("IntroScene");
+			// Use transition manager if available, otherwise fall back to direct scene change
+			if (window.transitionManager) {
+				window.transitionManager.startTransition(this, 'ClickThroughScene', 'IntroScene');
+			} else {
+				this.scene.start("IntroScene");
+			}
 		});
 
 		this.titleText.on("pointerdown", () => {
-			this.scene.start("IntroScene");
+			// Use transition manager if available, otherwise fall back to direct scene change
+			if (window.transitionManager) {
+				window.transitionManager.startTransition(this, 'ClickThroughScene', 'IntroScene');
+			} else {
+				this.scene.start("IntroScene");
+			}
 		});
 
-		// Hover effect
 		this.enterButton.on("pointerover", () => {
 			this.enterButton.setTint(0x87ceeb);
 			this.titleText.setTint(0xaaccff);
 		});
 
-		// Hover out
 		this.enterButton.on("pointerout", () => {
 			this.enterButton.clearTint();
 			this.titleText.clearTint();
 		});
-
-		// Make hover text interactive
 	}
 }

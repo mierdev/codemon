@@ -1,7 +1,9 @@
-// importing with ES6 syntax
 import mongoose from "mongoose";
 
-// setup schema
+/**
+ * Mongoose schema for Codemon model
+ * Defines the structure for codemon (language) data including name, type, description, status effects, image path, and area
+ */
 const codemonSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -51,5 +53,4 @@ const codemonSchema = new mongoose.Schema({
   }
 });
 
-// export
 export default mongoose.model("Codemon", codemonSchema);

@@ -1,11 +1,14 @@
-// importing libraries using the import syntax favoured by ES6
 import express from "express";
 import LanguageAbilities from "../models/modelLanguageAbilities.js";
 import { error } from "console";
 
 const router = express.Router();
 
-// CREATE one
+/**
+ * Creates a new language ability entry in the database
+ * @param {Object} req - Express request object containing language ability data
+ * @param {Object} res - Express response object
+ */
 router.post("/", async (req, res) => {
   const languageAbility = new LanguageAbilities({
     name: req.body.name,
@@ -20,7 +23,11 @@ router.post("/", async (req, res) => {
   }
 });
 
-// READ all
+/**
+ * Retrieves all language ability entries from the database
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 router.get("/", async (_, res) => {
   try {
     const languageAbility = await LanguageAbility.find();
@@ -30,8 +37,13 @@ router.get("/", async (_, res) => {
   }
 });
 
-
-// dynamic endpoints (READ/UPDATE/DELETE one)
+/**
+ * GET: Retrieves a specific language ability entry by ID
+ * PATCH: Updates a specific language ability entry by ID
+ * DELETE: Removes a specific language ability entry by ID
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 router
 .route("/:id")
 .get(getLanguageAbility, (_, res) => {
@@ -61,7 +73,12 @@ router
   }
 });
 
-// middleware to get id
+/**
+ * Middleware to retrieve a language ability entry by ID and attach it to the response object
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 async function getLanguageAbility(req, res, next) {
   let languageAbility;
   try {
@@ -77,5 +94,4 @@ async function getLanguageAbility(req, res, next) {
   next();
 };
 
-// export
 export default router;
