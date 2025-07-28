@@ -6,6 +6,7 @@ class EndScene extends Phaser.Scene {
 		super({ key: "EndScene" });
 		this.tournamentResult = null;
 		this.playerLanguage = null;
+		this.audioManager = null;
 	}
 
 	/**
@@ -26,12 +27,42 @@ class EndScene extends Phaser.Scene {
 	}
 
 	/**
+	 * preload assets
+	 */
+	preload() {
+		// Backdrop defeat
+		this.load.image("bootsSky", ["assets/boots_screens/bootsandsky.png"]);
+		// Backdrop victory bronze
+		this.load.image("victoryBronze", [
+			"assets/boots_screens/boots_bronze_coin.png",
+		]);
+		// Backdrop victory silver
+		this.load.image("victorySilver", [
+			"assets/boots_screens/boots_silver_coin.png",
+		]);
+		// Backdrop victory gold
+		this.load.image("victoryGold", [
+			"assets/boots_screens/boots_gold_coin.png",
+		]);
+		// Coin drop
+		this.load.audio("coins", ["assets/audio/win_lose/coins.wav"]);
+
+		// Sad chest
+		this.load.audio("lose", ["assets/audio/win_lose/lose.wav"]);
+	}
+	/**
 	 * Creates end scene UI with results
 	 */
 	create() {
-		// TODO add backdrop rather than gradient
-		this.add.rectangle(0, 0, 960, 720, 0x2c3e50).setOrigin(0, 0);
-		this.add.rectangle(480, 360, 800, 600, 0x34495e).setOrigin(0, 0);
+		// Check Audio manager has loaded
+		if (window.AudioManager) {
+			this.audioManager = new window.AudioManager(this);
+		} else {
+			console.log("something went wrong with the audio manager!");
+		}
+
+		// Setup backdrop and audio
+		this.setupBackdropAndAudio();
 
 		if (this.won) {
 			this.createVictoryScreen();
@@ -40,6 +71,44 @@ class EndScene extends Phaser.Scene {
 		}
 
 		this.setupInputHandlers();
+	}
+
+	/**
+	 * Contditionally renders audio and backdrop based on win or lose state and tournament type
+	 */
+	setupBackdropAndAudio() {
+		let backdropImage;
+		if (this.won) {
+			// Determine if coin is bronze, silver or golad
+			const coinInfo = this.getTrophyInfo();
+			switch (coinInfo.name) {
+				case "Bronze":
+					backdropImage = "victoryBronze";
+					break;
+				case "Silver":
+					backdropImage = "victorySilver";
+					break;
+				case "Gold":
+					backdropImage = "victoryGold";
+					break;
+				default:
+					backdropImage = "victoryBronze";
+					break;
+			}
+			// Play happy coin sound
+			if (this.audioManager) {
+				this.audioManager.playSoundEffect("coins");
+			}
+		} else {
+			backdropImage = "bootsSky";
+			// Play lose chest
+			if (this.audioManager) {
+				this.audioManager.playSoundEffect("lose");
+			}
+		}
+		// Add backdrop
+		const backdrop = this.add.image(480, 360, backdropImage);
+		backdrop.setDisplaySize(960, 720);
 	}
 
 	/**
@@ -77,11 +146,11 @@ class EndScene extends Phaser.Scene {
 		const trophyInfo = this.getTrophyInfo();
 
 		// TODO: replace with shiny coin
-		this.add
-			.text(480, 320, trophyInfo.emoji, {
-				fontSize: "80px",
-			})
-			.setOrigin(0.5);
+		// this.add
+		// 	.text(480, 320, trophyInfo.emoji, {
+		// 		fontSize: "80px",
+		// 	})
+		// 	.setOrigin(0.5);
 
 		this.add
 			.text(480, 400, `${trophyInfo.name} Trophy Earned!`, {
@@ -92,7 +161,7 @@ class EndScene extends Phaser.Scene {
 			})
 			.setOrigin(0.5);
 
-		// final score
+		// Final score
 		this.add
 			.text(
 				480,
@@ -123,6 +192,15 @@ class EndScene extends Phaser.Scene {
 					fill: "#ecf0f1",
 				}
 			)
+			.setOrigin(0.5);
+
+		this.add
+			.text(480, 580, "Press SPACE or R to play again", {
+				fontSize: "18px",
+				fill: "#ffffff",
+				stroke: "#000",
+				strokeThickness: 1,
+			})
 			.setOrigin(0.5);
 	}
 
@@ -193,6 +271,16 @@ class EndScene extends Phaser.Scene {
 				}
 			)
 			.setOrigin(0.5);
+
+		// Restart
+		this.add
+			.text(480, 580, "Press SPACE or R to play again", {
+				fontSize: "18px",
+				fill: "#ffffff",
+				stroke: "#000",
+				strokeThickness: 1,
+			})
+			.setOrigin(0.5);
 	}
 
 	/**
@@ -205,25 +293,25 @@ class EndScene extends Phaser.Scene {
 				// update emojis to sprites (placeholders for now)
 				return {
 					name: "Bronze",
-					emoji: "🥉",
+					// emoji: "🥉",
 					color: "#cd7f32",
 				};
 			case 5:
 				return {
 					name: "Silver",
-					emoji: "🥈",
+					// emoji: "🥈",
 					color: "#c0c0c0",
 				};
 			case 7:
 				return {
 					name: "Gold",
-					emoji: "🥇",
+					// emoji: "🥇",
 					color: "#ffd700",
 				};
 			default:
 				return {
 					name: "Victory",
-					emoji: "🪙",
+					// emoji: "🪙",
 					color: "#f1c40f",
 				};
 		}
