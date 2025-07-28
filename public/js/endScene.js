@@ -195,7 +195,7 @@ class EndScene extends Phaser.Scene {
 			.setOrigin(0.5);
 
 		this.add
-			.text(480, 580, "Press SPACE or R to play again", {
+			.text(480, 580, "Refresh the page to play again!", {
 				fontSize: "18px",
 				fill: "#ffffff",
 				stroke: "#000",
@@ -241,7 +241,7 @@ class EndScene extends Phaser.Scene {
 			.text(
 				480,
 				460,
-				`Final Score: ${this.tournamentResult.wins}-${this.tournamentResult.losses} (needed ${this.tournamentResult.winsNeeded})`,
+				`Final Score: ${this.tournamentResult?.wins || 0}-${this.tournamentResult?.losses || 0} (played ${this.tournamentResult?.total || 0} matches)`,
 				{
 					fontSize: "20px",
 					fill: "#e67e22",
@@ -274,7 +274,7 @@ class EndScene extends Phaser.Scene {
 
 		// Restart
 		this.add
-			.text(480, 580, "Press SPACE or R to play again", {
+			.text(480, 580, "Refresh the page to play again!", {
 				fontSize: "18px",
 				fill: "#ffffff",
 				stroke: "#000",

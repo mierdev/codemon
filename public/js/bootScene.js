@@ -268,21 +268,27 @@ class BootScene extends Phaser.Scene {
 		});
 	}
 
-	startTournament() {
+	async startTournament() {
 		console.log(
 			`Starting tournament: ${this.selectedTournament} match as ${this.selectedLanguage}`
 		);
 
-		const tournamentSetup = window.gameManager.startTournament(
+		// Check if game data is loaded
+		if (!window.gameManager.isGameDataLoaded()) {
+			console.error('Game data not loaded yet, cannot start tournament');
+			return;
+		}
+
+		const tournamentSetup = await window.gameManager.startTournament(
 			this.selectedTournament,
 			this.selectedLanguage
 		);
 
 		const initialOpponent = tournamentSetup.trainer;
 
-		const battleData = window.gameManager.startBattle(
+		const battleData = window.gameManager.startTournamentBattle(
 			this.selectedLanguage,
-			initialOpponent.language
+		initialOpponent.codemon
 		);
 		if (this.audioManager) {
 			this.audioManager.stopMusic();

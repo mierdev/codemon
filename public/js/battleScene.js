@@ -33,6 +33,10 @@ class BattleScene extends Phaser.Scene {
 	init(data) {
 		console.log("BattleScene initialized with data:", data);
 		
+		// Always set tournamentPlayerLanguage from data
+		if (data && data.tournamentPlayerLanguage) {
+			this.tournamentPlayerLanguage = data.tournamentPlayerLanguage;
+		}
 		// Initialize battle data
 		this.pokemon1 = data.pokemon1;
 		this.pokemon2 = data.pokemon2;
@@ -1029,173 +1033,61 @@ class BattleScene extends Phaser.Scene {
 	}
 	
 	/**
-	 * Handles the player win scenario
+	 * Handles player win scenario
 	 */
-	handlePlayerWin() {
-		if (this.tournamentInfo) {
-			console.log("Handling player win as TOURNAMENT battle");
-			const result = window.gameManager.recordWin();
-			console.log("Execute player attack: ", result);
-
-			if (result.completed) {
-				// Fade out music before transitioning
-				if (this.audioManager) {
-					this.audioManager.fadeOutMusic(1000);
-				}
-				
-				// Force transition to EndScene by resetting transition state first
-				if (window.transitionManager) {
-					window.transitionManager.resetTransitionState();
-					window.transitionManager.startTransition(this, 'BattleScene', 'EndScene', {
-						result: result,
-						playerLanguage: this.tournamentPlayerLanguage,
-					});
-				} else {
-					this.scene.start("EndScene", {
-						result: result,
-						playerLanguage: this.tournamentPlayerLanguage,
-					});
-				}
-			} else {
-				console.log("Getting next opponent.... ");
-				const nextOpponent = result.nextOpponent;
-				console.log("Getting next opponent: ", nextOpponent);
-				this.nextOpponent = nextOpponent;
-				this.battleText.setText(
-					`${this.pokemon2?.name} fainted! ${this.pokemon1?.name} wins!`
-				);
-				this.turnText.setText("Press SPACE for next battle");
-			}
-		} else {
-			// Return single battle
-			console.log("Handling player win as SINGLE battle");
-			this.battleText.setText(
-				`${this.pokemon2?.name} fainted! ${this.pokemon1?.name} wins!`
-			);
-			console.log("Single battle triggered");
-			this.turnText.setText("Press SPACE or R to restart");
-		}
-	}
-	
-	/**
-	 * Handles the AI win scenario
-	 */
-	handleAIWin() {
-		if (this.tournamentInfo) {
-			console.log("Handling AI win as TOURNAMENT battle");
-			const result = window.gameManager.recordLoss();
-			console.log("AI Attack - Tournament result: ", result);
-
-			if (result && result.completed) {
-				// Fade out music before transitioning
-				if (this.audioManager) {
-					this.audioManager.fadeOutMusic(1000);
-				}
-				
-				// Force transition to EndScene by resetting transition state first
-				if (window.transitionManager) {
-					window.transitionManager.resetTransitionState();
-					window.transitionManager.startTransition(this, 'BattleScene', 'EndScene', {
-						result: result,
-						playerLanguage: this.tournamentPlayerLanguage,
-					});
-				} else {
-					this.scene.start("EndScene", {
-						result: result,
-						playerLanguage: this.tournamentPlayerLanguage,
-					});
-				}
-			} else if (result && !result.completed) {
-				this.nextOpponent = result.nextOpponent;
-				this.battleText.setText(
-					`${this.pokemon1?.name} fainted! ${this.pokemon2?.name} wins!`
-				);
-				this.turnText.setText("Press SPACE for next battle");
-			} else {
-				console.error(
-					"Tournament result is null.. it shouldn't be doing that...restarting!"
-				);
-				this.scene.start("BootScene");
-			}
-		} else {
-			console.log("Handling AI win as SINGLE battle");
-			this.battleText.setText(
-				`${this.pokemon1?.name} fainted! ${this.pokemon2?.name} wins!`
-			);
-			this.turnText.setText("Press SPACE or R to restart");
-		}
-	}
-
-	/**
-	 * Handles the player winning the battle
-	 */
-	handlePlayerWin() {
-		this.battleState = "gameOver";
-		// Tournament battle only
+	async handlePlayerWin() {
 		console.log("Handling player win as TOURNAMENT battle");
-		const result = window.gameManager.recordWin();
-		console.log("Player win result: ", result);
-
+		this.battleState = "gameOver";
+		
+		const result = await window.gameManager.recordWin();
+		
 		if (result.completed) {
-			// Tournament finished
-			console.log("Tournament completed - transitioning to EndScene");
+			console.log("Tournament completed - player wins");
 			this.tournamentResult = result;
-			if (window.transitionManager) {
-				window.transitionManager.resetTransitionState();
-				window.transitionManager.startTransition(this, 'BattleScene', 'EndScene', {
-					result: result,
-					playerLanguage: this.tournamentPlayerLanguage,
-				});
-			} else {
-				this.scene.start("EndScene", {
-					result: result,
-					playerLanguage: this.tournamentPlayerLanguage,
-				});
+			
+			// Fade out music and transition to end scene
+			if (this.audioManager) {
+				this.audioManager.fadeOutMusic(1000);
 			}
+			
+			window.transitionManager.resetTransitionState();
+			window.transitionManager.startTransition(this, 'BattleScene', 'EndScene', {
+				result: result,
+				playerLanguage: this.tournamentPlayerLanguage
+			});
 		} else {
-			// Continue tournament
-			console.log("Tournament continues - next opponent: ", result.nextOpponent);
+			console.log("Tournament continues - next opponent:", result.nextOpponent);
 			this.nextOpponent = result.nextOpponent;
-			this.battleText.setText(
-				`${this.pokemon2?.name} fainted! ${this.pokemon1?.name} wins!`
-			);
 			this.turnText.setText("Press SPACE for next battle");
 		}
 	}
 
 	/**
-	 * Handles the AI winning the battle
+	 * Handles AI win scenario
 	 */
-	handleAIWin() {
-		this.battleState = "gameOver";
-		// Tournament battle only
+	async handleAIWin() {
 		console.log("Handling AI win as TOURNAMENT battle");
-		const result = window.gameManager.recordLoss();
-		console.log("AI win result: ", result);
-
+		this.battleState = "gameOver";
+		
+		const result = await window.gameManager.recordLoss();
+		
 		if (result.completed) {
-			// Tournament finished
-			console.log("Tournament completed - transitioning to EndScene");
+			console.log("Tournament completed - AI wins");
 			this.tournamentResult = result;
-			if (window.transitionManager) {
-				window.transitionManager.resetTransitionState();
-				window.transitionManager.startTransition(this, 'BattleScene', 'EndScene', {
-					result: result,
-					playerLanguage: this.tournamentPlayerLanguage,
-				});
-			} else {
-				this.scene.start("EndScene", {
-					result: result,
-					playerLanguage: this.tournamentPlayerLanguage,
-				});
+			
+			// Fade out music and transition to end scene
+			if (this.audioManager) {
+				this.audioManager.fadeOutMusic(1000);
 			}
+			
+			window.transitionManager.resetTransitionState();
+			window.transitionManager.startTransition(this, 'BattleScene', 'EndScene', {
+				result: result,
+				playerLanguage: this.tournamentPlayerLanguage
+			});
 		} else {
-			// Continue tournament
-			console.log("Tournament continues - next opponent: ", result.nextOpponent);
+			console.log("Tournament continues - next opponent:", result.nextOpponent);
 			this.nextOpponent = result.nextOpponent;
-			this.battleText.setText(
-				`${this.pokemon1?.name} fainted! ${this.pokemon2?.name} wins!`
-			);
 			this.turnText.setText("Press SPACE for next battle");
 		}
 	}
@@ -1859,16 +1751,55 @@ class BattleScene extends Phaser.Scene {
 	 * Starts the next battle in the tournament
 	 */
 	startNextBattle() {
-		if (this.nextOpponent) {
-			// Start next battle with new opponent
-			this.scene.start("BattleScene", {
-				pokemon1: this.pokemon1,
-				pokemon2: this.nextOpponent,
-				tournamentInfo: this.tournamentInfo,
-				tournamentPlayerLanguage: this.tournamentPlayerLanguage,
-				nextOpponent: null // Will be set by gameManager
+		// Check if game data is loaded
+		if (!window.gameManager.isGameDataLoaded()) {
+			console.error('Game data not loaded yet, cannot start next battle');
+			// Fallback to end scene
+			this.scene.start("EndScene", {
+				result: this.tournamentResult,
+				playerLanguage: this.tournamentPlayerLanguage
 			});
+			return;
+		}
+
+		if (this.nextOpponent && this.nextOpponent.trainer) {
+			console.log('startNextBattle - tournamentPlayerLanguage:', this.tournamentPlayerLanguage);
+			console.log('startNextBattle - nextOpponent:', this.nextOpponent);
+			console.log('startNextBattle - nextOpponent.trainer:', this.nextOpponent.trainer);
+			console.log('startNextBattle - nextOpponent.trainer.codemon:', this.nextOpponent.trainer.codemon);
+			console.log('startNextBattle - nextOpponent.trainer.name:', this.nextOpponent.trainer.name);
+			console.log('startNextBattle - tournamentInfo:', this.tournamentInfo);
+			console.log('startNextBattle - tournamentInfo.playerLanguage:', this.tournamentInfo?.playerLanguage);
+			
+			// Convert trainer data to Pokemon data using game manager
+			const playerLanguageId = this.tournamentInfo?.playerLanguage || window.gameManager.tournament?.playerLanguage;
+			console.log('startNextBattle - using playerLanguageId:', playerLanguageId);
+			
+			const battleData = window.gameManager.startTournamentBattle(
+				playerLanguageId,
+				this.nextOpponent.trainer.codemon
+			);
+			
+			if (battleData) {
+				// Start next battle with proper Pokemon data
+				this.scene.start("BattleScene", {
+					pokemon1: battleData.pokemon1,
+					pokemon2: battleData.pokemon2,
+					tournamentInfo: this.tournamentInfo,
+					tournamentPlayerLanguage: playerLanguageId,
+					nextOpponent: null // Will be set by gameManager
+				});
+			} else {
+				console.error("Failed to create battle data for next opponent");
+				// Fallback to end scene
+				this.scene.start("EndScene", {
+					result: this.tournamentResult,
+					playerLanguage: playerLanguageId
+				});
+			}
 		} else {
+			console.error('startNextBattle - nextOpponent or nextOpponent.trainer is null/undefined');
+			console.log('startNextBattle - this.nextOpponent:', this.nextOpponent);
 			// Tournament finished, go to end scene
 			this.scene.start("EndScene", {
 				result: this.tournamentResult,

@@ -510,30 +510,65 @@ class GameManager {
 			`Tournament started: ${matchCount} matches (play all matches)`
 		);
 
-		this.trainers = [
-			{ name: "Nallo", language: "rust" },
-			{ name: "Dan", language: "javascript" },
-			{ name: "Miranda", language: "python" },
-			{ name: "Nuc", language: "ocaml" },
-			{ name: "Lane", language: "go" },
-			{ name: "Lyle", language: "csharp" },
-		];
+		// Initialize trainers list - will be populated when needed
+		this.trainers = [];
+		// Return a promise that resolves to the next opponent
 		return this.getNextOpponent();
 	}
 
 	/**
-	 * Gets the next opponent for the tournament.
-	 * @returns {Object|null} Next opponent data or null if tournament is complete
+	 * Fetches trainers from the database for a specific language
+	 * @param {string} languageId - The language ID to fetch trainers for
+	 * @returns {Promise<Array>} Array of trainers
 	 */
-	getNextOpponent() {
+	async fetchTrainersForLanguage(languageId) {
+		try {
+			const response = await fetch(`/api/language-abilities/trainers/${languageId}`);
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+			const trainers = await response.json();
+			return trainers;
+		} catch (error) {
+			console.error(`Error fetching trainers for ${languageId}:`, error);
+			return [];
+		}
+	}
+
+	/**
+	 * Gets all available trainers from the database
+	 * @returns {Promise<Array>} Array of all trainers
+	 */
+	async fetchAllTrainers() {
+		const allTrainers = [];
+		const languageIds = this.getAllLanguageIds();
+		
+		for (const languageId of languageIds) {
+			const trainers = await this.fetchTrainersForLanguage(languageId);
+			allTrainers.push(...trainers);
+		}
+		
+		return allTrainers;
+	}
+
+	/**
+	 * Gets the next opponent for the tournament.
+	 * @returns {Promise<Object|null>} Next opponent data or null if tournament is complete
+	 */
+	async getNextOpponent() {
 		if (!this.tournament || !this.tournament.isActive) {
 			console.log("No active tournament ");
 			return null;
 		}
 
+		// Fetch all trainers from database if not already loaded
+		if (this.trainers.length === 0) {
+			this.trainers = await this.fetchAllTrainers();
+		}
+
 		/// Filter out player's languages and get random opponent
 		const availableTrainers = this.trainers.filter(
-			(trainer) => trainer.language !== this.tournament.playerLanguage
+			(trainer) => trainer.codemon !== this.tournament.playerLanguage
 		);
 		const randomTrainer =
 			availableTrainers[Math.floor(Math.random() * availableTrainers.length)];
@@ -549,9 +584,9 @@ class GameManager {
 
 	/**
 	 * Records a win in the current tournament.
-	 * @returns {Object|null} Tournament result or null if tournament continues
+	 * @returns {Promise<Object|null>} Tournament result or null if tournament continues
 	 */
-	recordWin() {
+	async recordWin() {
 		if (!this.tournament) return null;
 		this.tournament.wins++;
 		this.tournament.matchesPlayed++;
@@ -581,20 +616,20 @@ class GameManager {
 		console.log(`Continuing tournament - ${this.tournament.matchesPlayed} < ${this.tournament.type} matches`);
 		return {
 			completed: false,
-			nextOpponent: this.getNextOpponent(),
+			nextOpponent: await this.getNextOpponent(),
 		};
 	}
 
 	/**
 	 * Records a loss in the current tournament.
-	 * @returns {Object|null} Tournament result or null if tournament continues
+	 * @returns {Promise<Object|null>} Tournament result or null if tournament continues
 	 */
-	recordLoss() {
+	async recordLoss() {
 		if (!this.tournament) return null;
 		this.tournament.losses++;
 		this.tournament.matchesPlayed++;
 		console.log(
-			`In record loss, with: ${this.tournament.wins} wins, ${this.tournament.losses} losses, ${this.tournament.matchesPlayed} matches played, total: ${this.tournament.type}`
+			`In record loss, with: ${this.tournament.losses} losses, ${this.tournament.wins} wins, ${this.tournament.matchesPlayed} matches played, total: ${this.tournament.type}`
 		);
 
 		// Only end tournament after all matches are played
@@ -619,7 +654,76 @@ class GameManager {
 		console.log(`Continuing tournament - ${this.tournament.matchesPlayed} < ${this.tournament.type} matches`);
 		return {
 			completed: false,
-			nextOpponent: this.getNextOpponent(),
+			nextOpponent: await this.getNextOpponent(),
+		};
+	}
+
+	/**
+	 * Starts a tournament battle between two languages.
+	 * @param {string} playerLanguageId - The player's language ID
+	 * @param {string} opponentLanguageId - The opponent's language ID
+	 * @returns {Object|null} Battle data or null if invalid
+	 */
+	startTournamentBattle(playerLanguageId, opponentLanguageId) {
+		console.log('startTournamentBattle - playerLanguageId:', playerLanguageId);
+		console.log('startTournamentBattle - opponentLanguageId:', opponentLanguageId);
+		console.log('startTournamentBattle - available language IDs:', Array.from(this.pokemonData.keys()));
+		
+		const playerLanguage = this.getLanguageData(playerLanguageId);
+		const opponentLanguage = this.getLanguageData(opponentLanguageId);
+		
+		console.log('startTournamentBattle - playerLanguage:', playerLanguage);
+		console.log('startTournamentBattle - opponentLanguage:', opponentLanguage);
+
+		if (!playerLanguage || !opponentLanguage) {
+			console.error("Invalid language IDs provided");
+			console.error("playerLanguageId:", playerLanguageId, "playerLanguage:", playerLanguage);
+			console.error("opponentLanguageId:", opponentLanguageId, "opponentLanguage:", opponentLanguage);
+			return null;
+		}
+
+		// Create Pokemon objects from language data
+		const pokemon1 = {
+			name: playerLanguage.name,
+			type: playerLanguage.type,
+			hp: 100,
+			maxHp: 100,
+			attack: 75,
+			specialAttack: 75,
+			defense: 75,
+			specialDefense: 75,
+			speed: 75,
+			abilities: playerLanguage.abilities
+		};
+
+		const pokemon2 = {
+			name: opponentLanguage.name,
+			type: opponentLanguage.type,
+			hp: 100,
+			maxHp: 100,
+			attack: 75,
+			specialAttack: 75,
+			defense: 75,
+			specialDefense: 75,
+			speed: 75,
+			abilities: opponentLanguage.abilities
+		};
+
+		// Initialize buff/debuff systems
+		this.initializeBuffsAndDebuffs(pokemon1);
+		this.initializeBuffsAndDebuffs(pokemon2);
+
+		// Add placeholder buffs/debuffs for testing
+		this.applyBuff(pokemon1, "attack", 2);
+		this.applyBuff(pokemon1, "speed", 1);
+		this.applyDebuff(pokemon1, "defense", 1);
+
+		this.applyBuff(pokemon2, "specialAttack", 1);
+		this.applyDebuff(pokemon2, "speed", 2);
+
+		return {
+			pokemon1: pokemon1,
+			pokemon2: pokemon2,
 		};
 	}
 } 
