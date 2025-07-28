@@ -18,7 +18,6 @@ export class TransitionManager {
      * This should be called when a new scene starts to ensure clean state
      */
     resetTransitionState() {
-        console.log('Resetting transition state...');
         this.isTransitioning = false;
         this.squares.forEach(square => square.destroy());
         this.squares = [];
@@ -31,19 +30,33 @@ export class TransitionManager {
      * @param {string} toScene - The name of the scene to transition to
      * @param {Object} data - Optional data to pass to the target scene
      */
-    startTransition(scene, fromScene, toScene, data = {}) {
+    startTransition(scene, fromKey, toKey, data = {}) {
         if (this.isTransitioning) {
-            console.log('Transition already in progress, ignoring new transition request');
             return;
         }
         
         this.isTransitioning = true;
-        console.log(`Starting transition from ${fromScene} to ${toScene}`);
-        console.log('Scene object:', scene);
-        console.log('Scene key:', scene.scene.key);
-        
-        this.createTransitionSquares(scene);
-        this.growSquares(scene, fromScene, toScene, data);
+        this.squares = [];
+        this.completedSquares = 0;
+
+        const gameWidth = 960;
+        const gameHeight = 720;
+        const squareSize = 80;
+        const cols = Math.ceil(gameWidth / squareSize);
+        const rows = Math.ceil(gameHeight / squareSize);
+
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                const x = col * squareSize;
+                const y = row * squareSize;
+                const square = scene.add.rectangle(x, y, squareSize, squareSize, 0x000000);
+                square.setOrigin(0, 0);
+                square.setAlpha(0);
+                this.squares.push(square);
+            }
+        }
+
+        this.startGrowAnimation(scene, toKey, data);
     }
 
     /**
@@ -57,8 +70,6 @@ export class TransitionManager {
         const gameHeight = scene.cameras.main.height;
         const cols = Math.ceil(gameWidth / this.squareSize) + 1;
         const rows = Math.ceil(gameHeight / this.squareSize) + 1;
-        
-        console.log(`Creating ${cols} x ${rows} transition squares`);
         
         for (let row = 0; row < rows; row++) {
             for (let col = 0; col < cols; col++) {
@@ -91,8 +102,6 @@ export class TransitionManager {
         let completedSquares = 0;
         const totalSquares = this.squares.length;
         
-        console.log(`Starting grow animation with ${totalSquares} squares`);
-        
         this.squares.forEach((square, index) => {
             const duration = this.transitionDuration + square.delay;
             
@@ -110,10 +119,7 @@ export class TransitionManager {
                     square.isCompleted = true;
                     completedSquares++;
                     
-                    console.log(`Square ${index} completed. ${completedSquares}/${totalSquares}`);
-                    
                     if (completedSquares >= totalSquares) {
-                        console.log('All squares grown, changing scene...');
                         this.changeScene(scene, fromScene, toScene, data);
                     }
                 }
@@ -163,7 +169,6 @@ export class TransitionManager {
                     completedSquares++;
                     
                     if (completedSquares >= totalSquares) {
-                        console.log('Transition complete!');
                         this.completeTransition(scene);
                     }
                 }
@@ -176,11 +181,9 @@ export class TransitionManager {
      * @param {Phaser.Scene} scene - The current scene
      */
     completeTransition(scene) {
-        console.log('Completing transition, cleaning up squares...');
         this.squares.forEach(square => square.destroy());
         this.squares = [];
         this.isTransitioning = false;
-        console.log('Transition completed, isTransitioning reset to false');
     }
 
     /**
@@ -258,6 +261,23 @@ export class TransitionManager {
                         }
                     }
                 });
+            });
+        });
+    }
+
+    startGrowAnimation(scene, toKey, data) {
+        this.squares.forEach((square, index) => {
+            scene.tweens.add({
+                targets: square,
+                alpha: 1,
+                duration: 200,
+                delay: index * 10,
+                onComplete: () => {
+                    this.completedSquares++;
+                    if (this.completedSquares >= this.squares.length) {
+                        scene.scene.start(toKey, data);
+                    }
+                }
             });
         });
     }
