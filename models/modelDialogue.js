@@ -16,6 +16,14 @@ const dialogueSchema = new mongoose.Schema({
   battleDialogue: {
     type: Array,
     required: true
+  },
+  winDialogue: {
+    type: String,
+    required: true,
+  },
+  loseDialogue: {
+    type: String,
+    required: true,
   }
 });
 

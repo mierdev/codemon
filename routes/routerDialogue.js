@@ -13,7 +13,9 @@ router.post("/", async (req, res) => {
   const dialogue = new Dialogue({
     name: req.body.name,
     startDialogue: req.body.startDialogue,
-    battleDialogue: req.body.battleDialogue
+    battleDialogue: req.body.battleDialogue,
+    winDialogue: req.body.battleDialogue,
+    loseDialogue: req.body.battleDialogue
   });
 
   try {
@@ -59,6 +61,12 @@ router
   };
   if (req.body.battleDialogue !== null) {
     res.dialogue.battleDialogue = req.body.battleDialogue;
+  };
+  if (req.body.winDialogue !== null) {
+    res.dialogue.winDialogue = req.body.winDialogue;
+  };
+  if (req.body.loseDialogue !== null) {
+    res.dialogue.loseDialogue = req.body.loseDialogue;
   };
 
   try {

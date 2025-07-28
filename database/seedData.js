@@ -265,14 +265,123 @@ const seedData = async () => {
 
     const dialogue = await Dialogue.insertMany([
       {
-        name: "Nallo",
-        startDialogue: "Welcome to my gym!",
-        battleDialogue: "Let's see what you've got!"
+        name: "Gert",
+        startDialogue: "",
+        battleDialogue: ["", "", ""],
+        winDialogue: "",
+        loseDialogue: ""
       },
       {
-        name: "Gert",
-        startDialogue: "Are you ready for a water battle?",
-        battleDialogue: "My water types will wash you away!"
+        name: "Miranda",
+        startDialogue: "",
+        battleDialogue: ["", "", ""],
+        winDialogue: "",
+        loseDialogue: ""
+      },
+      {
+        name: "birbMiranda",
+        startDialogue: "",
+        battleDialogue: ["", "", ""],
+        winDialogue: "",
+        loseDialogue: ""
+      },
+      {
+        name: "TokiLoshi",
+        startDialogue: "",
+        battleDialogue: ["", "", ""],
+        winDialogue: "",
+        loseDialogue: ""
+      },
+      {
+        name: "Dan",
+        startDialogue: "",
+        battleDialogue: ["", "", ""],
+        winDialogue: "",
+        loseDialogue: ""
+      },
+      {
+        name: "Karma Glitch",
+        startDialogue: "Can you use Google?",
+        battleDialogue: ["", "", ""],
+        winDialogue: "",
+        loseDialogue: ""
+      },
+      {
+        name: "Lane",
+        startDialogue: "",
+        battleDialogue: ["", "", ""],
+        winDialogue: "",
+        loseDialogue: ""
+      },
+      {
+        name: "Lyle",
+        startDialogue: "Want to battle? Let's SSGo!",
+        battleDialogue: ["", "", ""],
+        winDialogue: "",
+        loseDialogue: ""
+      },
+      {
+        name: "Ipê",
+        startDialogue: "",
+        battleDialogue: ["", "", ""],
+        winDialogue: "",
+        loseDialogue: ""
+      },
+      {
+        name: "Nallo",
+        startDialogue: "",
+        battleDialogue: ["", "", ""],
+        winDialogue: "",
+        loseDialogue: ""
+      },
+      {
+        name: "birbNallo",
+        startDialogue: "",
+        battleDialogue: ["", "", ""],
+        winDialogue: "",
+        loseDialogue: ""
+      },
+      {
+        name: "Zillhar",
+        startDialogue: "",
+        battleDialogue: ["", "", ""],
+        winDialogue: "",
+        loseDialogue: ""
+      },
+      {
+        name: "Wasseem",
+        startDialogue: "",
+        battleDialogue: ["", "", ""],
+        winDialogue: "",
+        loseDialogue: ""
+      },
+      {
+        name: "Ryan",
+        startDialogue: "",
+        battleDialogue: ["", "", ""],
+        winDialogue: "",
+        loseDialogue: ""
+      },
+      {
+        name: "Zieba",
+        startDialogue: "",
+        battleDialogue: ["", "", ""],
+        winDialogue: "",
+        loseDialogue: ""
+      },
+      {
+        name: "Dave",
+        startDialogue: "",
+        battleDialogue: ["", "", ""],
+        winDialogue: "",
+        loseDialogue: ""
+      },
+      {
+        name: "Nuc",
+        startDialogue: "ANA is abandoned!",
+        battleDialogue: ["", "", ""],
+        winDialogue: "",
+        loseDialogue: "I'm surrounded by old people."
       }
     ]);
 
@@ -305,12 +414,72 @@ const seedData = async () => {
 
     const trainers = await Trainer.insertMany([
       {
-        name: "Nallo",
+        name: "Gert",
+        codemon: "python"
+      },
+      {
+        name: "Miranda",
+        codemon: "python"
+      },
+      {
+        name: "birbMiranda",
         codemon: "javascript"
       },
       {
-        name: "Gert",
-        codemon: "python"
+        name: "TokiLoshi",
+        codemon: "javascript"
+      },
+      {
+        name: "Dan",
+        codemon: "javascript"
+      },
+      {
+        name: "Karma Glitch",
+        codemon: "javascript"
+      },
+      {
+        name: "Lane",
+        codemon: "go"
+      },
+      {
+        name: "Lyle",
+        codemon: "go"
+      },
+      {
+        name: "Ipê",
+        codemon: "go"
+      },
+      {
+        name: "Nallo",
+        codemon: "rust"
+      },
+      {
+        name: "birbNallo",
+        codemon: "javascript"
+      },
+      {
+        name: "Zillhar",
+        codemon: "rust"
+      },
+      {
+        name: "Wasseem",
+        codemon: "ocaml"
+      },
+      {
+        name: "Ryan",
+        codemon: "ocaml"
+      },
+      {
+        name: "Zieba",
+        codemon: "csharp"
+      },
+      {
+        name: "Dave",
+        codemon: "lotusscript"
+      },
+      {
+        name: "Nuc",
+        codemon: "ANA"
       }
     ]);
 
