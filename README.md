@@ -8,7 +8,7 @@ Compete in pokémon inspired battles to find out which is the strongest programm
 
 ## The game is live hosted! 
 
-**<a href="https://cdn.bookey.app/files/publish-book/Learning%20TypeScript7136808.jpg" target="_blank">Play it in your browser</a>**
+**<a href="https://codemon-rho.vercel.app/" target="_blank">Play it in your browser</a>**
 
 ## In-game sreenshots
 
