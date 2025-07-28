@@ -16,19 +16,30 @@ class BootScene extends Phaser.Scene {
 	 * Preloads assets
 	 */
 	preload() {
+		// Backdrop
 		this.load.image("danLaneStandoff", [
 			"assets/backgrounds/dan-lane-standoff.png",
 		]);
+		// Codemon banner
+		this.load.image("bannerLeft", ["assets/UI/components/bannerLeft.png"]);
+		this.load.image("bannerMid", ["assets/UI/components/bannerMid.png"]);
+		this.load.image("bannerRight", ["assets/UI/components/bannerRight.png"]);
+
+		// TODO:
+		// Clear if unused
 		this.load.image("brownPressed", ["assets/UI/components/brownPressed.png"]);
 		this.load.image("brownUnpressed", [
 			"assets/UI/components/brownUnpressed.png",
 		]);
+		// Language buttons
 		this.load.image("enterButton", ["assets/UI/components/enterButton.png"]);
 		this.load.image("enterPressed", ["assets/UI/components/enterPressed.png"]);
+		// Tournament Buttons
 		this.load.image("goldPressed", ["assets/UI/components/goldPressed.png"]);
 		this.load.image("goldUnpressed", [
 			"assets/UI/components/goldUnpressed.png",
 		]);
+		// Start Button
 		this.load.image("greyPressed", ["assets/UI/components/greyPressed.png"]);
 		this.load.image("greyUnpressed", [
 			"assets/UI/components/greyUnpressed.png",
@@ -49,17 +60,7 @@ class BootScene extends Phaser.Scene {
 		const backdrop = this.add.image(480, 360, "danLaneStandoff");
 		backdrop.setDisplaySize(960, 720);
 
-		// Title
-		// TODO:
-		// Make this a banner
-		this.add
-			.text(480, 100, "CODEMON", {
-				fontSize: "46px",
-				fill: "#fff",
-				stroke: "#4A90E2",
-				strokeThickness: 3,
-			})
-			.setOrigin(0.5);
+		this.createCodemonBanner();
 
 		// Tournament buttons
 		this.add
@@ -72,7 +73,7 @@ class BootScene extends Phaser.Scene {
 
 		// Language buttons
 		this.add
-			.text(480, 350, "Choose language: ", { fontSize: "24px", fill: "#fff" })
+			.text(480, 335, "Choose language: ", { fontSize: "24px", fill: "#fff" })
 			.setOrigin(0.5);
 
 		this.createLanguageButton("python", "Python", 280, 400);
@@ -85,12 +86,12 @@ class BootScene extends Phaser.Scene {
 		startButton.setInteractive();
 
 		this.add
-			.text(480, 500, "COMPILE", { fontSize: "18px", fill: "#00000" })
+			.text(480, 500, "COMPILE", { fontSize: "18px", fill: "#0f2b92ff" })
 			.setOrigin(0.5);
 
 		startButton.on("pointerdown", () => {
+			startButton.setTexture("greyPressed");
 			this.time.delayedCall(150, () => {
-				startButton.setTexture("greyPressed");
 				this.startTournament();
 			});
 		});
@@ -112,6 +113,40 @@ class BootScene extends Phaser.Scene {
 				{ fontSize: "18px", fill: "#fff" }
 			)
 			.setOrigin(0.5);
+	}
+
+	createCodemonBanner() {
+		const bannerY = 100;
+		const centerX = 480;
+		const bannerScale = 2.5;
+
+		const bannerLeft = this.add.image(centerX - 80, bannerY, "bannerLeft");
+		bannerLeft.setScale(bannerScale);
+
+		const bannerMid = this.add.image(centerX, bannerY, "bannerMid");
+		bannerMid.setScale(bannerScale);
+
+		const bannerRight = this.add.image(centerX + 80, bannerY, "bannerRight");
+		bannerRight.setScale(bannerScale);
+
+		// Title
+		this.add
+			.text(480, 105, "CODEMON", {
+				fontSize: "36px",
+				fill: "#fff",
+				fontStyle: "bold",
+				stroke: "#000",
+				strokeThickness: 2,
+				shadow: {
+					offsetX: 2,
+					offsetY: 2,
+					color: "#000000",
+					blur: 4,
+					fill: true,
+				},
+			})
+			.setOrigin(0.5)
+			.setDepth(1);
 	}
 
 	createTournamentButton(matches, text, x, y) {
