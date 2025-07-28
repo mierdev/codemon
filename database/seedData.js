@@ -266,59 +266,59 @@ const seedData = async () => {
     const dialogue = await Dialogue.insertMany([
       {
         name: "Gert",
-        startDialogue: "Ready to code?",
-        battleDialogue: ["Let's see what you've got!", "Time to test your skills!", "Show me your best!"],
-        winDialogue: "Well done!",
-        loseDialogue: "Better luck next time!"
+        startDialogue: "Tomorrow I hope will be the end of DSA (then SSG :brokenarmor:",
+        battleDialogue: ["Greatness comes from chaos!! 🔥 🔥", "Did you choose violence today :bootslol:", "You all are bots."],
+        winDialogue: "Woke up from DSA brain melt and get wordle in 2 :bootspog:)",
+        loseDialogue: "But know I haven't forgotten about timing you out Miranda! 😠"
       },
       {
         name: "Miranda",
-        startDialogue: "Hello there!",
-        battleDialogue: ["Let's battle!", "Time to fight!", "Show me your moves!"],
+        startDialogue: "Loops throw you for a loop when starting out.",
+        battleDialogue: ["It's more Pythonic.", "Oh no, not more currying pls :bootsfear:", "BRING THE PAIN !!! :hard:"],
         winDialogue: "Great job!",
-        loseDialogue: "Don't give up!"
+        loseDialogue: "I’m old I don’t remember things."
       },
       {
         name: "birbMiranda",
-        startDialogue: "Hello there!",
-        battleDialogue: ["Let's battle!", "Time to fight!", "Show me your moves!"],
-        winDialogue: "Great job!",
-        loseDialogue: "Don't give up!"
+        startDialogue: "TypeScript has enums.",
+        battleDialogue: ["Easily beaten with enums.", "Just finished the Union chapter, they are neat.", "'G'o do some html and css and vanilla javascript."],
+        winDialogue: "I love JavaScript.",
+        loseDialogue: "You do realize JavaScript is everywhere and you’ll never be able to escape it?"
       },
       {
         name: "TokiLoshi",
-        startDialogue: "Hey there!",
-        battleDialogue: ["Let's do this!", "Time to battle!", "Show me what you got!"],
-        winDialogue: "Excellent!",
-        loseDialogue: "Keep trying!"
+        startDialogue: "Birds are happy creatures :bootsheart:",
+        battleDialogue: ["Kinda looks like a ducky :rubberduck:", "Ok, that's pretty cute :bootsheart:", "Fine, keep your secrets."],
+        winDialogue: "I predicted the shiny.",
+        loseDialogue: "So much I still want to add and polish."
       },
       {
         name: "Dan",
-        startDialogue: "",
-        battleDialogue: ["", "", ""],
-        winDialogue: "",
-        loseDialogue: ""
+        startDialogue: "It's important to keep reminding people that TypeScript has enums.",
+        battleDialogue: ["Don't stop bullying.", "Just a lot of soy manual enjoyers here.", "Kinda verbose."],
+        winDialogue: "Did lane forget to mention bonus points if it's in js/ts? :bootsthink:",
+        loseDialogue: "Non-sarcastically added it to the backlog :bootspray:"
       },
       {
         name: "Karma Glitch",
         startDialogue: "Can you use Google?",
-        battleDialogue: ["Let's see!", "Time to battle!", "Show me your moves!"],
-        winDialogue: "Impressive!",
-        loseDialogue: "Keep learning!"
+        battleDialogue: ["Shiiiiiit.", "Fat bear.", "we have TS which is far more superior, am i right?"],
+        winDialogue: "I would love a cup of Java.",
+        loseDialogue: "Streak has zero value in reality."
       },
       {
         name: "Lane",
-        startDialogue: "Hello!",
-        battleDialogue: ["Let's fight!", "Time to battle!", "Show me your best!"],
-        winDialogue: "Great work!",
-        loseDialogue: "Don't stop trying!"
+        startDialogue: "I don't have anything with Java installed, when in doubt, provide instructions.",
+        battleDialogue: ["I never took notes in school.", "Slay.", "Can anyone hear me?"],
+        winDialogue: "Not hard to look things up these days.",
+        loseDialogue: "Effin got me"
       },
       {
         name: "Lyle",
-        startDialogue: "Want to battle? Let's SSGo!",
-        battleDialogue: ["Let's do this!", "Time to fight!", "Show me your skills!"],
-        winDialogue: "Excellent job!",
-        loseDialogue: "Keep practicing!"
+        startDialogue: "There is no SSGo.",
+        battleDialogue: ["It do be a little slow.", "You're the reason my parser handles inline hot garbage", "At least it's not JS/TS..."],
+        winDialogue: "If I can't have a little fun then what's the point?",
+        loseDialogue: "You could say the go team doesn't give one iota about enums :KEKWlaugh:"
       },
       {
         name: "Ipê",
@@ -332,7 +332,7 @@ const seedData = async () => {
         startDialogue: "Hello there!",
         battleDialogue: ["Let's fight!", "Time to battle!", "Show me your best!"],
         winDialogue: "Great job!",
-        loseDialogue: "Don't give up!"
+        loseDialogue: "Crab! I'm cooked..."
       },
       {
         name: "birbNallo",
