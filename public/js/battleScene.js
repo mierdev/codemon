@@ -152,12 +152,20 @@ class BattleScene extends Phaser.Scene {
 
 		// Assign sprites
 		this.pokemon1Sprite = this.add.image(240, 220, pokemon1SpriteKey);
-		this.pokemon1Sprite.setScale(0.3);
+		// Crab sprite is 50% smaller
+		if (pokemon1SpriteKey === "crab") {
+			this.pokemon1Sprite.setScale(0.15);
+		} else {
+			this.pokemon1Sprite.setScale(0.3);
+		}
 
 		this.pokemon2Sprite = this.add.image(720, 220, pokemon2SpriteKey);
 		// C# sprite is 3 times smaller due to larger source image
 		if (pokemon2SpriteKey === "windows_logo") {
 			this.pokemon2Sprite.setScale(0.1);
+		} else if (pokemon2SpriteKey === "crab") {
+			// Crab sprite is 50% smaller
+			this.pokemon2Sprite.setScale(0.15);
 		} else {
 			this.pokemon2Sprite.setScale(0.3);
 		}

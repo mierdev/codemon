@@ -266,121 +266,114 @@ const seedData = async () => {
     const dialogue = await Dialogue.insertMany([
       {
         name: "Gert",
-        startDialogue: "",
-        battleDialogue: ["", "", ""],
-        winDialogue: "",
-        loseDialogue: ""
+        startDialogue: "Ready to code?",
+        battleDialogue: ["Let's see what you've got!", "Time to test your skills!", "Show me your best!"],
+        winDialogue: "Well done!",
+        loseDialogue: "Better luck next time!"
       },
       {
         name: "Miranda",
-        startDialogue: "",
-        battleDialogue: ["", "", ""],
-        winDialogue: "",
-        loseDialogue: ""
+        startDialogue: "Hello there!",
+        battleDialogue: ["Let's battle!", "Time to fight!", "Show me your moves!"],
+        winDialogue: "Great job!",
+        loseDialogue: "Don't give up!"
       },
       {
         name: "birbMiranda",
-        startDialogue: "",
-        battleDialogue: ["", "", ""],
-        winDialogue: "",
-        loseDialogue: ""
+        startDialogue: "Hello there!",
+        battleDialogue: ["Let's battle!", "Time to fight!", "Show me your moves!"],
+        winDialogue: "Great job!",
+        loseDialogue: "Don't give up!"
       },
       {
         name: "TokiLoshi",
-        startDialogue: "",
-        battleDialogue: ["", "", ""],
-        winDialogue: "",
-        loseDialogue: ""
+        startDialogue: "Hey there!",
+        battleDialogue: ["Let's do this!", "Time to battle!", "Show me what you got!"],
+        winDialogue: "Excellent!",
+        loseDialogue: "Keep trying!"
       },
       {
         name: "Dan",
-        startDialogue: "",
-        battleDialogue: ["", "", ""],
-        winDialogue: "",
-        loseDialogue: ""
+        startDialogue: "Ready to fight?",
+        battleDialogue: ["Let's go!", "Time to test!", "Show me your skills!"],
+        winDialogue: "Well played!",
+        loseDialogue: "You'll get better!"
       },
       {
         name: "Karma Glitch",
         startDialogue: "Can you use Google?",
-        battleDialogue: ["", "", ""],
-        winDialogue: "",
-        loseDialogue: ""
+        battleDialogue: ["Let's see!", "Time to battle!", "Show me your moves!"],
+        winDialogue: "Impressive!",
+        loseDialogue: "Keep learning!"
       },
       {
         name: "Lane",
-        startDialogue: "",
-        battleDialogue: ["", "", ""],
-        winDialogue: "",
-        loseDialogue: ""
+        startDialogue: "Hello!",
+        battleDialogue: ["Let's fight!", "Time to battle!", "Show me your best!"],
+        winDialogue: "Great work!",
+        loseDialogue: "Don't stop trying!"
       },
       {
         name: "Lyle",
         startDialogue: "Want to battle? Let's SSGo!",
-        battleDialogue: ["", "", ""],
-        winDialogue: "",
-        loseDialogue: ""
+        battleDialogue: ["Let's do this!", "Time to fight!", "Show me your skills!"],
+        winDialogue: "Excellent job!",
+        loseDialogue: "Keep practicing!"
       },
       {
         name: "Ipê",
-        startDialogue: "",
-        battleDialogue: ["", "", ""],
-        winDialogue: "",
-        loseDialogue: ""
+        startDialogue: "Ready to code?",
+        battleDialogue: ["Let's battle!", "Time to test!", "Show me your moves!"],
+        winDialogue: "Well done!",
+        loseDialogue: "Keep improving!"
       },
       {
         name: "Nallo",
-        startDialogue: "",
-        battleDialogue: ["", "", ""],
-        winDialogue: "",
-        loseDialogue: ""
+        startDialogue: "Hello there!",
+        battleDialogue: ["Let's fight!", "Time to battle!", "Show me your best!"],
+        winDialogue: "Great job!",
+        loseDialogue: "Don't give up!"
       },
       {
         name: "birbNallo",
-        startDialogue: "",
-        battleDialogue: ["", "", ""],
-        winDialogue: "",
-        loseDialogue: ""
+        startDialogue: "Hello there!",
+        battleDialogue: ["Let's fight!", "Time to battle!", "Show me your best!"],
+        winDialogue: "Great job!",
+        loseDialogue: "Don't give up!"
       },
       {
         name: "Zillhar",
-        startDialogue: "",
-        battleDialogue: ["", "", ""],
-        winDialogue: "",
-        loseDialogue: ""
+        startDialogue: "Ready to fight?",
+        battleDialogue: ["Let's go!", "Time to test!", "Show me your skills!"],
+        winDialogue: "Well played!",
+        loseDialogue: "Keep trying!"
       },
       {
         name: "Wasseem",
-        startDialogue: "",
-        battleDialogue: ["", "", ""],
-        winDialogue: "",
-        loseDialogue: ""
+        startDialogue: "Hello!",
+        battleDialogue: ["Let's battle!", "Time to fight!", "Show me your moves!"],
+        winDialogue: "Excellent!",
+        loseDialogue: "Keep learning!"
       },
       {
         name: "Ryan",
-        startDialogue: "",
-        battleDialogue: ["", "", ""],
-        winDialogue: "",
-        loseDialogue: ""
+        startDialogue: "Ready to code?",
+        battleDialogue: ["Let's do this!", "Time to battle!", "Show me your best!"],
+        winDialogue: "Great work!",
+        loseDialogue: "Don't stop trying!"
       },
       {
         name: "Zieba",
-        startDialogue: "",
-        battleDialogue: ["", "", ""],
-        winDialogue: "",
-        loseDialogue: ""
-      },
-      {
-        name: "Dave",
-        startDialogue: "",
-        battleDialogue: ["", "", ""],
-        winDialogue: "",
-        loseDialogue: ""
+        startDialogue: "Hello there!",
+        battleDialogue: ["Let's fight!", "Time to test!", "Show me your skills!"],
+        winDialogue: "Well done!",
+        loseDialogue: "Keep improving!"
       },
       {
         name: "Nuc",
         startDialogue: "ANA is abandoned!",
-        battleDialogue: ["", "", ""],
-        winDialogue: "",
+        battleDialogue: ["Let's battle!", "Time to fight!", "Show me your moves!"],
+        winDialogue: "Great job!",
         loseDialogue: "I'm surrounded by old people."
       }
     ]);
@@ -415,20 +408,6 @@ const seedData = async () => {
     const trainers = await Trainer.insertMany([
       // Python trainers
       {
-<<<<<<< Updated upstream
-        name: "Gert",
-        codemon: "python"
-      },
-      {
-        name: "Miranda",
-        codemon: "python"
-      },
-      {
-        name: "birbMiranda",
-        codemon: "javascript"
-      },
-      {
-=======
         name: "Miranda",
         codemon: "python"
       },
@@ -438,7 +417,6 @@ const seedData = async () => {
       },
       // JavaScript & TypeScript trainers
       {
->>>>>>> Stashed changes
         name: "TokiLoshi",
         codemon: "javascript"
       },
@@ -450,10 +428,15 @@ const seedData = async () => {
         name: "Karma Glitch",
         codemon: "javascript"
       },
-<<<<<<< Updated upstream
-=======
+      {
+        name: "birbMiranda",
+        codemon: "javascript"
+      },
+      {
+        name: "birbNallo",
+        codemon: "javascript"
+      },
       // Go trainers
->>>>>>> Stashed changes
       {
         name: "Lane",
         codemon: "go"
@@ -466,50 +449,21 @@ const seedData = async () => {
         name: "Ipê",
         codemon: "go"
       },
-<<<<<<< Updated upstream
-=======
       // Rust trainers
->>>>>>> Stashed changes
       {
         name: "Nallo",
         codemon: "rust"
       },
       {
-<<<<<<< Updated upstream
-        name: "birbNallo",
-        codemon: "javascript"
-      },
-      {
-        name: "Zillhar",
-        codemon: "rust"
-      },
-      {
-        name: "Wasseem",
-        codemon: "ocaml"
-      },
-=======
         name: "Zillhar",
         codemon: "rust"
       },
       // OCaml trainers
->>>>>>> Stashed changes
       {
         name: "Ryan",
         codemon: "ocaml"
       },
       {
-<<<<<<< Updated upstream
-        name: "Zieba",
-        codemon: "csharp"
-      },
-      {
-        name: "Dave",
-        codemon: "lotusscript"
-      },
-      {
-        name: "Nuc",
-        codemon: "ANA"
-=======
         name: "Wasseem",
         codemon: "ocaml"
       },
@@ -517,7 +471,6 @@ const seedData = async () => {
       {
         name: "Zieba",
         codemon: "csharp"
->>>>>>> Stashed changes
       }
     ]);
 
