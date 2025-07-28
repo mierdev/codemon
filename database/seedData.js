@@ -294,10 +294,10 @@ const seedData = async () => {
       },
       {
         name: "Dan",
-        startDialogue: "Ready to fight?",
-        battleDialogue: ["Let's go!", "Time to test!", "Show me your skills!"],
-        winDialogue: "Well played!",
-        loseDialogue: "You'll get better!"
+        startDialogue: "",
+        battleDialogue: ["", "", ""],
+        winDialogue: "",
+        loseDialogue: ""
       },
       {
         name: "Karma Glitch",
@@ -322,10 +322,10 @@ const seedData = async () => {
       },
       {
         name: "Ipê",
-        startDialogue: "Ready to code?",
-        battleDialogue: ["Let's battle!", "Time to test!", "Show me your moves!"],
-        winDialogue: "Well done!",
-        loseDialogue: "Keep improving!"
+        startDialogue: "",
+        battleDialogue: ["", "", ""],
+        winDialogue: "",
+        loseDialogue: ""
       },
       {
         name: "Nallo",
