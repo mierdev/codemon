@@ -173,7 +173,6 @@ npm run devStart
 - MongoDB
 
 **Programming languages**
-- TypeScript
 - JavaScript
 - HTML/CSS
 
