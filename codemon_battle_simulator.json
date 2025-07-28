@@ -1,0 +1,425 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "Codemon battle simulator data with pre-calculated damage scores",
+    "damage_formula": "(Base_Power * Attack_Stat / Defense_Stat) * Random_Factor",
+    "random_factor_range": [0.85, 1.15],
+    "stat_stages": {
+      "buff_multiplier": 1.5,
+      "debuff_multiplier": 0.67,
+      "max_stages": 4
+    },
+    "ability_types": {
+      "Physical": "Uses Attack vs Defense",
+      "Special": "Uses Special Attack vs Special Defense",
+      "Passive": "No damage, always active",
+      "Recovery": "Healing abilities",
+      "Utility": "Support abilities",
+      "Debuff": "Status effect abilities",
+      "Buff": "Stat boosting abilities",
+      "Control": "Battle manipulation",
+      "Defensive": "Protective abilities",
+      "Support": "Team support abilities"
+    }
+  },
+  "languages": [
+    {
+      "id": "python",
+      "name": "Python",
+      "type": "Script",
+      "base_stats": {
+        "hp": 100,
+        "maxHp": 100,
+        "attack": 75,
+        "specialAttack": 85,
+        "defense": 75,
+        "specialDefense": 75,
+        "speed": 80
+      },
+      "abilities": [
+        {
+          "name": "Rapid Prototype",
+          "type": "Passive",
+          "power": 10,
+          "accuracy": 100,
+          "description": "Starts battle with +10 Speed bonus. Status effects last 1 less turn.",
+          "cooldown": 0,
+          "damage_calculations": {
+            "note": "Passive ability - no damage dealt"
+          }
+        },
+        {
+          "name": "Ecosystem Call",
+          "type": "Utility",
+          "power": 15,
+          "accuracy": 100,
+          "description": "Temporarily gains a secondary type for 3 turns.",
+          "cooldown": 5,
+          "damage_calculations": {
+            "note": "Utility ability - minimal damage",
+            "base_damage": 15
+          }
+        }
+      ]
+    },
+    {
+      "id": "go",
+      "name": "Go",
+      "type": "Concurrent/System",
+      "base_stats": {
+        "hp": 100,
+        "maxHp": 100,
+        "attack": 80,
+        "specialAttack": 75,
+        "defense": 85,
+        "specialDefense": 80,
+        "speed": 70
+      },
+      "abilities": [
+        {
+          "name": "Fast Compilation",
+          "type": "Passive",
+          "power": 10,
+          "accuracy": 100,
+          "description": "Takes turn first vs Script/Managed types. +5 Defense/SpDefense.",
+          "cooldown": 0,
+          "damage_calculations": {
+            "note": "Passive ability - no damage dealt"
+          }
+        },
+        {
+          "name": "Goroutine Swarm",
+          "type": "Special",
+          "power": 35,
+          "accuracy": 75,
+          "description": "Deals special damage. 25% chance to inflict Concurrency Bottleneck.",
+          "cooldown": 2,
+          "damage_calculations": {
+            "vs_python": {
+              "min": 28,
+              "max": 38,
+              "average": 33
+            },
+            "vs_go": {
+              "min": 26,
+              "max": 36,
+              "average": 31
+            },
+            "vs_rust": {
+              "min": 24,
+              "max": 33,
+              "average": 28
+            },
+            "vs_ocaml": {
+              "min": 25,
+              "max": 34,
+              "average": 29
+            },
+            "vs_csharp": {
+              "min": 26,
+              "max": 36,
+              "average": 31
+            },
+            "vs_javascript": {
+              "min": 29,
+              "max": 39,
+              "average": 34
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "rust",
+      "name": "Rust",
+      "type": "System/Concurrent",
+      "base_stats": {
+        "hp": 100,
+        "maxHp": 100,
+        "attack": 85,
+        "specialAttack": 75,
+        "defense": 90,
+        "specialDefense": 85,
+        "speed": 65
+      },
+      "abilities": [
+        {
+          "name": "Borrow Checker",
+          "type": "Passive",
+          "power": 25,
+          "accuracy": 100,
+          "description": "Takes 50% less damage from memory corruption attacks.",
+          "cooldown": 0,
+          "damage_calculations": {
+            "note": "Passive ability - no damage dealt"
+          }
+        },
+        {
+          "name": "Zero-Cost Abstraction",
+          "type": "Buff",
+          "power": 15,
+          "accuracy": 100,
+          "description": "Increases Attack and Special Attack by 1 stage for 3 turns.",
+          "cooldown": 3,
+          "damage_calculations": {
+            "note": "Buff ability - minimal damage",
+            "base_damage": 15
+          }
+        }
+      ]
+    },
+    {
+      "id": "ocaml",
+      "name": "OCaml",
+      "type": "Functional",
+      "base_stats": {
+        "hp": 100,
+        "maxHp": 100,
+        "attack": 65,
+        "specialAttack": 95,
+        "defense": 70,
+        "specialDefense": 90,
+        "speed": 75
+      },
+      "abilities": [
+        {
+          "name": "Type Inference",
+          "type": "Passive",
+          "power": 25,
+          "accuracy": 100,
+          "description": "All abilities gain +10% accuracy. +15% crit vs multi-type targets.",
+          "cooldown": 0,
+          "damage_calculations": {
+            "note": "Passive ability - no damage dealt"
+          }
+        },
+        {
+          "name": "Pattern Matching",
+          "type": "Special",
+          "power": 60,
+          "accuracy": 85,
+          "description": "Deals special damage. +25 bonus vs C++ and JS/TS.",
+          "cooldown": 3,
+          "damage_calculations": {
+            "vs_python": {
+              "min": 55,
+              "max": 75,
+              "average": 65
+            },
+            "vs_go": {
+              "min": 53,
+              "max": 72,
+              "average": 62
+            },
+            "vs_rust": {
+              "min": 50,
+              "max": 68,
+              "average": 59
+            },
+            "vs_ocaml": {
+              "min": 51,
+              "max": 70,
+              "average": 60
+            },
+            "vs_csharp": {
+              "min": 52,
+              "max": 71,
+              "average": 61
+            },
+            "vs_javascript": {
+              "min": 56,
+              "max": 76,
+              "average": 66
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "csharp",
+      "name": "C#",
+      "type": "Managed/Enterprise",
+      "base_stats": {
+        "hp": 100,
+        "maxHp": 100,
+        "attack": 85,
+        "specialAttack": 90,
+        "defense": 80,
+        "specialDefense": 85,
+        "speed": 75
+      },
+      "abilities": [
+        {
+          "name": "Garbage Collection",
+          "type": "Recovery",
+          "power": 15,
+          "accuracy": 100,
+          "description": "Heals 30% max HP and removes one debuff. 25% chance to gain +1 Defense.",
+          "cooldown": 4,
+          "damage_calculations": {
+            "note": "Recovery ability - minimal damage",
+            "base_damage": 15
+          }
+        },
+        {
+          "name": "LINQ Query",
+          "type": "Special",
+          "power": 50,
+          "accuracy": 85,
+          "description": "Deals special damage. 30% chance to inflict 'Data Binding Error'.",
+          "cooldown": 3,
+          "damage_calculations": {
+            "vs_python": {
+              "min": 47,
+              "max": 64,
+              "average": 55
+            },
+            "vs_go": {
+              "min": 45,
+              "max": 61,
+              "average": 53
+            },
+            "vs_rust": {
+              "min": 42,
+              "max": 57,
+              "average": 49
+            },
+            "vs_ocaml": {
+              "min": 43,
+              "max": 59,
+              "average": 51
+            },
+            "vs_csharp": {
+              "min": 44,
+              "max": 60,
+              "average": 52
+            },
+            "vs_javascript": {
+              "min": 48,
+              "max": 65,
+              "average": 56
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "javascript",
+      "name": "JavaScript & TypeScript",
+      "type": "Web/Script",
+      "base_stats": {
+        "hp": 100,
+        "maxHp": 100,
+        "attack": 70,
+        "specialAttack": 85,
+        "defense": 70,
+        "specialDefense": 70,
+        "speed": 90
+      },
+      "abilities": [
+        {
+          "name": "Asynchronous Promise",
+          "type": "Special",
+          "power": 45,
+          "accuracy": 75,
+          "description": "Deals initial damage + 25 delayed damage. 25% chance of Callback Hell.",
+          "cooldown": 2,
+          "damage_calculations": {
+            "vs_python": {
+              "min": 41,
+              "max": 55,
+              "average": 48
+            },
+            "vs_go": {
+              "min": 39,
+              "max": 53,
+              "average": 46
+            },
+            "vs_rust": {
+              "min": 37,
+              "max": 50,
+              "average": 43
+            },
+            "vs_ocaml": {
+              "min": 38,
+              "max": 51,
+              "average": 44
+            },
+            "vs_csharp": {
+              "min": 39,
+              "max": 52,
+              "average": 45
+            },
+            "vs_javascript": {
+              "min": 42,
+              "max": 56,
+              "average": 49
+            }
+          }
+        },
+        {
+          "name": "Framework Flux",
+          "type": "Passive",
+          "power": 30,
+          "accuracy": 100,
+          "description": "40% chance each turn to gain +1 random stat. 10% chance to lose -1.",
+          "cooldown": 0,
+          "damage_calculations": {
+            "note": "Passive ability - no damage dealt"
+          }
+        }
+      ]
+    }
+  ],
+  "battle_mechanics": {
+    "damage_formula": {
+      "description": "Damage = (Base_Power * Attack_Stat / Defense_Stat) * Random_Factor",
+      "random_factor": {
+        "min": 0.85,
+        "max": 1.15,
+        "description": "Random factor applied to damage calculation"
+      }
+    },
+    "stat_stages": {
+      "buff_multiplier": 1.5,
+      "debuff_multiplier": 0.67,
+      "max_stages": 4,
+      "description": "Stat stage multipliers for buffs and debuffs"
+    },
+    "accuracy": {
+      "description": "Percentage chance for ability to hit",
+      "range": [0, 100]
+    },
+    "cooldown": {
+      "description": "Number of turns before ability can be used again",
+      "range": [0, 10]
+    }
+  },
+  "simulation_data": {
+    "total_languages": 6,
+    "total_abilities": 12,
+    "damage_types": {
+      "physical": 0,
+      "special": 4,
+      "passive": 4,
+      "recovery": 1,
+      "utility": 1,
+      "debuff": 0,
+      "buff": 1,
+      "control": 0,
+      "defensive": 0,
+      "support": 0
+    },
+    "highest_damage_ability": {
+      "name": "Pattern Matching",
+      "language": "OCaml",
+      "power": 80,
+      "average_damage": 66
+    },
+    "most_versatile_language": {
+      "name": "C#",
+      "type": "Managed/Enterprise",
+      "abilities": ["Recovery", "Special", "Passive"]
+    }
+  }
+} 

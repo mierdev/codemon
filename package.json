@@ -11,7 +11,8 @@
 		"server": "nodemon --watch './' --ext ts,js --exec 'tsx' server.js",
 		"macStart": "nodemon --watch './' --ext ts --exec 'node --loader ts-node/esm' server.js",
 		"devStart": "nodemon server.js",
-		"dev:full": "concurrently \"npm run server\" \"npm run dev\""
+		"dev:full": "concurrently \"npm run server\" \"npm run dev\"",
+		"seed": "node -e \"import('./database/seedData.js').then(m => m.default())\""
 	},
 	"devDependencies": {
 		"@types/express": "^5.0.3",
