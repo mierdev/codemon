@@ -8,6 +8,7 @@ const router = express.Router();
 // CREATE one
 router.post("/", async (req, res) => {
   const dialogue = new Dialogue({
+    name: req.body.name,
     startDialogue: req.body.startDialogue,
     battleDialogue: req.body.battleDialogue
   });
@@ -38,6 +39,9 @@ router
   res.json(res.dialogue);
 })
 .patch(getDialogue, async (req, res) => {
+  if (req.body.name !== null) {
+    res.dialogue.name = req.body.name;
+  };
   if (req.body.startDialogue !== null) {
     res.dialogue.startDialogue = req.body.startDialogue;
   };

@@ -8,12 +8,8 @@ const trainersSchema = new mongoose.Schema({
     required: true,
   },
   codemon: {
-    type: Object,
+    type: String,
     required: true,
-  },
-  dialogue: {
-    type: Object,
-    required: true
   }
 });
 

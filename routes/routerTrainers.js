@@ -9,8 +9,7 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   const trainer = new Trainer({
     name: req.body.name,
-    codemon: req.body.codemon,
-    dialogue: req.body.dialogue
+    codemon: req.body.codemon
   });
 
   try {
@@ -44,9 +43,6 @@ router
   };
   if (req.body.battleDialogue !== null) {
     res.trainer.codemon = req.body.codemon;
-  };
-    if (req.body.dialogue !== null) {
-    res.trainer.dialogue = req.body.dialogue;
   };
 
   try {

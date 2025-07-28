@@ -3,6 +3,10 @@ import mongoose from "mongoose";
 
 // setup schema
 const dialogueSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
   startDialogue: {
     type: String,
     required: true,

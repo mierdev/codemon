@@ -252,10 +252,12 @@ const seedData = async () => {
     // Seed dialogue
     const dialogue = await Dialogue.insertMany([
       {
+        name: "Nallo",
         startDialogue: "Welcome to my gym!",
         battleDialogue: "Let's see what you've got!"
       },
       {
+        name: "Gert",
         startDialogue: "Are you ready for a water battle?",
         battleDialogue: "My water types will wash you away!"
       }
@@ -291,14 +293,12 @@ const seedData = async () => {
     // Seed trainers
     const trainers = await Trainer.insertMany([
       {
-        name: "Ash Ketchum",
-        codemon: ["Charizard", "Pikachu"],
-        dialogue: "I choose you!"
+        name: "Nallo",
+        codemon: "javascript"
       },
       {
-        name: "Misty",
-        codemon: ["Starmie", "Goldeen"],
-        dialogue: "Water types are the best!"
+        name: "Gert",
+        codemon: "python"
       }
     ]);
 
