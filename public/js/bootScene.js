@@ -97,9 +97,9 @@ class BootScene extends Phaser.Scene {
 			.text(480, 335, "Choose language: ", { fontSize: "24px", fill: "#fff" })
 			.setOrigin(0.5);
 
-		this.createLanguageButton("python", "Python", 200, 400);
-		this.createLanguageButton("go", "Go", 350, 400);
-		this.createLanguageButton("javascript", "JavaScript", 650, 400);
+		this.createLanguageButton("python", "Python", 320, 400);
+		this.createLanguageButton("go", "Go", 480, 400);
+		this.createLanguageButton("javascript", "JavaScript", 640, 400);
 
 		// Start button
 		const startButton = this.add.image(480, 500, "greyUnpressed");
