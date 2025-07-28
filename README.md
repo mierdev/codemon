@@ -92,7 +92,12 @@ sudo apt-get install -y mongodb-org
 ## Usage
 
 1. Start MongoDB
-   _On WSL2/Ubuntu (Windows)_
+
+### On Mac
+
+Do something.
+
+### On WSL2/Ubuntu (Windows)
 
 - Run this command to start MongoDBL:
 
