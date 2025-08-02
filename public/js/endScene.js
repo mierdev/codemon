@@ -195,7 +195,7 @@ class EndScene extends Phaser.Scene {
 			.setOrigin(0.5);
 
 		this.add
-			.text(480, 580, "Refresh the page to play again!", {
+			.text(480, 580, "Press SPACE or R to play again", {
 				fontSize: "18px",
 				fill: "#ffffff",
 				stroke: "#000",
@@ -274,7 +274,7 @@ class EndScene extends Phaser.Scene {
 
 		// Restart
 		this.add
-			.text(480, 580, "Refresh the page to play again!", {
+			.text(480, 580, "Press SPACE or R to play again", {
 				fontSize: "18px",
 				fill: "#ffffff",
 				stroke: "#000",
@@ -339,20 +339,45 @@ class EndScene extends Phaser.Scene {
 	setupInputHandlers() {
 		// play again
 		this.input.keyboard.on("keydown-SPACE", () => {
+			console.log("SPACE key pressed in EndScene");
 			// Use transition manager if available, otherwise fall back to direct scene change
 			if (window.transitionManager) {
+				console.log("Using transition manager for SPACE key");
 				window.transitionManager.startTransition(this, 'EndScene', 'BootScene');
 			} else {
+				console.log("Using direct scene start for SPACE key");
 				this.scene.start("BootScene");
 			}
 		});
+		// Try both R key methods
 		this.input.keyboard.on("keydown-R", () => {
-			// Use transition manager if available, otherwise fall back to direct scene change
-			if (window.transitionManager) {
-				window.transitionManager.startTransition(this, 'EndScene', 'BootScene');
-			} else {
-				this.scene.start("BootScene");
-			}
+			console.log("R key pressed in EndScene (keydown-R)");
+			this.handleRKey();
 		});
+		
+		// Alternative method using KeyR
+		this.input.keyboard.on("keydown-KeyR", () => {
+			console.log("R key pressed in EndScene (keydown-KeyR)");
+			this.handleRKey();
+		});
+		
+		// Alternative method using key code
+		this.rKey = this.input.keyboard.addKey('R');
+		this.rKey.on('down', () => {
+			console.log("R key pressed in EndScene (addKey method)");
+			this.handleRKey();
+		});
+	}
+	
+	handleRKey() {
+		console.log("Handling R key press");
+		// Use transition manager if available, otherwise fall back to direct scene change
+		if (window.transitionManager) {
+			console.log("Using transition manager for R key");
+			window.transitionManager.startTransition(this, 'EndScene', 'BootScene');
+		} else {
+			console.log("Using direct scene start for R key");
+			this.scene.start("BootScene");
+		}
 	}
 }

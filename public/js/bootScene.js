@@ -296,6 +296,7 @@ class BootScene extends Phaser.Scene {
 		if (battleData) {
 			battleData.tournamentInfo = tournamentSetup;
 			battleData.playerLanguage = this.selectedLanguage;
+			battleData.tournamentPlayerLanguage = this.selectedLanguage;
 			
 			// Use transition manager if available, otherwise fall back to direct scene change
 			if (window.transitionManager) {

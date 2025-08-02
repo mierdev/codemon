@@ -205,6 +205,38 @@ class GameManager {
 				},
 			],
 		});
+
+		this.pokemonData.set("ana", {
+			name: "Ana",
+			type: "Stack-Based/Concatenative",
+			hp: 100,
+			maxHp: 100,
+			attack: 75,
+			specialAttack: 80,
+			defense: 80,
+			specialDefense: 75,
+			speed: 85,
+			abilities: [
+				{
+					name: "Stack Push",
+					type: "Physical",
+					power: 25,
+					accuracy: 90,
+					description:
+						"Deals physical damage. 30% chance to gain +1 Attack for 3 turns.",
+					cooldown: 2,
+				},
+				{
+					name: "Stack Pop",
+					type: "Special",
+					power: 25,
+					accuracy: 80,
+					description:
+						"Deals special damage. 35% chance to inflict 'Stack Underflow' status.",
+					cooldown: 3,
+				},
+			],
+		});
 	}
 
 	/**
@@ -443,7 +475,7 @@ class GameManager {
 			{ name: "Nallo", language: "rust" },
 			{ name: "Dan", language: "javascript" },
 			{ name: "Miranda", language: "python" },
-			{ name: "Nuc", language: "ocaml" },
+			{ name: "Nuc", language: "ana" },
 			{ name: "Lane", language: "go" },
 			{ name: "Lyle", language: "csharp" },
 		];

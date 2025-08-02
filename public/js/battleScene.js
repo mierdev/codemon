@@ -33,10 +33,6 @@ class BattleScene extends Phaser.Scene {
 	init(data) {
 		console.log("BattleScene initialized with data:", data);
 		
-		// Always set tournamentPlayerLanguage from data
-		if (data && data.tournamentPlayerLanguage) {
-			this.tournamentPlayerLanguage = data.tournamentPlayerLanguage;
-		}
 		// Initialize battle data
 		this.pokemon1 = data.pokemon1;
 		this.pokemon2 = data.pokemon2;
@@ -1044,7 +1040,10 @@ class BattleScene extends Phaser.Scene {
 		if (result.completed) {
 			console.log("Tournament completed - player wins");
 			this.tournamentResult = result;
-			this.tournamentPlayerLanguage = this.tournamentInfo?.playerLanguage;
+			// Only update tournamentPlayerLanguage if it exists in tournamentInfo
+			if (this.tournamentInfo?.playerLanguage) {
+				this.tournamentPlayerLanguage = this.tournamentInfo.playerLanguage;
+			}
 			this.turnText.setText("Press SPACE for next battle");
 			this.nextOpponent = result.nextOpponent;
 			
@@ -1070,7 +1069,10 @@ class BattleScene extends Phaser.Scene {
 		if (result.completed) {
 			console.log("Tournament completed - AI wins");
 			this.tournamentResult = result;
-			this.tournamentPlayerLanguage = this.tournamentInfo?.playerLanguage;
+			// Only update tournamentPlayerLanguage if it exists in tournamentInfo
+			if (this.tournamentInfo?.playerLanguage) {
+				this.tournamentPlayerLanguage = this.tournamentInfo.playerLanguage;
+			}
 			this.turnText.setText("Press SPACE for next battle");
 			this.nextOpponent = result.nextOpponent;
 			
@@ -1754,7 +1756,8 @@ class BattleScene extends Phaser.Scene {
 			return;
 		}
 
-		if (this.nextOpponent && this.nextOpponent.trainer) {
+		// Check if there's a valid next opponent with trainer data
+		if (this.nextOpponent?.trainer) {
 			console.log('startNextBattle - tournamentPlayerLanguage:', this.tournamentPlayerLanguage);
 			console.log('startNextBattle - nextOpponent:', this.nextOpponent);
 			console.log('startNextBattle - nextOpponent.trainer:', this.nextOpponent.trainer);
@@ -1790,7 +1793,8 @@ class BattleScene extends Phaser.Scene {
 				});
 			}
 		} else {
-			console.error('startNextBattle - nextOpponent or nextOpponent.trainer is null/undefined');
+			// Tournament finished - no more opponents available
+			console.log('startNextBattle - Tournament completed, no more opponents');
 			console.log('startNextBattle - this.nextOpponent:', this.nextOpponent);
 			// Tournament finished, go to end scene
 			this.scene.start("EndScene", {

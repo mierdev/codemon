@@ -49,14 +49,24 @@ export class TransitionManager {
             for (let col = 0; col < cols; col++) {
                 const x = col * squareSize;
                 const y = row * squareSize;
-                const square = scene.add.rectangle(x, y, squareSize, squareSize, 0x000000);
+                
+                // Calculate distance from top-left corner for staggered animation
+                const distance = Math.sqrt(x * x + y * y);
+                const delay = distance * 0.5;
+                
+                // Start with small squares that will grow
+                const square = scene.add.rectangle(x, y, 5, 5, 0x000000);
                 square.setOrigin(0, 0);
-                square.setAlpha(0);
+                square.delay = delay;
+                square.maxSize = squareSize;
+                square.currentSize = 5;
+                square.isCompleted = false;
+                
                 this.squares.push(square);
             }
         }
 
-        this.startGrowAnimation(scene, toKey, data);
+        this.growSquares(scene, fromKey, toKey, data);
     }
 
     /**
@@ -136,11 +146,53 @@ export class TransitionManager {
      */
     changeScene(scene, fromScene, toScene, data) {
         scene.scene.stop(fromScene);
-        scene.scene.start(toScene, data);
+        const newScene = scene.scene.start(toScene, data);
         
         scene.time.delayedCall(200, () => {
-            this.shrinkSquares(scene);
+            // Get the new scene instance
+            const targetScene = scene.scene.get(toScene);
+            if (targetScene) {
+                this.createSquaresForNewScene(targetScene);
+                this.shrinkSquares(targetScene);
+            }
         });
+    }
+
+    /**
+     * Creates full-size squares for the shrinking animation on the new scene
+     * @param {Phaser.Scene} scene - The new scene
+     */
+    createSquaresForNewScene(scene) {
+        // Clear old squares first
+        this.squares.forEach(square => square.destroy());
+        this.squares = [];
+
+        const gameWidth = 960;
+        const gameHeight = 720;
+        const squareSize = 80;
+        const cols = Math.ceil(gameWidth / squareSize);
+        const rows = Math.ceil(gameHeight / squareSize);
+
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                const x = col * squareSize;
+                const y = row * squareSize;
+                
+                // Calculate distance from top-left corner for staggered animation
+                const distance = Math.sqrt(x * x + y * y);
+                const delay = distance * 0.5;
+                
+                // Start with full-size squares that will shrink
+                const square = scene.add.rectangle(x, y, squareSize, squareSize, 0x000000);
+                square.setOrigin(0, 0);
+                square.delay = delay;
+                square.maxSize = squareSize;
+                square.currentSize = squareSize;
+                square.isCompleted = false;
+                
+                this.squares.push(square);
+            }
+        }
     }
 
     /**
@@ -265,20 +317,4 @@ export class TransitionManager {
         });
     }
 
-    startGrowAnimation(scene, toKey, data) {
-        this.squares.forEach((square, index) => {
-            scene.tweens.add({
-                targets: square,
-                alpha: 1,
-                duration: 200,
-                delay: index * 10,
-                onComplete: () => {
-                    this.completedSquares++;
-                    if (this.completedSquares >= this.squares.length) {
-                        scene.scene.start(toKey, data);
-                    }
-                }
-            });
-        });
-    }
 } 
