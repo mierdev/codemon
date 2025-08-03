@@ -192,3 +192,5 @@ npm run devStart
 ## Architecture
 
 <img src="https://raw.githubusercontent.com/mierdev/codemon/refs/heads/main/public/assets/readme/architecture.png" width="800px" alt="Codemon architecture">
+
+A Little Shop of Chaos Production
