@@ -6,7 +6,7 @@
 	"keywords": [],
 	"scripts": {
 		"dev": "vite",
-		"build": "npm run build-with-ts",
+		"build": "vite build",
 		"build-with-ts": "tsc && vite build",
 		"preview": "vite preview",
 		"server": "nodemon --watch './' --ext ts,js --exec 'tsx' server.js",
