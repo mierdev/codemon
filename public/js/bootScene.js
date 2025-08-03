@@ -25,13 +25,6 @@ class BootScene extends Phaser.Scene {
 		this.load.image("bannerLeft", ["assets/UI/components/bannerLeft.png"]);
 		this.load.image("bannerMid", ["assets/UI/components/bannerMid.png"]);
 		this.load.image("bannerRight", ["assets/UI/components/bannerRight.png"]);
-
-		// TODO:
-		// Clear if unused
-		this.load.image("brownPressed", ["assets/UI/components/brownPressed.png"]);
-		this.load.image("brownUnpressed", [
-			"assets/UI/components/brownUnpressed.png",
-		]);
 		// Language buttons
 		this.load.image("enterButton", ["assets/UI/components/enterButton.png"]);
 		this.load.image("enterPressed", ["assets/UI/components/enterPressed.png"]);
@@ -47,6 +40,15 @@ class BootScene extends Phaser.Scene {
 		]);
 		// Background music (cider)
 		this.load.audio("cider", ["assets/audio/backgrounds/apple_cider.wav"]);
+		// Volume toggle button
+		this.load.image("musicOn", ["assets/UI/components/musicOn.png"]);
+		this.load.image("musicOff", ["assets/UI/components/musicOff.png"]);
+
+		this.load.once("complete", () => {
+			console.log("Assets loaded. Checking music button assets");
+			console.log("music loaded: ", this.textures.exists("musicOn"));
+			console.log("music off:", this.textures.exists("musicOff"));
+		});
 	}
 
 	/**
@@ -74,12 +76,24 @@ class BootScene extends Phaser.Scene {
 			console.log("something went wrong with the audio manager!");
 		}
 
-		if (
-			this.audioManager &&
-			(!window.currentMusic || !window.currentMusic.isPlaying)
-		) {
-			this.audioManager.playMusic("cider", { loop: true, volume: 0.4 });
-			window.currentMusic = this.audioManager.currentMusic;
+		// Previous way of handling audio
+		// if (
+		// 	this.audioManager &&
+		// 	(!window.currentMusic || !window.currentMusic.isPlaying)
+		// ) {
+		// 	this.audioManager.playMusic("cider", { loop: true, volume: 0.4 });
+		// 	window.currentMusic = this.audioManager.currentMusic;
+		// }
+		if (this.audioManager.isAudioEnabled()) {
+			if (!window.currentMusic || !window.currentMusic.isPlaying) {
+				this.audioManager.playMusic("cider", { loop: true, volume: 0.4 });
+				window.currentMusic = this.audioManager.currentMusic;
+			}
+		} else {
+			if (window.currentMusic) {
+				this.audioManager.stopMusic();
+				window.currentMusic = null;
+			}
 		}
 
 		// Simple background
@@ -128,8 +142,8 @@ class BootScene extends Phaser.Scene {
 		startButton.on("pointerdown", () => {
 			this.startTournament();
 		});
+		this.createVolumeToggle();
 	}
-
 	/**
 	 * Creates language buttons for only Python, Go, and JavaScript/TypeScript
 	 * Filters available languages to show only the three selectable options
@@ -241,6 +255,57 @@ class BootScene extends Phaser.Scene {
 			this.selectedTournament = matches;
 			// UI Update
 			this.scene.restart();
+		});
+	}
+
+	/**
+	 * Creates auido toggle button to turn music on and off
+	 */
+	createVolumeToggle() {
+		console.log("Generating volume toggle");
+		const isAudioEnabled = this.audioManager
+			? this.audioManager.isAudioEnabled()
+			: true;
+		const audioButtonImage = isAudioEnabled ? "musicOn" : "musicOff";
+		console.log("Audio Button image: ", audioButtonImage);
+
+		this.volumeToggle = this.add.image(850, 50, audioButtonImage);
+		console.log(
+			`Volume toggle created at ${this.volumeToggle.x} and y: ${this.volumeToggle.y}`
+		);
+		this.volumeToggle.setInteractive();
+		this.volumeToggle.setScale(0.8);
+		this.volumeToggle.setDepth(5);
+
+		this.volumeToggle.on("pointerover", () => {
+			this.volumeToggle.setTint(0xdddddd);
+		});
+
+		this.volumeToggle.on("pointerout", () => {
+			this.volumeToggle.clearTint();
+		});
+
+		this.volumeToggle.on("pointerdown", () => {
+			console.log("Audio button clicked");
+			if (this.audioManager) {
+				this.audioManager.toggleSoundEffect();
+
+				// Update button image
+				const newImage = this.audioManager.isAudioEnabled()
+					? "musicOn"
+					: "musicOff";
+				this.volumeToggle.setTexture(newImage);
+
+				// Handle music playback
+				if (this.audioManager.isAudioEnabled()) {
+					// Start playing music
+					this.audioManager.playMusic("cider", { loop: true, volume: 0.4 });
+					window.currentMusic = this.audioManager.currentMusic;
+				} else {
+					this.audioManager.stopMusic();
+					window.currentMusic = null;
+				}
+			}
 		});
 	}
 
