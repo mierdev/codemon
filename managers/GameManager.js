@@ -168,7 +168,8 @@ class GameManager {
 					type: "Special",
 					power: 45,
 					accuracy: 85,
-					description: "Deals special damage. 30% chance to inflict 'Data Binding Error'.",
+					description:
+						"Deals special damage. 30% chance to inflict 'Data Binding Error'.",
 					cooldown: 3,
 				},
 			],
@@ -467,10 +468,6 @@ class GameManager {
 			isActive: true,
 		};
 
-		console.log(
-			`Tournament started: Best of ${matchCount} (need ${winsNeeded} for shiny)`
-		);
-
 		this.trainers = [
 			{ name: "Nallo", language: "rust" },
 			{ name: "Dan", language: "javascript" },
@@ -541,10 +538,6 @@ class GameManager {
 			};
 		}
 
-		// Reutrn next match hoping it doesn't get here...
-		console.log(
-			"Shouldn't have reached this point of Game Manager with recording wins..."
-		);
 		const result = {
 			completed: true,
 			won: false,

@@ -6,7 +6,7 @@ Compete in pokémon inspired battles to find out which is the strongest programm
 
 > PS if you hang around the Boot.dev Discord server, you might recognize a lot of the opponents 👀
 
-## The game is live hosted! 
+## The game is live hosted!
 
 **<a href="https://codemon-rho.vercel.app/" target="_blank">Play it in your browser</a>**
 
@@ -62,12 +62,14 @@ npm install
 **On Mac**
 
 Using Homebrew:
+
 ```bash
 brew tap mongodb/brew
 brew install mongodb-community
 ```
 
 Or download from the official website:
+
 - Visit [MongoDB Download Center](https://www.mongodb.com/try/download/community)
 - Download the macOS version
 - Follow the installation instructions
@@ -110,12 +112,16 @@ sudo apt-get install -y mongodb-org
 ```
 
 5. Make a .env in the root folder and add the database keys
+
 ```
 touch .env
 code .env
 ```
+
+### For MongoDB Atlas (cloud)
+
 ```
-MONGODB_URI=mongodb+srv://mongouser:mongoischaos@gamecluster.8wtssss.mongodb.net/?retryWrites=true&w=majority&appName=GameCluster
+MONGODB_URI=mongodb+srv://mongouser:yourpassword@yourcluster.xxxxx.mongodb.net/codemon?retryWrites=true&w=majority
 MONGODB_DB=codemon
 ```
 
@@ -126,11 +132,13 @@ MONGODB_DB=codemon
 **On Mac**
 
 Using Homebrew:
+
 ```bash
 brew services start mongodb-community
 ```
 
 Or manually:
+
 ```bash
 mongod --config /usr/local/etc/mongod.conf
 ```
@@ -154,11 +162,13 @@ sudo systemctl daemon-reload
 Then run the start command above again.
 
 2. Add data to the database:
+
 ```bash
 npm run seed
 ```
 
 3. Start the server:
+
 ```bash
 npm run devStart
 ```
@@ -166,13 +176,16 @@ npm run devStart
 ## Tech Stack
 
 **Frameworks**
+
 - Phaser.js
 - Express.js
 
 **Database**
+
 - MongoDB
 
 **Programming languages**
+
 - JavaScript
 - HTML/CSS
 

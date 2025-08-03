@@ -74,12 +74,13 @@ class BootScene extends Phaser.Scene {
 			console.log("something went wrong with the audio manager!");
 		}
 
-		console.log("About to play cider");
-		if (this.audioManager && (!window.currentMusic || !window.currentMusic.isPlaying)) {
+		if (
+			this.audioManager &&
+			(!window.currentMusic || !window.currentMusic.isPlaying)
+		) {
 			this.audioManager.playMusic("cider", { loop: true, volume: 0.4 });
 			window.currentMusic = this.audioManager.currentMusic;
 		}
-		console.log("Should be playing cider");
 
 		// Simple background
 		// this.add.rectangle(0, 0, 960, 720, 0x2c3e50).setOrigin(0, 0);
@@ -99,7 +100,10 @@ class BootScene extends Phaser.Scene {
 
 		// Language selection
 		this.add
-			.text(480, 320, "Choose Your Language: ", { fontSize: "24px", fill: "#fff" })
+			.text(480, 320, "Choose Your Language: ", {
+				fontSize: "24px",
+				fill: "#fff",
+			})
 			.setOrigin(0.5);
 
 		// Create language buttons dynamically from database data
@@ -135,15 +139,24 @@ class BootScene extends Phaser.Scene {
 		const selectableLanguages = [
 			{ id: "python", name: "Python" },
 			{ id: "go", name: "Go" },
-			{ id: "javascript", name: "JavaScript & TypeScript" }
+			{ id: "javascript", name: "JavaScript & TypeScript" },
 		];
 
-		if (!window.gameManager || typeof window.gameManager.isGameDataLoaded !== 'function' || !window.gameManager.isGameDataLoaded()) {
-			console.warn('Game data not loaded, using fallback language buttons');
+		if (
+			!window.gameManager ||
+			typeof window.gameManager.isGameDataLoaded !== "function" ||
+			!window.gameManager.isGameDataLoaded()
+		) {
+			console.warn("Game data not loaded, using fallback language buttons");
 			// Fallback to hardcoded buttons for the three selectable languages
 			this.createLanguageButton("python", "Python", 280, 400);
 			this.createLanguageButton("go", "Go", 480, 400);
-			this.createLanguageButton("javascript", "JavaScript & TypeScript", 680, 400);
+			this.createLanguageButton(
+				"javascript",
+				"JavaScript & TypeScript",
+				680,
+				400
+			);
 			return;
 		}
 
@@ -152,9 +165,9 @@ class BootScene extends Phaser.Scene {
 			const languageData = window.gameManager.getLanguageData(language.id);
 			if (languageData) {
 				// Position the three buttons in a row
-				const x = 280 + (index * 200); // 280, 480, 680
+				const x = 280 + index * 200; // 280, 480, 680
 				const y = 400;
-				
+
 				this.createLanguageButton(language.id, languageData.name, x, y);
 			}
 		});
@@ -275,7 +288,7 @@ class BootScene extends Phaser.Scene {
 
 		// Check if game data is loaded
 		if (!window.gameManager.isGameDataLoaded()) {
-			console.error('Game data not loaded yet, cannot start tournament');
+			console.error("Game data not loaded yet, cannot start tournament");
 			return;
 		}
 
@@ -288,7 +301,7 @@ class BootScene extends Phaser.Scene {
 
 		const battleData = window.gameManager.startTournamentBattle(
 			this.selectedLanguage,
-		initialOpponent.codemon
+			initialOpponent.codemon
 		);
 		if (this.audioManager) {
 			this.audioManager.stopMusic();
@@ -297,10 +310,15 @@ class BootScene extends Phaser.Scene {
 			battleData.tournamentInfo = tournamentSetup;
 			battleData.playerLanguage = this.selectedLanguage;
 			battleData.tournamentPlayerLanguage = this.selectedLanguage;
-			
+
 			// Use transition manager if available, otherwise fall back to direct scene change
 			if (window.transitionManager) {
-				window.transitionManager.startTransition(this, 'BootScene', 'BattleScene', battleData);
+				window.transitionManager.startTransition(
+					this,
+					"BootScene",
+					"BattleScene",
+					battleData
+				);
 			} else {
 				this.scene.start("BattleScene", battleData);
 			}

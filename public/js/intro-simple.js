@@ -31,7 +31,6 @@ class IntroScene extends Phaser.Scene {
 
 		// Track loading progress
 		this.load.on("complete", () => {
-			console.log("Images loaded successfully!");
 			loadingText.setText("Loading Complete!");
 			this.time.delayedCall(1000, () => {
 				loadingText.destroy();
@@ -85,8 +84,6 @@ class IntroScene extends Phaser.Scene {
 		this.time.delayedCall(3000, () => {
 			this.fadeInText();
 		});
-
-		console.log("Intro scene created successfully");
 	}
 
 	startMoviePlayback() {
@@ -115,14 +112,14 @@ class IntroScene extends Phaser.Scene {
 		// Check if texture exists before setting it
 		if (this.textures.exists(textureKey)) {
 			this.movieSprite.setTexture(textureKey);
-			console.log(`Frame updated to: ${textureKey}`);
+			// console.log(`Frame updated to: ${textureKey}`);
 		} else {
 			console.warn(`Texture not found: ${textureKey}`);
 		}
 	}
 
 	fadeInText() {
-		console.log("Starting text fade-in...");
+		// console.log("Starting text fade-in...");
 
 		// Fade in "LITTLE SHOP OF"
 		this.tweens.add({
@@ -131,7 +128,7 @@ class IntroScene extends Phaser.Scene {
 			duration: 2000,
 			ease: "Power2",
 			onComplete: () => {
-				console.log("Title text faded in");
+				// console.log("Title text faded in");
 				// After title fades in, fade in CHAOS
 				this.tweens.add({
 					targets: this.chaosText,

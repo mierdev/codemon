@@ -32,27 +32,27 @@ class BattleScene extends Phaser.Scene {
 	 */
 	init(data) {
 		console.log("BattleScene initialized with data:", data);
-		
+
 		// Initialize battle data
 		this.pokemon1 = data.pokemon1;
 		this.pokemon2 = data.pokemon2;
 		this.tournamentInfo = data.tournamentInfo;
 		this.tournamentPlayerLanguage = data.tournamentPlayerLanguage;
 		this.nextOpponent = data.nextOpponent;
-		
+
 		// Initialize dialogue and trainer data
 		this.dialogueData = { pokemon1: null, pokemon2: null };
 		this.trainerData = { pokemon1: null, pokemon2: null };
-		
+
 		// Initialize battle state
 		this.battleState = "playerTurn";
 		this.selectedAbility = 0;
 		this.currentTurn = 1;
-		
+
 		// Initialize UI elements
 		this.abilityButtons = [];
 		this.battleLog = [];
-		
+
 		console.log("BattleScene initialized as TOURNAMENT battle");
 	}
 
@@ -74,6 +74,8 @@ class BattleScene extends Phaser.Scene {
 		this.load.image("lotus2", ["assets/codemon/lotus_flower2.png"]);
 		this.load.image("snake", ["assets/codemon/snake.png"]);
 		this.load.image("windows_logo", ["assets/codemon/windows_logo.png"]);
+		// Sprite assets
+		this.load.image("chainsaw", ["assets/codemon/accessories/chainsaw.png"]);
 		// Sound effects
 		this.load.audio("buff", ["assets/audio/effects/buff.mp3"]);
 		this.load.audio("control", ["assets/audio/effects/control.wav"]);
@@ -133,12 +135,9 @@ class BattleScene extends Phaser.Scene {
 			this.audioManager = new window.AudioManager(this);
 			// Only play music if no music is currently playing globally
 			if (!window.currentMusic || !window.currentMusic.isPlaying) {
-				console.log("About to play cider music...");
 				this.audioManager.playMusic("cider", { loop: true, volume: 0.4 });
 				window.currentMusic = this.audioManager.currentMusic;
-				console.log("Cider music should be playing");
 			} else {
-				console.log("Music already playing, not restarting");
 				// Use the existing music reference
 				this.audioManager.currentMusic = window.currentMusic;
 			}
@@ -220,9 +219,8 @@ class BattleScene extends Phaser.Scene {
 		// Initialize AudioManager
 		if (window.AudioManager) {
 			this.audioManager = new window.AudioManager(this);
-			console.log("AudioManager initialized!");
 		} else {
-			console.log("Something has gone wrong with the audio manager");
+			console.log("Oops, has gone wrong with the audio manager");
 		}
 
 		this.updateUI();
@@ -232,13 +230,13 @@ class BattleScene extends Phaser.Scene {
 	 */
 	getLanguageSprite(languageName) {
 		const spriteMap = {
-			"Python": "snake",
-			"Go": "gopher",
-			"Rust": "crab",
-			"OCaml": "camel",
+			Python: "snake",
+			Go: "gopher",
+			Rust: "crab",
+			OCaml: "camel",
 			"C#": "windows_logo",
 			"JavaScript & TypeScript": "birb",
-			"Ana": "fox"
+			Ana: "fox",
 		};
 		return spriteMap[languageName] || "snake";
 	}
@@ -249,7 +247,9 @@ class BattleScene extends Phaser.Scene {
 	 */
 	async fetchTrainerForLanguage(languageId) {
 		try {
-			const response = await fetch(`/api/language-abilities/trainers/${languageId}`);
+			const response = await fetch(
+				`/api/language-abilities/trainers/${languageId}`
+			);
 			if (!response.ok) {
 				console.warn(`Failed to fetch trainers for ${languageId}`);
 				return null;
@@ -262,7 +262,7 @@ class BattleScene extends Phaser.Scene {
 			}
 			return null;
 		} catch (error) {
-			console.error('Error fetching trainer data:', error);
+			console.error("Error fetching trainer data:", error);
 			return null;
 		}
 	}
@@ -273,22 +273,34 @@ class BattleScene extends Phaser.Scene {
 	async fetchAndCreateLanguageBanners() {
 		try {
 			// Debug logging
-			console.log('fetchAndCreateLanguageBanners - pokemon1:', this.pokemon1);
-			console.log('fetchAndCreateLanguageBanners - pokemon2:', this.pokemon2);
-			console.log('fetchAndCreateLanguageBanners - pokemon1.name:', this.pokemon1?.name);
-			console.log('fetchAndCreateLanguageBanners - pokemon2.name:', this.pokemon2?.name);
-			
+			console.log("fetchAndCreateLanguageBanners - pokemon1:", this.pokemon1);
+			console.log("fetchAndCreateLanguageBanners - pokemon2:", this.pokemon2);
+			console.log(
+				"fetchAndCreateLanguageBanners - pokemon1.name:",
+				this.pokemon1?.name
+			);
+			console.log(
+				"fetchAndCreateLanguageBanners - pokemon2.name:",
+				this.pokemon2?.name
+			);
+
 			// Get language IDs for both Pokemon
 			const pokemon1LanguageId = this.getLanguageId(this.pokemon1?.name);
 			const pokemon2LanguageId = this.getLanguageId(this.pokemon2?.name);
-			
-			console.log('fetchAndCreateLanguageBanners - pokemon1LanguageId:', pokemon1LanguageId);
-			console.log('fetchAndCreateLanguageBanners - pokemon2LanguageId:', pokemon2LanguageId);
+
+			console.log(
+				"fetchAndCreateLanguageBanners - pokemon1LanguageId:",
+				pokemon1LanguageId
+			);
+			console.log(
+				"fetchAndCreateLanguageBanners - pokemon2LanguageId:",
+				pokemon2LanguageId
+			);
 
 			// Fetch trainer data for both languages
 			const [trainer1, trainer2] = await Promise.all([
 				this.fetchTrainerForLanguage(pokemon1LanguageId),
-				this.fetchTrainerForLanguage(pokemon2LanguageId)
+				this.fetchTrainerForLanguage(pokemon2LanguageId),
 			]);
 
 			// Store trainer data
@@ -298,7 +310,7 @@ class BattleScene extends Phaser.Scene {
 			// Fetch dialogue data for both trainers (with error handling)
 			let dialogue1 = null;
 			let dialogue2 = null;
-			
+
 			if (trainer1) {
 				try {
 					dialogue1 = await this.fetchDialogueForTrainer(trainer1.name);
@@ -306,7 +318,7 @@ class BattleScene extends Phaser.Scene {
 					console.warn(`Failed to fetch dialogue for ${trainer1.name}:`, error);
 				}
 			}
-			
+
 			if (trainer2) {
 				try {
 					dialogue2 = await this.fetchDialogueForTrainer(trainer2.name);
@@ -324,7 +336,11 @@ class BattleScene extends Phaser.Scene {
 			this.createLanguageBanner(this.pokemon2?.name, 720, 94, trainer2);
 
 			// Show start dialogue for AI trainer
-			if (dialogue2 && dialogue2.startDialogue && dialogue2.startDialogue.trim() !== "") {
+			if (
+				dialogue2 &&
+				dialogue2.startDialogue &&
+				dialogue2.startDialogue.trim() !== ""
+			) {
 				this.showDialogue(dialogue2.startDialogue, 3000);
 				// Delay showing ability buttons until dialogue is done
 				this.time.delayedCall(3000, () => {
@@ -334,9 +350,8 @@ class BattleScene extends Phaser.Scene {
 				// Show ability buttons immediately if no dialogue
 				this.showAbilityButtons();
 			}
-
 		} catch (error) {
-			console.error('Error fetching trainer data:', error);
+			console.error("Error fetching trainer data:", error);
 			// Fallback to creating banners without trainer data
 			this.createLanguageBanner(this.pokemon1?.name, 240, 94);
 			this.createLanguageBanner(this.pokemon2?.name, 720, 94);
@@ -353,18 +368,18 @@ class BattleScene extends Phaser.Scene {
 	getLanguageId(languageName) {
 		// Safety check for undefined or null languageName
 		if (!languageName) {
-			console.warn('getLanguageId called with undefined or null languageName');
-			return 'unknown';
+			console.warn("getLanguageId called with undefined or null languageName");
+			return "unknown";
 		}
-		
+
 		const languageMap = {
-			'Python': 'python',
-			'Go': 'go',
-			'Rust': 'rust',
-			'OCaml': 'ocaml',
-			'C#': 'csharp',
-			'JavaScript & TypeScript': 'javascript',
-			'Ana': 'ana'
+			Python: "python",
+			Go: "go",
+			Rust: "rust",
+			OCaml: "ocaml",
+			"C#": "csharp",
+			"JavaScript & TypeScript": "javascript",
+			Ana: "ana",
 		};
 		return languageMap[languageName] || languageName.toLowerCase();
 	}
@@ -392,7 +407,7 @@ class BattleScene extends Phaser.Scene {
 				fontStyle: "bold",
 				stroke: "#000",
 				strokeThickness: 2,
-				align: "center"
+				align: "center",
 			})
 			.setOrigin(0.5)
 			.setDepth(1);
@@ -427,7 +442,7 @@ class BattleScene extends Phaser.Scene {
 				fontSize: "14px",
 				fill: "#000000",
 				wordWrap: { width: 360 },
-				align: "center"
+				align: "center",
 			})
 			.setOrigin(0.5);
 
@@ -443,7 +458,9 @@ class BattleScene extends Phaser.Scene {
 	 */
 	async fetchDialogueForTrainer(trainerName) {
 		try {
-			const response = await fetch(`/api/language-abilities/dialogue/${encodeURIComponent(trainerName)}`);
+			const response = await fetch(
+				`/api/language-abilities/dialogue/${encodeURIComponent(trainerName)}`
+			);
 			if (!response.ok) {
 				console.warn(`Failed to fetch dialogue for ${trainerName}`);
 				return null;
@@ -465,7 +482,7 @@ class BattleScene extends Phaser.Scene {
 		this.dialogueBox.setVisible(true);
 		this.dialogueText.setVisible(true);
 		this.dialogueText.setText(text);
-		
+
 		// Hide dialogue after duration
 		this.time.delayedCall(duration, () => {
 			this.dialogueBox.setVisible(false);
@@ -480,14 +497,26 @@ class BattleScene extends Phaser.Scene {
 	showRandomBattleDialogue(trainerName) {
 		// Find the dialogue data for the specific trainer
 		let dialogue = null;
-		if (this.trainerData.pokemon1 && this.trainerData.pokemon1.name === trainerName) {
+		if (
+			this.trainerData.pokemon1 &&
+			this.trainerData.pokemon1.name === trainerName
+		) {
 			dialogue = this.dialogueData.pokemon1;
-		} else if (this.trainerData.pokemon2 && this.trainerData.pokemon2.name === trainerName) {
+		} else if (
+			this.trainerData.pokemon2 &&
+			this.trainerData.pokemon2.name === trainerName
+		) {
 			dialogue = this.dialogueData.pokemon2;
 		}
-		
-		if (dialogue && dialogue.battleDialogue && dialogue.battleDialogue.length > 0) {
-			const randomIndex = Math.floor(Math.random() * dialogue.battleDialogue.length);
+
+		if (
+			dialogue &&
+			dialogue.battleDialogue &&
+			dialogue.battleDialogue.length > 0
+		) {
+			const randomIndex = Math.floor(
+				Math.random() * dialogue.battleDialogue.length
+			);
 			const randomDialogue = dialogue.battleDialogue[randomIndex];
 			if (randomDialogue && randomDialogue.trim() !== "") {
 				this.showDialogue(randomDialogue, 3000);
@@ -762,11 +791,11 @@ class BattleScene extends Phaser.Scene {
 
 			this.abilityButtons.push({ button, text, ability });
 		});
-		
+
 		// Initially hide all ability buttons
 		this.hideAbilityButtons();
 	}
-	
+
 	/**
 	 * Shows all ability buttons
 	 */
@@ -776,7 +805,7 @@ class BattleScene extends Phaser.Scene {
 			buttonData.text.setVisible(true);
 		});
 	}
-	
+
 	/**
 	 * Hides all ability buttons
 	 */
@@ -792,7 +821,7 @@ class BattleScene extends Phaser.Scene {
 	 */
 	showAbilityButtons() {
 		if (this.abilityButtons) {
-			this.abilityButtons.forEach(buttonData => {
+			this.abilityButtons.forEach((buttonData) => {
 				if (buttonData.button) {
 					buttonData.button.setVisible(true);
 				}
@@ -808,7 +837,7 @@ class BattleScene extends Phaser.Scene {
 	 */
 	hideAbilityButtons() {
 		if (this.abilityButtons) {
-			this.abilityButtons.forEach(buttonData => {
+			this.abilityButtons.forEach((buttonData) => {
 				if (buttonData.button) {
 					buttonData.button.setVisible(false);
 				}
@@ -1008,7 +1037,10 @@ class BattleScene extends Phaser.Scene {
 
 			// Show win/lose dialogue
 			if (this.trainerData.pokemon2 && this.dialogueData.pokemon2) {
-				if (this.dialogueData.pokemon2.loseDialogue && this.dialogueData.pokemon2.loseDialogue.trim() !== "") {
+				if (
+					this.dialogueData.pokemon2.loseDialogue &&
+					this.dialogueData.pokemon2.loseDialogue.trim() !== ""
+				) {
 					this.showDialogue(this.dialogueData.pokemon2.loseDialogue, 3000);
 					this.time.delayedCall(3000, () => {
 						this.handlePlayerWin();
@@ -1027,16 +1059,16 @@ class BattleScene extends Phaser.Scene {
 			this.startAITurn();
 		});
 	}
-	
+
 	/**
 	 * Handles player win scenario
 	 */
 	async handlePlayerWin() {
 		console.log("Handling player win as TOURNAMENT battle");
 		this.battleState = "gameOver";
-		
+
 		const result = await window.gameManager.recordWin();
-		
+
 		if (result.completed) {
 			console.log("Tournament completed - player wins");
 			this.tournamentResult = result;
@@ -1046,9 +1078,11 @@ class BattleScene extends Phaser.Scene {
 			}
 			this.turnText.setText("Press SPACE for next battle");
 			this.nextOpponent = result.nextOpponent;
-			
+
 			if (result.nextOpponent && result.nextOpponent.trainer) {
-				console.log(`Next match: ${this.tournamentPlayerLanguage} vs ${result.nextOpponent.trainer.codemon}`);
+				console.log(
+					`Next match: ${this.tournamentPlayerLanguage} vs ${result.nextOpponent.trainer.codemon}`
+				);
 			}
 		} else {
 			console.log("Tournament continues - next opponent:", result.nextOpponent);
@@ -1063,9 +1097,9 @@ class BattleScene extends Phaser.Scene {
 	async handleAIWin() {
 		console.log("Handling AI win as TOURNAMENT battle");
 		this.battleState = "gameOver";
-		
+
 		const result = await window.gameManager.recordLoss();
-		
+
 		if (result.completed) {
 			console.log("Tournament completed - AI wins");
 			this.tournamentResult = result;
@@ -1075,9 +1109,11 @@ class BattleScene extends Phaser.Scene {
 			}
 			this.turnText.setText("Press SPACE for next battle");
 			this.nextOpponent = result.nextOpponent;
-			
+
 			if (result.nextOpponent && result.nextOpponent.trainer) {
-				console.log(`Next match: ${this.tournamentPlayerLanguage} vs ${result.nextOpponent.trainer.codemon}`);
+				console.log(
+					`Next match: ${this.tournamentPlayerLanguage} vs ${result.nextOpponent.trainer.codemon}`
+				);
 			}
 		} else {
 			console.log("Tournament continues - next opponent:", result.nextOpponent);
@@ -1117,7 +1153,7 @@ class BattleScene extends Phaser.Scene {
 
 		this.battleState = "animating";
 		this.battleText.setText(`${attacker.name} used ${ability.name}!`);
-		
+
 		// Show random battle dialogue for AI trainer
 		if (this.trainerData.pokemon2 && this.trainerData.pokemon2.name) {
 			this.showRandomBattleDialogue(this.trainerData.pokemon2.name);
@@ -1199,7 +1235,10 @@ class BattleScene extends Phaser.Scene {
 
 			// Show win/lose dialogue
 			if (this.trainerData.pokemon2 && this.dialogueData.pokemon2) {
-				if (this.dialogueData.pokemon2.winDialogue && this.dialogueData.pokemon2.winDialogue.trim() !== "") {
+				if (
+					this.dialogueData.pokemon2.winDialogue &&
+					this.dialogueData.pokemon2.winDialogue.trim() !== ""
+				) {
 					this.showDialogue(this.dialogueData.pokemon2.winDialogue, 3000);
 					this.time.delayedCall(3000, () => {
 						this.handleAIWin();
@@ -1227,10 +1266,10 @@ class BattleScene extends Phaser.Scene {
 		this.battleState = "playerTurn";
 		this.battleText.setText("Choose your ability!");
 		this.turnText.setText("Select an ability to attack!");
-		
+
 		// Show ability buttons
 		this.showAbilityButtons();
-		
+
 		// Update ability selection
 		this.updateAbilitySelection();
 	}
@@ -1261,9 +1300,9 @@ class BattleScene extends Phaser.Scene {
 	 * Refreshes ability button text and updates the ability selection display.
 	 */
 	updateUI() {
-		console.log("update UI called for: ", this.pokemon1?.name);
+		// console.log("update UI called for: ", this.pokemon1?.name);
 		console.log("Pokemon abilities in update: ", this.pokemon1?.abilities);
-		console.log("ability buttons length: ", this.abilityButtons?.length);
+		// console.log("ability buttons length: ", this.abilityButtons?.length);
 
 		// skip updating UI if game over
 		if (this.battleState === "gameOver") {
@@ -1747,34 +1786,54 @@ class BattleScene extends Phaser.Scene {
 	startNextBattle() {
 		// Check if game data is loaded
 		if (!window.gameManager.isGameDataLoaded()) {
-			console.error('Game data not loaded yet, cannot start next battle');
+			console.error("Game data not loaded yet, cannot start next battle");
 			// Fallback to end scene
 			this.scene.start("EndScene", {
 				result: this.tournamentResult,
-				playerLanguage: this.tournamentPlayerLanguage
+				playerLanguage: this.tournamentPlayerLanguage,
 			});
 			return;
 		}
 
 		// Check if there's a valid next opponent with trainer data
 		if (this.nextOpponent?.trainer) {
-			console.log('startNextBattle - tournamentPlayerLanguage:', this.tournamentPlayerLanguage);
-			console.log('startNextBattle - nextOpponent:', this.nextOpponent);
-			console.log('startNextBattle - nextOpponent.trainer:', this.nextOpponent.trainer);
-			console.log('startNextBattle - nextOpponent.trainer.codemon:', this.nextOpponent.trainer.codemon);
-			console.log('startNextBattle - nextOpponent.trainer.name:', this.nextOpponent.trainer.name);
-			console.log('startNextBattle - tournamentInfo:', this.tournamentInfo);
-			console.log('startNextBattle - tournamentInfo.playerLanguage:', this.tournamentInfo?.playerLanguage);
-			
+			console.log(
+				"startNextBattle - tournamentPlayerLanguage:",
+				this.tournamentPlayerLanguage
+			);
+			console.log("startNextBattle - nextOpponent:", this.nextOpponent);
+			console.log(
+				"startNextBattle - nextOpponent.trainer:",
+				this.nextOpponent.trainer
+			);
+			console.log(
+				"startNextBattle - nextOpponent.trainer.codemon:",
+				this.nextOpponent.trainer.codemon
+			);
+			console.log(
+				"startNextBattle - nextOpponent.trainer.name:",
+				this.nextOpponent.trainer.name
+			);
+			console.log("startNextBattle - tournamentInfo:", this.tournamentInfo);
+			console.log(
+				"startNextBattle - tournamentInfo.playerLanguage:",
+				this.tournamentInfo?.playerLanguage
+			);
+
 			// Convert trainer data to Pokemon data using game manager
-			const playerLanguageId = this.tournamentInfo?.playerLanguage || window.gameManager.tournament?.playerLanguage;
-			console.log('startNextBattle - using playerLanguageId:', playerLanguageId);
-			
+			const playerLanguageId =
+				this.tournamentInfo?.playerLanguage ||
+				window.gameManager.tournament?.playerLanguage;
+			console.log(
+				"startNextBattle - using playerLanguageId:",
+				playerLanguageId
+			);
+
 			const battleData = window.gameManager.startTournamentBattle(
 				playerLanguageId,
 				this.nextOpponent.trainer.codemon
 			);
-			
+
 			if (battleData) {
 				// Start next battle with proper Pokemon data
 				this.scene.start("BattleScene", {
@@ -1782,24 +1841,24 @@ class BattleScene extends Phaser.Scene {
 					pokemon2: battleData.pokemon2,
 					tournamentInfo: this.tournamentInfo,
 					tournamentPlayerLanguage: playerLanguageId,
-					nextOpponent: null // Will be set by gameManager
+					nextOpponent: null, // Will be set by gameManager
 				});
 			} else {
 				console.error("Failed to create battle data for next opponent");
 				// Fallback to end scene
 				this.scene.start("EndScene", {
 					result: this.tournamentResult,
-					playerLanguage: playerLanguageId
+					playerLanguage: playerLanguageId,
 				});
 			}
 		} else {
 			// Tournament finished - no more opponents available
-			console.log('startNextBattle - Tournament completed, no more opponents');
-			console.log('startNextBattle - this.nextOpponent:', this.nextOpponent);
+			console.log("startNextBattle - Tournament completed, no more opponents");
+			console.log("startNextBattle - this.nextOpponent:", this.nextOpponent);
 			// Tournament finished, go to end scene
 			this.scene.start("EndScene", {
 				result: this.tournamentResult,
-				playerLanguage: this.tournamentPlayerLanguage
+				playerLanguage: this.tournamentPlayerLanguage,
 			});
 		}
 	}
