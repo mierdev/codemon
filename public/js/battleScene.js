@@ -195,7 +195,7 @@ class BattleScene extends Phaser.Scene {
 		this.add.image(470, 470, "sword").setOrigin(0.5);
 		this.turnText = this.add
 			.text(480, 500, `Turn: ${this.pokemon1?.name}`, {
-				fontSize: "16px",
+				fontSize: "18px",
 				fill: "#fff",
 				stroke: "#000",
 				strokeThickness: 2,
@@ -212,7 +212,7 @@ class BattleScene extends Phaser.Scene {
 				696,
 				"Your turn! Click an ability or use arrow keys + SPACE!",
 				{
-					fontSize: "12px",
+					fontSize: "14px",
 					fill: "#000",
 					stroke: "#fff",
 					strokeThickness: 1,
@@ -227,11 +227,11 @@ class BattleScene extends Phaser.Scene {
 		this.setupInputHandlers();
 
 		// Initialize AudioManager
-		if (window.AudioManager) {
-			this.audioManager = new window.AudioManager(this);
-		} else {
-			console.log("Oops, has gone wrong with the audio manager");
-		}
+		// if (window.AudioManager) {
+		// 	this.audioManager = new window.AudioManager(this);
+		// } else {
+		// 	console.log("Oops, has gone wrong with the audio manager");
+		// }
 		this.createVolumeToggle();
 		this.updateUI();
 	}
@@ -396,11 +396,11 @@ class BattleScene extends Phaser.Scene {
 
 	createLanguageBanner(pokemonName, x, y, trainerData = null) {
 		// Banner pieces
-		const bannerLeft = this.add.image(x - 30, y, "langLeft");
+		const bannerLeft = this.add.image(x - 50, y, "langLeft");
 		bannerLeft.setScale(1.5);
 		const bannerMid = this.add.image(x, y, "langMid");
-		bannerMid.setScale(1.5);
-		const bannerRight = this.add.image(x + 30, y, "langRight");
+		bannerMid.setScale(2.0, 1.5);
+		const bannerRight = this.add.image(x + 50, y, "langRight");
 		bannerRight.setScale(1.5);
 
 		// Determine what text to display
@@ -600,10 +600,11 @@ class BattleScene extends Phaser.Scene {
 		for (let i = 0; i < 5; i++) {
 			const entry = this.add
 				.text(720, 570 + i * 18, "", {
-					fontSize: "10px",
-					fill: "#CCCCCC",
+					fontSize: "12px",
+					fill: "#9a9454ff",
 					stroke: "#000",
 					strokeThickness: 1,
+					// wordWrap: { width: 130 },
 				})
 				.setOrigin(0.5);
 			this.battleLogEntries.push(entry);
