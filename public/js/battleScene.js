@@ -111,6 +111,15 @@ class BattleScene extends Phaser.Scene {
 		this.load.image("enterPressed", ["assets/UI/components/enterPressed.png"]);
 		// Effect Info
 		this.load.image("greyPressed", ["assets/UI/components/goldPressed.png"]);
+		// Volume toggle button
+		this.load.image("musicOn", ["assets/UI/components/musicOn.png"]);
+		this.load.image("musicOff", ["assets/UI/components/musicOff.png"]);
+		// TODO: Remove when done
+		this.load.once("complete", () => {
+			console.log("Assets loaded. Checking music button assets");
+			console.log("music loaded: ", this.textures.exists("musicOn"));
+			console.log("music off:", this.textures.exists("musicOff"));
+		});
 	}
 
 	/**
@@ -131,6 +140,7 @@ class BattleScene extends Phaser.Scene {
 		}
 
 		// Initialize AudioManager and play background music
+		// Previous way of handling audio manager
 		if (window.AudioManager) {
 			this.audioManager = new window.AudioManager(this);
 			// Only play music if no music is currently playing globally
@@ -185,7 +195,7 @@ class BattleScene extends Phaser.Scene {
 		this.add.image(470, 470, "sword").setOrigin(0.5);
 		this.turnText = this.add
 			.text(480, 500, `Turn: ${this.pokemon1?.name}`, {
-				fontSize: "16px",
+				fontSize: "18px",
 				fill: "#fff",
 				stroke: "#000",
 				strokeThickness: 2,
@@ -202,7 +212,7 @@ class BattleScene extends Phaser.Scene {
 				696,
 				"Your turn! Click an ability or use arrow keys + SPACE!",
 				{
-					fontSize: "12px",
+					fontSize: "14px",
 					fill: "#000",
 					stroke: "#fff",
 					strokeThickness: 1,
@@ -217,12 +227,12 @@ class BattleScene extends Phaser.Scene {
 		this.setupInputHandlers();
 
 		// Initialize AudioManager
-		if (window.AudioManager) {
-			this.audioManager = new window.AudioManager(this);
-		} else {
-			console.log("Oops, has gone wrong with the audio manager");
-		}
-
+		// if (window.AudioManager) {
+		// 	this.audioManager = new window.AudioManager(this);
+		// } else {
+		// 	console.log("Oops, has gone wrong with the audio manager");
+		// }
+		this.createVolumeToggle();
 		this.updateUI();
 	}
 	/**
@@ -386,11 +396,11 @@ class BattleScene extends Phaser.Scene {
 
 	createLanguageBanner(pokemonName, x, y, trainerData = null) {
 		// Banner pieces
-		const bannerLeft = this.add.image(x - 30, y, "langLeft");
+		const bannerLeft = this.add.image(x - 50, y, "langLeft");
 		bannerLeft.setScale(1.5);
 		const bannerMid = this.add.image(x, y, "langMid");
-		bannerMid.setScale(1.5);
-		const bannerRight = this.add.image(x + 30, y, "langRight");
+		bannerMid.setScale(2.0, 1.5);
+		const bannerRight = this.add.image(x + 50, y, "langRight");
 		bannerRight.setScale(1.5);
 
 		// Determine what text to display
@@ -590,10 +600,11 @@ class BattleScene extends Phaser.Scene {
 		for (let i = 0; i < 5; i++) {
 			const entry = this.add
 				.text(720, 570 + i * 18, "", {
-					fontSize: "10px",
-					fill: "#CCCCCC",
+					fontSize: "12px",
+					fill: "#9a9454ff",
 					stroke: "#000",
 					strokeThickness: 1,
+					// wordWrap: { width: 130 },
 				})
 				.setOrigin(0.5);
 			this.battleLogEntries.push(entry);
@@ -686,6 +697,58 @@ class BattleScene extends Phaser.Scene {
 		this.time.delayedCall(duration, () => {
 			messageBox.setVisible(false);
 			messageText.setVisible(false);
+		});
+	}
+
+	/**
+	 * Creates audio toggle button to turn music on and off
+	 */
+	createVolumeToggle() {
+		const isAudioEnabled = this.audioManager
+			? this.audioManager.isAudioEnabled()
+			: true;
+		const audioButtonImage = isAudioEnabled ? "musicOn" : "musicOff";
+
+		this.volumeToggle = this.add.image(850, 50, audioButtonImage);
+		this.volumeToggle.setInteractive();
+		this.volumeToggle.setScale(0.8);
+		this.volumeToggle.setDepth(5);
+
+		this.volumeToggle.on("pointerover", () => {
+			this.volumeToggle.setTint(0xdddddd);
+		});
+
+		this.volumeToggle.on("pointerout", () => {
+			this.volumeToggle.clearTint();
+		});
+
+		this.volumeToggle.on("pointerdown", () => {
+			if (this.audioManager) {
+				this.audioManager.toggleSoundEffect();
+
+				// Update button image
+				const newImage = this.audioManager.isAudioEnabled()
+					? "musicOn"
+					: "musicOff";
+				this.volumeToggle.setTexture(newImage);
+
+				// Handle music playback
+				// if (this.audioManager.isAudioEnabled()) {
+				// 	// Start playing music
+				// 	this.audioManager.playMusic("cider", { loop: true, volume: 0.4 });
+				// 	window.currentMusic = this.audioManager.currentMusic;
+				// } else {
+				// 	this.audioManager.stopMusic();
+				// 	window.currentMusic = null;
+				// }
+				if (window.currentMusic) {
+					if (this.audioManager.isAudioEnabled()) {
+						window.currentMusic.resume();
+					} else {
+						window.currentMusic.pause();
+					}
+				}
+			}
 		});
 	}
 

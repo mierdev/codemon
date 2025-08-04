@@ -32,7 +32,7 @@ class TitlePage extends Phaser.Scene {
 		this.enterButton.setInteractive({ useHandCursor: false });
 
 		this.titleText = this.add
-			.text(650, 400, "ENTER", {
+			.text(650, 398, "ENTER", {
 				fontSize: "32px",
 				fontFamily: "Arial",
 				color: "#f6f5e9ff",
@@ -52,7 +52,11 @@ class TitlePage extends Phaser.Scene {
 		this.enterButton.on("pointerdown", () => {
 			// Use transition manager if available, otherwise fall back to direct scene change
 			if (window.transitionManager) {
-				window.transitionManager.startTransition(this, 'TitlePage', 'IntroScene');
+				window.transitionManager.startTransition(
+					this,
+					"TitlePage",
+					"IntroScene"
+				);
 			} else {
 				this.scene.start("IntroScene");
 			}
@@ -61,7 +65,11 @@ class TitlePage extends Phaser.Scene {
 		this.titleText.on("pointerdown", () => {
 			// Use transition manager if available, otherwise fall back to direct scene change
 			if (window.transitionManager) {
-				window.transitionManager.startTransition(this, 'TitlePage', 'IntroScene');
+				window.transitionManager.startTransition(
+					this,
+					"TitlePage",
+					"IntroScene"
+				);
 			} else {
 				this.scene.start("IntroScene");
 			}
