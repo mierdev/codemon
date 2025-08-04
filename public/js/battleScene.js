@@ -111,6 +111,15 @@ class BattleScene extends Phaser.Scene {
 		this.load.image("enterPressed", ["assets/UI/components/enterPressed.png"]);
 		// Effect Info
 		this.load.image("greyPressed", ["assets/UI/components/goldPressed.png"]);
+		// Volume toggle button
+		this.load.image("musicOn", ["assets/UI/components/musicOn.png"]);
+		this.load.image("musicOff", ["assets/UI/components/musicOff.png"]);
+		// TODO: Remove when done
+		this.load.once("complete", () => {
+			console.log("Assets loaded. Checking music button assets");
+			console.log("music loaded: ", this.textures.exists("musicOn"));
+			console.log("music off:", this.textures.exists("musicOff"));
+		});
 	}
 
 	/**
@@ -131,6 +140,7 @@ class BattleScene extends Phaser.Scene {
 		}
 
 		// Initialize AudioManager and play background music
+		// Previous way of handling audio manager
 		if (window.AudioManager) {
 			this.audioManager = new window.AudioManager(this);
 			// Only play music if no music is currently playing globally
@@ -222,7 +232,7 @@ class BattleScene extends Phaser.Scene {
 		} else {
 			console.log("Oops, has gone wrong with the audio manager");
 		}
-
+		this.createVolumeToggle();
 		this.updateUI();
 	}
 	/**
@@ -686,6 +696,58 @@ class BattleScene extends Phaser.Scene {
 		this.time.delayedCall(duration, () => {
 			messageBox.setVisible(false);
 			messageText.setVisible(false);
+		});
+	}
+
+	/**
+	 * Creates audio toggle button to turn music on and off
+	 */
+	createVolumeToggle() {
+		const isAudioEnabled = this.audioManager
+			? this.audioManager.isAudioEnabled()
+			: true;
+		const audioButtonImage = isAudioEnabled ? "musicOn" : "musicOff";
+
+		this.volumeToggle = this.add.image(850, 50, audioButtonImage);
+		this.volumeToggle.setInteractive();
+		this.volumeToggle.setScale(0.8);
+		this.volumeToggle.setDepth(5);
+
+		this.volumeToggle.on("pointerover", () => {
+			this.volumeToggle.setTint(0xdddddd);
+		});
+
+		this.volumeToggle.on("pointerout", () => {
+			this.volumeToggle.clearTint();
+		});
+
+		this.volumeToggle.on("pointerdown", () => {
+			if (this.audioManager) {
+				this.audioManager.toggleSoundEffect();
+
+				// Update button image
+				const newImage = this.audioManager.isAudioEnabled()
+					? "musicOn"
+					: "musicOff";
+				this.volumeToggle.setTexture(newImage);
+
+				// Handle music playback
+				// if (this.audioManager.isAudioEnabled()) {
+				// 	// Start playing music
+				// 	this.audioManager.playMusic("cider", { loop: true, volume: 0.4 });
+				// 	window.currentMusic = this.audioManager.currentMusic;
+				// } else {
+				// 	this.audioManager.stopMusic();
+				// 	window.currentMusic = null;
+				// }
+				if (window.currentMusic) {
+					if (this.audioManager.isAudioEnabled()) {
+						window.currentMusic.resume();
+					} else {
+						window.currentMusic.pause();
+					}
+				}
+			}
 		});
 	}
 
