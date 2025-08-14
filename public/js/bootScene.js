@@ -25,13 +25,6 @@ class BootScene extends Phaser.Scene {
 		this.load.image("bannerLeft", ["assets/UI/components/bannerLeft.png"]);
 		this.load.image("bannerMid", ["assets/UI/components/bannerMid.png"]);
 		this.load.image("bannerRight", ["assets/UI/components/bannerRight.png"]);
-
-		// TODO:
-		// Clear if unused
-		this.load.image("brownPressed", ["assets/UI/components/brownPressed.png"]);
-		this.load.image("brownUnpressed", [
-			"assets/UI/components/brownUnpressed.png",
-		]);
 		// Language buttons
 		this.load.image("enterButton", ["assets/UI/components/enterButton.png"]);
 		this.load.image("enterPressed", ["assets/UI/components/enterPressed.png"]);
@@ -47,6 +40,9 @@ class BootScene extends Phaser.Scene {
 		]);
 		// Background music (cider)
 		this.load.audio("cider", ["assets/audio/backgrounds/apple_cider.wav"]);
+		// Volume toggle button
+		this.load.image("musicOn", ["assets/UI/components/musicOn.png"]);
+		this.load.image("musicOff", ["assets/UI/components/musicOff.png"]);
 	}
 
 	/**
@@ -74,12 +70,24 @@ class BootScene extends Phaser.Scene {
 			console.log("something went wrong with the audio manager!");
 		}
 
-		if (
-			this.audioManager &&
-			(!window.currentMusic || !window.currentMusic.isPlaying)
-		) {
-			this.audioManager.playMusic("cider", { loop: true, volume: 0.4 });
-			window.currentMusic = this.audioManager.currentMusic;
+		// Previous way of handling audio
+		// if (
+		// 	this.audioManager &&
+		// 	(!window.currentMusic || !window.currentMusic.isPlaying)
+		// ) {
+		// 	this.audioManager.playMusic("cider", { loop: true, volume: 0.4 });
+		// 	window.currentMusic = this.audioManager.currentMusic;
+		// }
+		if (this.audioManager.isAudioEnabled()) {
+			if (!window.currentMusic || !window.currentMusic.isPlaying) {
+				this.audioManager.playMusic("cider", { loop: true, volume: 0.4 });
+				window.currentMusic = this.audioManager.currentMusic;
+			}
+		} else {
+			if (window.currentMusic) {
+				this.audioManager.stopMusic();
+				window.currentMusic = null;
+			}
 		}
 
 		// Simple background
@@ -94,9 +102,9 @@ class BootScene extends Phaser.Scene {
 			.text(480, 180, "Choose Tournament: ", { fontSize: "24px", fill: "#fff" })
 			.setOrigin(0.5);
 
-		this.createTournamentButton(3, "3 Matches", 280, 240);
-		this.createTournamentButton(5, "5 Matches", 480, 240);
-		this.createTournamentButton(7, "7 Matches", 680, 240);
+		this.createTournamentButton(3, "3 Matches", 200, 240);
+		this.createTournamentButton(5, "5 Matches", 460, 240);
+		this.createTournamentButton(7, "7 Matches", 720, 240);
 
 		// Language selection
 		this.add
@@ -128,8 +136,8 @@ class BootScene extends Phaser.Scene {
 		startButton.on("pointerdown", () => {
 			this.startTournament();
 		});
+		this.createVolumeToggle();
 	}
-
 	/**
 	 * Creates language buttons for only Python, Go, and JavaScript/TypeScript
 	 * Filters available languages to show only the three selectable options
@@ -149,12 +157,12 @@ class BootScene extends Phaser.Scene {
 		) {
 			console.warn("Game data not loaded, using fallback language buttons");
 			// Fallback to hardcoded buttons for the three selectable languages
-			this.createLanguageButton("python", "Python", 280, 400);
-			this.createLanguageButton("go", "Go", 480, 400);
+			this.createLanguageButton("python", "Python", 200, 400);
+			this.createLanguageButton("go", "Go", 460, 400);
 			this.createLanguageButton(
 				"javascript",
 				"JavaScript & TypeScript",
-				680,
+				720,
 				400
 			);
 			return;
@@ -165,7 +173,7 @@ class BootScene extends Phaser.Scene {
 			const languageData = window.gameManager.getLanguageData(language.id);
 			if (languageData) {
 				// Position the three buttons in a row
-				const x = 280 + index * 200; // 280, 480, 680
+				const x = 200 + index * 260; // Originally 280, 480, 680
 				const y = 400;
 
 				this.createLanguageButton(language.id, languageData.name, x, y);
@@ -214,9 +222,10 @@ class BootScene extends Phaser.Scene {
 			y,
 			isSelected ? "goldPressed" : "goldUnpressed"
 		);
+		tournamentButton.setScale(1.3);
 
 		this.add
-			.text(x, y, text, { fontSize: "14px", fill: "#fff" })
+			.text(x, y, text, { fontSize: "18px", fill: "#fff" })
 			.setOrigin(0.5);
 
 		// Tinting for extra visual feedback
@@ -244,6 +253,51 @@ class BootScene extends Phaser.Scene {
 		});
 	}
 
+	/**
+	 * Creates audio toggle button to turn music on and off
+	 */
+	createVolumeToggle() {
+		const isAudioEnabled = this.audioManager
+			? this.audioManager.isAudioEnabled()
+			: true;
+		const audioButtonImage = isAudioEnabled ? "musicOn" : "musicOff";
+
+		this.volumeToggle = this.add.image(850, 50, audioButtonImage);
+		this.volumeToggle.setInteractive();
+		this.volumeToggle.setScale(0.8);
+		this.volumeToggle.setDepth(5);
+
+		this.volumeToggle.on("pointerover", () => {
+			this.volumeToggle.setTint(0xdddddd);
+		});
+
+		this.volumeToggle.on("pointerout", () => {
+			this.volumeToggle.clearTint();
+		});
+
+		this.volumeToggle.on("pointerdown", () => {
+			if (this.audioManager) {
+				this.audioManager.toggleSoundEffect();
+
+				// Update button image
+				const newImage = this.audioManager.isAudioEnabled()
+					? "musicOn"
+					: "musicOff";
+				this.volumeToggle.setTexture(newImage);
+
+				// Handle music playback
+				if (this.audioManager.isAudioEnabled()) {
+					// Start playing music
+					this.audioManager.playMusic("cider", { loop: true, volume: 0.4 });
+					window.currentMusic = this.audioManager.currentMusic;
+				} else {
+					this.audioManager.stopMusic();
+					window.currentMusic = null;
+				}
+			}
+		});
+	}
+
 	createLanguageButton(id, name, x, y) {
 		const isSelected = this.selectedLanguage === id;
 		const languageButton = this.add.image(
@@ -255,9 +309,15 @@ class BootScene extends Phaser.Scene {
 		if (isSelected) {
 			languageButton.setTint(0x87ceeb);
 		}
+		languageButton.setScale(1.3);
 
 		this.add
-			.text(x, y, name, { fontSize: "14px", fill: "#fff" })
+			.text(x, y, name, {
+				fontSize: "16px",
+				fill: "#fff",
+				align: "center",
+				// wordWrap: { width: 180 },
+			})
 			.setOrigin(0.5);
 
 		languageButton.setInteractive();
@@ -282,10 +342,6 @@ class BootScene extends Phaser.Scene {
 	}
 
 	async startTournament() {
-		console.log(
-			`Starting tournament: ${this.selectedTournament} match as ${this.selectedLanguage}`
-		);
-
 		// Check if game data is loaded
 		if (!window.gameManager.isGameDataLoaded()) {
 			console.error("Game data not loaded yet, cannot start tournament");
