@@ -1,4 +1,3 @@
-"Motivation", "Quick Start", "Usage" and "Contributing"
 <img src="https://raw.githubusercontent.com/mierdev/codemon/refs/heads/main/public/assets/readme/codemon.png" alt="codemon logo">
 
 # A JRPG battle game with a coding theme
