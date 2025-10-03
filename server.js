@@ -19,7 +19,7 @@ app.use(express.json());
 /**
  * Logs all incoming requests for debugging purposes
  * @param {Object} req - Express request object
- * @param {Object} res - Express response object  
+ * @param {Object} res - Express response object
  * @param {Function} next - Express next middleware function
  */
 app.use((req, _, next) => {
@@ -70,4 +70,7 @@ app.use((req, res) => {
 	res.status(404).send("Route not found: " + req.url);
 });
 
-app.listen(3001, () => console.log("Chaos has begun!"));
+app.listen(3001, () => {
+	console.log("Chaos has begun!");
+	console.log("Serving Chaos on port 3001");
+});
