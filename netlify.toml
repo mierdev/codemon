@@ -2,7 +2,7 @@
   publish = "public"
 
 [functions]
-  external_node_modules = ["express"]
+  external_node_modules = ["express", "mongoose"]
   node_bundler = "esbuild"
 
 [[redirects]]

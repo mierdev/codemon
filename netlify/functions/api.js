@@ -1,5 +1,4 @@
 import serverless from "serverless-http";
+import { app } from ".../../server.js";
 
-const serverModule = await import("../../server.js");
-
-export const handler = serverless(serverModule.app);
+export const handler = serverless(app);
