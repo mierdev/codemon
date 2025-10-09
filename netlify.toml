@@ -2,6 +2,7 @@
   publish = "public"
 
 [functions]
+  directory = "netlify/functions" 
   external_node_modules = ["express", "mongoose"]
   node_bundler = "esbuild"
 
