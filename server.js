@@ -14,12 +14,12 @@ export const app = express();
 const ROOT = process.cwd();
 
 app.set("view engine", "ejs");
-// app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(ROOT, "views"));
 app.use(express.static(path.join(ROOT, "public")));
-app.use(express.static("public"));
-// app.use("/managers", express.static(path.join(__dirname, "managers")));
 app.use("/managers", express.static(path.join(ROOT, "managers")));
 app.use(express.json());
+// app.set("views", path.join(__dirname, "views"));
+// app.use("/managers", express.static(path.join(__dirname, "managers")));
 
 /**
  * Logs all incoming requests for debugging purposes
