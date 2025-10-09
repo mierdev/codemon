@@ -6,7 +6,7 @@
 	"keywords": [],
 	"scripts": {
 		"dev": "vite",
-		"build": "echo 'Build complete - using static files'",
+		"build": "echo 'Build complete'",
 		"start": "node server.js",
 		"server": "nodemon --watch './' --ext ts,js --exec 'tsx' server.js",
 		"macStart": "nodemon --watch './' --ext ts --exec 'node --loader ts-node/esm' server.js",
