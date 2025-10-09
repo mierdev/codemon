@@ -1,11 +1,12 @@
-[[plugins]]
-  package = "@netlify/plugin-express"
-
 [build]
-  command = "npm install"
   publish = "public"
+
+[functions]
+  external_node_modules = ["express"]
+  node_bundler = "esbuild"
 
 [[redirects]]
   from = "/*"
-  to = "/.netlify/functions/server/:splat"
+  to = "/.netlify/functions/api/:splat"
   status = 200
+  force = true
