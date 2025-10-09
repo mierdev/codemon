@@ -6,14 +6,19 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 export const app = express();
+
+const ROOT = process.cwd();
+
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+// app.set("views", path.join(__dirname, "views"));
+app.use(express.static(path.join(ROOT, "public")));
 app.use(express.static("public"));
-app.use("/managers", express.static(path.join(__dirname, "managers")));
+// app.use("/managers", express.static(path.join(__dirname, "managers")));
+app.use("/managers", express.static(path.join(ROOT, "managers")));
 app.use(express.json());
 
 /**
@@ -27,11 +32,32 @@ app.use((req, _, next) => {
 	next();
 });
 
-mongoose.connect(process.env.MONGODB_URI);
+// mongoose.connect(process.env.MONGODB_URI);
+let mongoReady = false;
+async function ensureMongo() {
+	if (mongoReady && mongoose.connection.readyState === 1) return;
+	if (!process.env.MONGODB_URI) {
+		console.warn("Mongo keys are missing");
+		return;
+	}
+	await mongoose.connect(process.env.MONGODB_URI);
+	mongoReady = true;
+	console.log("Mongo connected");
+	console.log("Database of madness has started!");
+}
 
-const db = mongoose.connection;
-db.on("error", (error) => console.log(error));
-db.once("open", () => console.log("Database of madness has started!"));
+app.use(async (_req, _res, next) => {
+	try {
+		await ensureMongo();
+		next();
+	} catch (error) {
+		next(error);
+	}
+});
+
+// const db = mongoose.connection;
+// db.on("error", (error) => console.log(error));
+// db.once("open", () => console.log("Database of madness has started!"));
 
 import abilitiesRouter from "./routes/routerAbilities.js";
 app.use("/abilities", abilitiesRouter);
