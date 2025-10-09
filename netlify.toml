@@ -1,0 +1,11 @@
+[[plugins]]
+  package = "@netlify/plugin-express"
+
+[build]
+  command = "npm install"
+  publish = "public"
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/server/:splat"
+  status = 200

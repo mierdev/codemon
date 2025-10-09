@@ -6,9 +6,8 @@
 	"keywords": [],
 	"scripts": {
 		"dev": "vite",
-		"build": "vite build",
-		"build-with-ts": "tsc && vite build",
-		"preview": "vite preview",
+		"build": "echo 'Build complete - using static files'",
+		"start": "node server.js",
 		"server": "nodemon --watch './' --ext ts,js --exec 'tsx' server.js",
 		"macStart": "nodemon --watch './' --ext ts --exec 'node --loader ts-node/esm' server.js",
 		"devStart": "nodemon server.js",
@@ -26,11 +25,13 @@
 		"vite": "^7.0.4"
 	},
 	"dependencies": {
+		"@netlify/functions": "^4.2.7",
 		"@types/node": "^24.1.0",
 		"ejs": "^3.1.10",
 		"express": "^5.1.0",
 		"mongoose": "^8.16.5",
 		"phaser": "^3.90.0",
+		"serverless-http": "^4.0.0",
 		"ts-node": "^10.9.2"
 	}
 }
