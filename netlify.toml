@@ -3,4 +3,6 @@
   external_node_modules = ["express", "mongoose", "ejs"]
   node_bundler = "esbuild"
 
-
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
