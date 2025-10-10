@@ -5,7 +5,6 @@
 	"type": "module",
 	"keywords": [],
 	"scripts": {
-		"dev": "vite",
 		"build": "node -e \"console.log('build ok')\"",
 		"start": "node server.js",
 		"server": "nodemon --watch './' --ext ts,js --exec 'tsx' server.js",
