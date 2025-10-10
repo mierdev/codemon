@@ -3,7 +3,4 @@
   external_node_modules = ["express", "mongoose", "ejs"]
   node_bundler = "esbuild"
 
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/api/:splat"
-  status = 200
+
