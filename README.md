@@ -121,8 +121,7 @@ code .env
 ### For MongoDB Atlas (cloud)
 
 ```
-MONGODB_URI=mongodb+srv://mongouser:yourpassword@yourcluster.xxxxx.mongodb.net/codemon?retryWrites=true&w=majority
-MONGODB_DB=codemon
+REMOVED THE KEY HERE FOR SAFETY, PLAY THE PUBLISHED GAME ON https://codemon-rho.vercel.app/
 ```
 
 ## Usage
