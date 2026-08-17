@@ -31,7 +31,7 @@ Compete in pokémon inspired battles to find out which is the strongest programm
 
 - [Nallo](https://github.com/nallovint)
 - [TokiLoshi](https://github.com/TokiLoshi)
-- [Miranda](https://github.com/mierdev)
+- [mierdev](https://github.com/mierdev)
 
 ## Prerequisites
 
